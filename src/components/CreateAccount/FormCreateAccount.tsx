@@ -105,7 +105,7 @@ const FormCreateAccount = () => {
         </div>
         <div className="pt-4">
           <p className="font-semibold text-blackPrimary pb-1">
-            Confirme sua senha:
+            Seu número de telefone:
           </p>
           <div className="w-[333px] h-[37px] flex items-center pl-2 bg-white rounded-md ">
             <div className="w-full flex items-center justify-between">
