@@ -1,9 +1,9 @@
 "use client";
 
-import ButtonEntrarAccount from "../components/CreateAccount/ButtonEntrarAccount";
-import CreateAccountButton from "../components/CreateAccount/CreateAccountButton";
-import FormCreateAccount from "../components/CreateAccount/FormCreateAccount";
-import { ButtonCreateAccount } from "../components/Login/ButtonCreateAccount";
+import ButtonEntrarAccount from "@/components/CreateAccount/ButtonEntrarAccount";
+
+import CreateAccountButton from "@/components/CreateAccount/CreateAccountButton";
+import FormCreateAccount from "@/components/CreateAccount/FormCreateAccount";
 
 export default function CreateAccount() {
   return (
