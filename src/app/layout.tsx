@@ -17,8 +17,10 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={inter.className}>
-        <div className="flex justify-center bg-whitePrimary">
-          <div className="flex w-[390px] h-screen px-[28px] bg-whitePrimary">{children}</div>
+        <div className="flex justify-center bg-whitePrimary min-h-screen">
+          <div className="flex w-[390px] px-[28px] bg-whitePrimary overflow-auto">
+            {children}
+          </div>
         </div>
       </body>
     </html>
