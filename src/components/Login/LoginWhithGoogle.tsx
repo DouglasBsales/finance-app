@@ -1,19 +1,48 @@
 import Image from "next/image";
-import { GoogleAuthProvider, signInWithPopup, User } from "firebase/auth";
-import { auth } from "../../services/firebase";
-import {  useState } from "react";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth, db } from "../../services/firebase";
+import { useContext, useState } from "react";
+import { HomeContext } from "@/Context/HomeContext";
+import { setDoc, doc, collection } from "firebase/firestore";
 
-const LoginWhithGoogle = () => {
-  const [user, setUser] = useState<User | null>(null);
+type UserGoogleType = {
+  uId: string;
+  name: string;
+  email: string;
+  photoURL: string;
+  creationTime: string;
+  lastLoginTime: string;
+};
+
+const LoginWithGoogle = () => {
+  const { setDataUserGoogle } = useContext(HomeContext);
+  const [showAuth, setShowAuth] = useState(false);
 
   const googleLogin = async () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    setUser(result.user); 
-    console.log(result.user);
-    if(typeof window !== "undefined"){
-      window.location.href="/Home"
+    const user = result.user;
+    setDataUserGoogle(user); // armazena os dados do usuario do google em uma variável global do context
+
+    const userCollectionRef = collection(db, "users");
+
+    const userGoogle: UserGoogleType = {
+      // objeto criado com seu tipo para enviar os dados pro banco
+      uId: user.uid,
+      name: user.displayName!,
+      email: user.email!,
+      photoURL: user.photoURL!,
+      creationTime: user.metadata.creationTime!,
+      lastLoginTime: user.metadata.lastSignInTime!,
+    };
+    // Usando a referência de documento específica para o usuário
+    const userDocRef = doc(userCollectionRef, user.uid);
+    await setDoc(userDocRef, userGoogle, { merge: true });
+    if (typeof window !== "undefined") {
+      setShowAuth(true);
+      window.location.href = "/Home";
     }
+    setShowAuth(false);
   };
 
   return (
@@ -29,11 +58,23 @@ const LoginWhithGoogle = () => {
           onClick={googleLogin}
         >
           <Image src="/Google.png" alt="" width={12} height={12} />
-          <p className="text-blackOpacity ">Entrar com Google</p>
+          <p className="text-blackOpacity">Entrar com Google</p>
         </button>
       </div>
+      {showAuth && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="w-full bg-bluePrimary rounded-md fixed top-[210px] left-0">
+            <div className=" flex justify-center pr-5">
+              <Image src="/loading.gif" alt="loading" width={40} height={40} />
+              <p className="py-2 text-white font-semibold ">
+                Autenticação concluída
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default LoginWhithGoogle;
+export default LoginWithGoogle;
