@@ -6,7 +6,7 @@ import { db } from "@/services/firebase";
 import Image from "next/image";
 
 export default function Home() {
-  const userCollectionRef = collection(db, "users");
+  const userCollectionRef = collection(db, "users"); 
 
   let userGoogle = null;
   if (typeof window !== "undefined") {
@@ -17,7 +17,7 @@ export default function Home() {
   const [dataUser, setDataUser] = useState<any>({});
   const [valueWallet, setValueWallet] = useState<any>([]); // Inicializando como array
 
-  useEffect(() => {
+  useEffect(() => { // funcao para capturar os dados específicos do usuário no banco 
     const getDataUser = async () => {
       if (userGoogleObj?.uid) {
         const userDocRef = doc(userCollectionRef, userGoogleObj.uid);
@@ -32,9 +32,9 @@ export default function Home() {
   useEffect(() => {
     const getValueWallet = async () => {
       if (userGoogleObj?.uid) {
-        const userDocRef = doc(userCollectionRef, userGoogleObj.uid);
-        const walletCollectionRef = collection(userDocRef, "valueWallet");
-        const walletRefSnap = await getDocs(walletCollectionRef);
+        const userDocRef = doc(userCollectionRef, userGoogleObj.uid); // jogar para o escopo global ( ref da conta do usuario ) 
+        const walletCollectionRef = collection(userDocRef, "valueWallet"); // jogar para o escopo global ( usando a colecao do valueWallet ) 
+        const walletRefSnap = await getDocs(walletCollectionRef); // retorno dos dados do valueWallet
         const walletData = walletRefSnap.docs.map((doc) => doc.data());
         setValueWallet(walletData);
       }
@@ -44,9 +44,11 @@ export default function Home() {
 
   console.log(valueWallet);
 
+  // TRANSFORMAR O JSX EM COMPONENTS 
+
   return (
     <div className="w-full h-screen flex flex-col items-center bg-whitePrimary">
-      <div className="w-full fixed flex flex-col h-[357px] bg-bluePrimary rounded-b-[30px] px-[28px]">
+      <div className="w-full fixed flex flex-col h-[357px] bg-bluePrimary rounded-b-[30px] px-[28px]"> 
         <div className="flex pt-[41px] items-center">
           <div>
             <Image
