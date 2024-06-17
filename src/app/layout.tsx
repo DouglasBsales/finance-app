@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import HomeContextProvider from "@/Context/HomeContext";
 
-const inter = Inter({ subsets: ["latin"] });
+const montSerrat = Montserrat({
+  weight: ["200", "300", "400", "700"],
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Finance-app",
@@ -17,13 +20,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={inter.className}>
+      <body className={montSerrat.className}>
         <HomeContextProvider>
-        <div className="flex justify-center bg-whitePrimary min-h-screen">
-          <div className="flex w-[390px] px-[28px] bg-whitePrimary overflow-auto">
-            {children}
+          <div className="flex justify-center bg-whitePrimary min-h-screen">
+            <div className="flex w-[390px] px-[28px] bg-whitePrimary overflow-auto">
+              {children}
+            </div>
           </div>
-        </div>
         </HomeContextProvider>
       </body>
     </html>
