@@ -22,13 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body
-        className={`${montSerrat.className} m-0 p-0 h-screen bg-whitePrimary flex items-center justify-center`}
-      >
+      <body className={`${montSerrat.className}`}>
         <HomeContextProvider>
-          <div className="w-[390px] bg-whitePrimary overflow-auto">
-            {children}
-            <Menu />
+          <div className="w-full h-screen overflow-auto flex justify-center bg-whitePrimary">
+            <div className="w-[390px]  bg-whitePrimary">
+              {children}
+            </div>
+            <Menu/>
           </div>
         </HomeContextProvider>
       </body>
