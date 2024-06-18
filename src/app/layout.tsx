@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import HomeContextProvider from "@/Context/HomeContextProvider";
+
 import Menu from "@/components/MenuGlobal/Menu";
+import HomeContextProvider from "@/Context/HomeContext";
 
 const montSerrat = Montserrat({
   weight: ["200", "300", "400", "500", "700"],
