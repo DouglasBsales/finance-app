@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, db } from "../../services/firebase";
-import { useContext, useEffect, useState } from "react";
-import { HomeContext } from "@/Context/HomeContext";
+import { useState } from "react";
 import { setDoc, doc, collection } from "firebase/firestore";
 
 type UserGoogleType = {
@@ -15,7 +14,6 @@ type UserGoogleType = {
 };
 
 const LoginWithGoogle = () => {
-  const { setDataUserGoogle, dataUserGoogle } = useContext(HomeContext);
   const [showAuth, setShowAuth] = useState(false);
 
   const googleLogin = async () => {
@@ -23,7 +21,6 @@ const LoginWithGoogle = () => {
     const result = await signInWithPopup(auth, provider);
     setShowAuth(true);
     const user = result.user; // armazena os dados do usuario do google em uma variável global do context
-    setDataUserGoogle(user);
     const userGoogle: UserGoogleType = {
       // objeto criado com seu tipo para enviar os dados pro banco
       uId: user.uid,
