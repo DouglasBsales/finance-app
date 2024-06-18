@@ -16,8 +16,6 @@ type UserGoogleType = {
 const LoginWithGoogle = () => {
   const [showAuth, setShowAuth] = useState(false);
 
-  // importar todo o código para o contextHome e deixar a page mais clean
-
   const googleLogin = async () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
