@@ -7,7 +7,7 @@ import LoginWhithGoogle from "@/components/Login/LoginWhithGoogle";
 
 export default function Login() {
   return (
-    <div className="w-full h-screen flex flex-col items-center bg-whitePrimary">
+    <div className="w-full h-screen px-[28px] flex flex-col items-center bg-whitePrimary">
       <ButtonCreateAccount />
       <FormLogin />
       <ButtonEntrar />
