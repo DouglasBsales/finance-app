@@ -5,7 +5,7 @@ import { Planos } from "@/components/HomePage/Planos";
 
 export default function Home() {
   return (
-    <div className="w-full h-screen flex flex-col  bg-whitePrimary ">
+    <div className="w-full flex flex-col bg-whitePrimary pb-[100px]">
       <Header />
       <Planos />
     </div>
