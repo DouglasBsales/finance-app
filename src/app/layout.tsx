@@ -20,15 +20,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+  return ( 
     <html lang="pt-br">
       <body className={`${montSerrat.className}`}>
         <HomeContextProvider>
           <div className="w-full h-screen overflow-auto flex justify-center bg-whitePrimary">
-            <div className="w-[390px]  bg-whitePrimary">
-              {children}
-            </div>
-            <Menu/>
+            <div className="w-full  bg-whitePrimary">{children}</div>
           </div>
         </HomeContextProvider>
       </body>

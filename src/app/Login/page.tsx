@@ -8,10 +8,12 @@ import LoginWhithGoogle from "@/components/Login/LoginWhithGoogle";
 export default function Login() {
   return (
     <div className="w-full px-[28px] flex flex-col items-center bg-whitePrimary pb-[80px]">
-      <ButtonCreateAccount />
-      <FormLogin />
-      <ButtonEntrar />
-      <LoginWhithGoogle/>
+      <div className="w-[390px]">
+        <ButtonCreateAccount />
+        <FormLogin />
+        <ButtonEntrar />
+        <LoginWhithGoogle/>
+      </div>
     </div>
   );
 }
