@@ -9,7 +9,7 @@ const FormLogin = () => {
   };
 
   return (
-    <div className="w-full flex-col pt-[41px]">
+    <div className="flex flex-col items-center pt-[41px]">
       <div>
         <p className="text-3xl font-semibold text-bluePrimary">Entrar</p>
         <p className="text-blackOpacity font-light text-xs">
