@@ -8,15 +8,23 @@ import {
   faCircleChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import ModalSentValue from "./ModalSentValue";
+
 
 export const Header = () => {
   const { dataUser, valueWallet } = useContext(HomeContext);
 
   const [showValueWallet, setShowValueWallet] = useState(false);
 
+  const [openModalSentValue, setOpenModalSentValue] = useState<boolean>(true)
+
+  const openModalValue = ()=> {
+    setOpenModalSentValue(true)
+  }
+
   return (
-    <div className="w-full flex flex-col h-[357px] bg-bluePrimary rounded-b-[30px] overflow-x-hidden overflow-y-hidden">
-      <div className="flex pt-[41px] items-center pl-[28px]">
+    <div className="w-full flex flex-col items-center h-[357px] bg-bluePrimary rounded-b-[30px] overflow-x-hidden overflow-y-hidden">
+      <div className="w-[390px] flex pt-[41px] pl-[28px]">
         <div>
           <Image
             src={dataUser.photoURL}
@@ -75,7 +83,7 @@ export const Header = () => {
             />
             <p className="text-blackPrimary">Saída</p>
           </button>
-          <button className="w-[144px] h-[40px] flex justify-center items-center gap-1 bg-white rounded-[20px] font-medium">
+          <button className="w-[144px] h-[40px] flex justify-center items-center gap-1 bg-white rounded-[20px] font-medium" onClick={ openModalValue }>
             <FontAwesomeIcon
               icon={faCircleArrowUp}
               className="text-bluePrimary text-2xl"
@@ -84,6 +92,7 @@ export const Header = () => {
           </button>
         </div>
       </div>
+      {openModalSentValue && <ModalSentValue setOpenModalSentValue={setOpenModalSentValue}/>}
     </div>
   );
 };
