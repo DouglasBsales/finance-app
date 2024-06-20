@@ -6,10 +6,12 @@ import FormCreateAccount from "@/components/CreateAccount/FormCreateAccount";
 
 export default function CreateAccount() {
   return (
-    <div className="w-full px-[28px] flex flex-col items-center bg-whitePrimary pb-[80px]">
-      <ButtonEntrarAccount />
-      <FormCreateAccount />
-      <CreateAccountButton />
+    <div className="w-full flex flex-col items-center bg-whitePrimary">
+      <div className="w-[390px] px-[28px] pb-5">
+        <ButtonEntrarAccount />
+        <FormCreateAccount />
+        <CreateAccountButton />
+      </div>
     </div>
   );
 }
