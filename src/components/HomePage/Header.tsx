@@ -3,12 +3,10 @@ import Image from "next/image";
 import { useContext, useState } from "react";
 import { HomeContext } from "@/Context/HomeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleArrowUp,
-  faCircleChevronDown,
-} from "@fortawesome/free-solid-svg-icons";
+import {faCircleArrowUp,faCircleChevronDown,} from "@fortawesome/free-solid-svg-icons";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import ModalSentValue from "./ModalSentValue";
+import { ModalExitValue } from "./ModalExitValue";
 
 
 export const Header = () => {
@@ -16,10 +14,16 @@ export const Header = () => {
 
   const [showValueWallet, setShowValueWallet] = useState(false);
 
-  const [openModalSentValue, setOpenModalSentValue] = useState<boolean>(true)
+  const [openModalSentValue, setOpenModalSentValue] = useState<boolean>(false)
+
+  const [openModalExitValue, setOpenModalExitValue] = useState<boolean>(false)
 
   const openModalValue = ()=> {
     setOpenModalSentValue(true)
+  }
+
+  const openModalExitValueFn = ()=> {
+    setOpenModalExitValue(true)
   }
 
   return (
@@ -76,7 +80,7 @@ export const Header = () => {
       </div>
       <div className="px-[28px] pt-[55px]">
         <div className="flex gap-[37px]">
-          <button className=" w-[144px] h-[40px] flex justify-center items-center gap-1 bg-white rounded-[20px] font-medium">
+          <button className=" w-[144px] h-[40px] flex justify-center items-center gap-1 bg-white rounded-[20px] font-medium" onClick={openModalExitValueFn}>
             <FontAwesomeIcon
               icon={faCircleChevronDown}
               className="text-bluePrimary text-2xl"
@@ -93,6 +97,7 @@ export const Header = () => {
         </div>
       </div>
       {openModalSentValue && <ModalSentValue setOpenModalSentValue={setOpenModalSentValue}/>}
+      {openModalExitValue && <ModalExitValue setOpenModalSentValue={ setOpenModalExitValue}/>}
     </div>
   );
 };
