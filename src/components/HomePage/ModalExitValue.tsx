@@ -8,7 +8,7 @@ type ModalSentValueProps = {
   setOpenModalSentValue: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const ModalExitValue: React.FC<ModalSentValueProps>  = ({setOpenModalSentValue}) => {
+export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSentValue }) => {
 
   const { valueWallet, idWalletAtt } = useContext(HomeContext);
 
@@ -20,17 +20,16 @@ export const ModalExitValue: React.FC<ModalSentValueProps>  = ({setOpenModalSent
   );
 
 
-  const exitValueWallet = async ()=> {
+  const exitValueWallet = async () => {
 
     const changeValueOfNumber = parseFloat(valueExitWallet);
 
-    let newValueWallet = 0
-    if(numberWallet === 0 || changeValueOfNumber > numberWallet){
-      newValueWallet = numberWallet - changeValueOfNumber;
-      return ;
+    if (numberWallet === 0) {
+      return;
     }
+    const newValueWallet = numberWallet - changeValueOfNumber;
+    await updateDoc(idWalletAtt, {valueWallet: newValueWallet}) // utilizamos para atualizar os dados
 
-    await updateDoc(idWalletAtt, { valueWallet: newValueWallet });
     setOpenModalSentValue(false)
   }
 
@@ -59,13 +58,13 @@ export const ModalExitValue: React.FC<ModalSentValueProps>  = ({setOpenModalSent
                 type="text"
                 className="rounded-md outline-none pl-[9px] text-blackPrimary"
                 placeholder="ex: 100"
-                onChange={(e)=>setValueExitWallet(e.target.value)}
+                onChange={(e) => setValueExitWallet(e.target.value)}
               />
             </div>
           </div>
         </div>
         <div className="flex gap-[11px]">
-          <button className="border-2 rounded-md" onClick={()=> setOpenModalSentValue(false)}>
+          <button className="border-2 rounded-md" onClick={() => setOpenModalSentValue(false)}>
             <p className="py-[8px] px-4 text-blackOpacity">Cancelar</p>
           </button>
           <button className="bg-bluePrimary rounded-md" onClick={exitValueWallet}>
