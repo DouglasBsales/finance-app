@@ -18,7 +18,7 @@ export default function HomeContextProvider({ children }: any) {
   const walletCollectionRef = userDocRef ? collection(userDocRef, "valueWallet") : null; // selecionando valueWallet no banco de dados 
 
   const [dataUser, setDataUser] = useState<any>({});
-  const [valueWallet, setValueWallet] = useState<any>([]); // Inicializando como array
+  const [valueWallet, setValueWallet] = useState<any>(0); // Inicializando como array
 
   useEffect(() => {
     const getDataUser = async () => {
@@ -33,20 +33,27 @@ export default function HomeContextProvider({ children }: any) {
     getDataUser();
   }, [userGoogleObj?.uid]); // Adicione uma dependência para o useEffect
 
+
+  const [idWalletAtt, setIdWalletAtt] = useState<any>()
   useEffect(() => {
     const getValueWallet = async () => {
       if (walletCollectionRef) {
-        const walletRefSnap = await getDocs(walletCollectionRef); // Retorno dos dados do valueWallet
+        const walletRefSnap = await getDocs(walletCollectionRef);
         const walletData = walletRefSnap.docs.map((doc) => doc.data());
+        const walletDocRef = await getDocs(walletCollectionRef)
+        const walletDocId =   walletDocRef.docs[0];
+        const walletDocIdref = doc(walletCollectionRef, walletDocId.id);
         setValueWallet(walletData);
+        setIdWalletAtt(walletDocIdref)
       }
     };
 
     getValueWallet();
   }, [walletCollectionRef]); // Use walletCollectionRef como dependência
 
+
   return (
-    <HomeContext.Provider value={{ dataUser, valueWallet }}>
+    <HomeContext.Provider value={{ dataUser, valueWallet, userGoogle,  walletCollectionRef, idWalletAtt}}>
       {children}
     </HomeContext.Provider>
   );
