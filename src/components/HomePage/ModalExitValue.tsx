@@ -24,7 +24,7 @@ export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSent
 
     const changeValueOfNumber = parseFloat(valueExitWallet);
 
-    if (numberWallet === 0) {
+    if (numberWallet === 0 || changeValueOfNumber > numberWallet ) {
       return;
     }
     const newValueWallet = numberWallet - changeValueOfNumber;
