@@ -36,7 +36,7 @@ const LoginWithGoogle = () => {
     await setDoc(userDocRef, userGoogle, { merge: true });
     if (typeof window !== "undefined") {
       localStorage.setItem("userGoogle", JSON.stringify(user));
-      window.location.href = "/Home";
+      window.location.href = "/Pages/Home";
     }
     setShowAuth(false);
   };
