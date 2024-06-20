@@ -2,7 +2,7 @@ import Image from "next/image";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, db } from "../../services/firebase";
 import { useState } from "react";
-import { setDoc, doc, collection } from "firebase/firestore";
+import { setDoc, doc, collection, getDoc } from "firebase/firestore";
 
 type UserGoogleType = {
   uId: string;
@@ -13,6 +13,25 @@ type UserGoogleType = {
   lastLoginTime: string;
 };
 
+const addedUserWithGoogle = async (user:any)=> {
+
+  const planosCollectionRef = collection(db, "users", user.uid, "planos");
+  const planoDocRef = doc(planosCollectionRef, "planos");
+  await setDoc(planoDocRef, {});
+
+  const valueWalletCollectionRef = collection(db,"users",user.uid,"valueWallet");
+  const valueWalletDocRef = doc(valueWalletCollectionRef, "valueWallet");
+  await setDoc(valueWalletDocRef, { valueWallet: 0 });
+
+  const custosCollectionRef = collection(db, "users", user.uid, "custos");
+  const custosDocRef = doc(custosCollectionRef, "custos");
+  await setDoc(custosDocRef, {});
+
+  const transacoesCollectionRef = collection(db,"users",user.uid,"transacoes");
+  const transacoesDocRef = doc(transacoesCollectionRef, "transacoes");
+  await setDoc(transacoesDocRef, {});
+}
+
 const LoginWithGoogle = () => {
   const [showAuth, setShowAuth] = useState(false);
 
@@ -20,26 +39,34 @@ const LoginWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
     setShowAuth(true);
-    const user = result.user; // armazena os dados do usuario do google em uma variável global do context
-    const userGoogle: UserGoogleType = {
-      // objeto criado com seu tipo para enviar os dados pro banco
-      uId: user.uid,
-      name: user.displayName!,
-      email: user.email!,
-      photoURL: user.photoURL!,
-      creationTime: user.metadata.creationTime!,
-      lastLoginTime: user.metadata.lastSignInTime!,
-    };
-    // Usando a referência de documento específica para o usuário
-    const userCollectionRef = collection(db, "users");
-    const userDocRef = doc(userCollectionRef, user.uid);
-    await setDoc(userDocRef, userGoogle, { merge: true });
+    const user = result.user;
+
+    // Verificar se o usuário já existe no banco de dados
+    const userDocRef = doc(db, "users", user.uid);
+    const userDocSnapshot = await getDoc(userDocRef);
+
+    if (!userDocSnapshot.exists()) {
+      // Criar dados do usuário se ainda não existir
+      const userGoogle: UserGoogleType = {
+        uId: user.uid,
+        name: user.displayName!,
+        email: user.email!,
+        photoURL: user.photoURL!,
+        creationTime: user.metadata.creationTime!,
+        lastLoginTime: user.metadata.lastSignInTime!,
+      };
+    
+      await setDoc(userDocRef, userGoogle, { merge: true });
+      addedUserWithGoogle(user)
+
+    // Armazenar dados do usuário na localStorage
     if (typeof window !== "undefined") {
       localStorage.setItem("userGoogle", JSON.stringify(user));
       window.location.href = "/Pages/Home";
     }
+
     setShowAuth(false);
-  };
+  }};
 
   return (
     <div>
