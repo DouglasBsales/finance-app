@@ -31,8 +31,7 @@ export default function HomeContextProvider({ children }: any) {
     };
 
     getDataUser();
-  }, [userGoogleObj?.uid]); // Adicione uma dependência para o useEffect
-
+  }, [userGoogleObj?.uid]); 
 
   const [idWalletAtt, setIdWalletAtt] = useState<any>()
   useEffect(() => {
@@ -42,7 +41,7 @@ export default function HomeContextProvider({ children }: any) {
         const walletData = walletRefSnap.docs.map((doc) => doc.data());
         const walletDocRef = await getDocs(walletCollectionRef)
         const walletDocId =   walletDocRef.docs[0];
-        const walletDocIdref = doc(walletCollectionRef, walletDocId.id);
+        const walletDocIdref = doc(walletCollectionRef, walletDocId.id) || null;
         setValueWallet(walletData);
         setIdWalletAtt(walletDocIdref)
       }
