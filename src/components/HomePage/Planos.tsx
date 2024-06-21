@@ -1,14 +1,15 @@
 import { faHouse, faUmbrellaBeach } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 
 export const Planos = () => {
   return (
     <div className="pl-[28px] pt-[25px]">
       <div className="flex justify-between items-center">
         <p className="text-blackPrimary text-xl font-medium">Seus planos</p>
-        <button className="text-bluePrimary font-medium pr-[28px]">
+        <Link href="/Pages/NewPlan" className="text-bluePrimary font-medium pr-[28px]">
           Novo plano
-        </button>
+        </Link>
       </div>
       <div className="flex gap-3 pt-5">
         <div className=" w-[130px] rounded-md bg-white pl-3 pb-3">
