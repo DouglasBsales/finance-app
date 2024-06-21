@@ -13,24 +13,24 @@ type UserGoogleType = {
   lastLoginTime: string;
 };
 
-const addedUserWithGoogle = async (user:any)=> {
-
+const addedUserWithGoogle = async (user: any) => {
   const planosCollectionRef = collection(db, "users", user.uid, "planos");
-  const planoDocRef = doc(planosCollectionRef, "planos");
+  const planoDocRef = doc(planosCollectionRef); // Cria um novo documento com ID gerado automaticamente
   await setDoc(planoDocRef, {});
 
-  const valueWalletCollectionRef = collection(db,"users",user.uid,"valueWallet");
-  const valueWalletDocRef = doc(valueWalletCollectionRef, "valueWallet");
+  const valueWalletCollectionRef = collection(db, "users", user.uid, "valueWallet");
+  const valueWalletDocRef = doc(valueWalletCollectionRef); // Cria um novo documento com ID gerado automaticamente
   await setDoc(valueWalletDocRef, { valueWallet: 0 });
 
   const custosCollectionRef = collection(db, "users", user.uid, "custos");
-  const custosDocRef = doc(custosCollectionRef, "custos");
+  const custosDocRef = doc(custosCollectionRef); // Cria um novo documento com ID gerado automaticamente
   await setDoc(custosDocRef, {});
 
-  const transacoesCollectionRef = collection(db,"users",user.uid,"transacoes");
-  const transacoesDocRef = doc(transacoesCollectionRef, "transacoes");
+  const transacoesCollectionRef = collection(db, "users", user.uid, "transacoes");
+  const transacoesDocRef = doc(transacoesCollectionRef); // Cria um novo documento com ID gerado automaticamente
   await setDoc(transacoesDocRef, {});
 }
+
 
 const LoginWithGoogle = () => {
   const [showAuth, setShowAuth] = useState(false);
@@ -58,13 +58,12 @@ const LoginWithGoogle = () => {
     
       await setDoc(userDocRef, userGoogle, { merge: true });
       addedUserWithGoogle(user)
+    }
 
     // Armazenar dados do usuário na localStorage
     if (typeof window !== "undefined") {
       localStorage.setItem("userGoogle", JSON.stringify(user));
       window.location.href = "/Pages/Home";
-    }
-
     setShowAuth(false);
   }};
 
