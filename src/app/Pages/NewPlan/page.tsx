@@ -1,10 +1,15 @@
 "use client";
 
 import { HomeContext } from "@/Context/HomeContext";
-import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleLeft,
+  faPlaneDeparture,
+  faStore,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { arrayUnion, doc, getDocs, updateDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
+import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState } from "react";
 
@@ -23,6 +28,21 @@ export default function NewPlan() {
     nameOfPlan: string;
     valueOfPlan: number;
     categorySelected: string;
+    iconCategory: any;
+  };
+
+  const iconsOfCatgeory: any = {
+    Viagem: "/viagem.svg",
+    Compras: "/store.svg",
+    Moda: "/moda.svg",
+    Eletrodomesticos: "/eletrodomesticos.svg",
+    Transporte: "/transporte.svg",
+    Lazer: "/lazer.svg",
+    Saude: "/saude.svg",
+    Investimentos: "/investimentos.svg",
+    ProjetosPessoais: "/projetosPessoais.svg",
+    Emergencia: "/emergencia.svg",
+    Educacao: "/educacao1.svg",
   };
 
   const createNewPlan = async () => {
@@ -50,16 +70,19 @@ export default function NewPlan() {
       nameOfPlan,
       valueOfPlan: parseFloat(valueOfPlan),
       categorySelected,
+      iconCategory: iconsOfCatgeory[categorySelected],
     };
 
     const docsPlan = await getDocs(collectionRefPlan);
     const docPlanId = docsPlan.docs[0].id;
     const refDocPlan = doc(collectionRefPlan, docPlanId);
 
-    const planArray = { // adicionando o novo Objeto no array
+    const planArray = {
+      // adicionando o novo Objeto no array
       id: nanoid(),
       data: data,
     };
+
     await updateDoc(refDocPlan, { planos: arrayUnion(planArray) }); // atualiazndo o array com os valores antigos e novos
 
     alert(`Plano criado com sucesso.`);
@@ -132,12 +155,10 @@ export default function NewPlan() {
               <option value="Moda">Moda</option>
               <option value="Eletrodomesticos">Eletrodomesticos</option>
               <option value="Transporte">Transporte</option>
-              <option value="Lazer e entretenimento">
-                Lazer e entretenimento{" "}
-              </option>
+              <option value="Lazer">Lazer e entretenimento</option>
               <option value="Saude">Saúde</option>
               <option value="Investimentos">Investimentos</option>
-              <option value="Projetos pessoais">Projetos pessoais</option>
+              <option value="ProjetosPessoais">Projetos pessoais</option>
               <option value="Emergencia">Emergencia </option>
               <option value="Educacao">Educação </option>
             </select>
@@ -146,8 +167,7 @@ export default function NewPlan() {
         <div className="w-full flex justify-center items-center pt-16">
           <button
             className="w-full bg-bluePrimary rounded-md"
-            onClick={createNewPlan}
-          >
+            onClick={createNewPlan}>
             <p className="text-white font-bold py-4">Criar plano</p>
           </button>
         </div>
