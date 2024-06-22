@@ -23,8 +23,8 @@ const HeaderPlan = () => {
               <p className="text-[28px] text-blackPrimary font-medium">House</p>
               <p className="text-blackOpacity">Projetos pessoais</p>
             </div>
-            <div>
-              <button onClick={() => setShowOptionsPlan(!showOptionsPlan)}>
+            <div className="relative">
+              <button onClick={() => setShowOptionsPlan(!showOptionsPlan)} className="outline-none">
                 <FontAwesomeIcon
                   icon={faEllipsis}
                   className="text-blackOpacity text-4xl"
