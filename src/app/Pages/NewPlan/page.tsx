@@ -3,13 +3,13 @@
 import { HomeContext } from "@/Context/HomeContext";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { doc, getDocs, setDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDocs, updateDoc } from "firebase/firestore";
+import { nanoid } from "nanoid";
 import Link from "next/link";
 import { useContext, useState } from "react";
 
 export default function NewPlan() {
-
-  const {collectionRefPlan} = useContext(HomeContext)
+  const { collectionRefPlan } = useContext(HomeContext);
 
   const [nameOfPlan, setNameOfPlan] = useState<string>("");
   const [valueOfPlan, setValueOfPlan] = useState<string>("");
@@ -19,12 +19,11 @@ export default function NewPlan() {
   const [errorValuePlan, setErrorValuePlan] = useState<boolean>(false);
   const [errorcategory, setErrorCategory] = useState<boolean>(false);
 
-type DataType = {
-  nameOfPlan: string, 
-  valueOfPlan: number, 
-  categorySelected: string
-
-}
+  type DataType = {
+    nameOfPlan: string;
+    valueOfPlan: number;
+    categorySelected: string;
+  };
 
   const createNewPlan = async () => {
     if (!nameOfPlan && !valueOfPlan && !categorySelected) {
@@ -53,19 +52,26 @@ type DataType = {
       categorySelected,
     };
 
-    const docsPlan = await getDocs(collectionRefPlan) 
-    const docPlanId = docsPlan.docs[0].id
-    const refDocPlan = doc(collectionRefPlan, docPlanId)
-    await updateDoc(refDocPlan, {planos: [data]})
+    const docsPlan = await getDocs(collectionRefPlan);
+    const docPlanId = docsPlan.docs[0].id;
+    const refDocPlan = doc(collectionRefPlan, docPlanId);
+
+    const planArray = { // adicionando o novo Objeto no array
+      id: nanoid(),
+      data: data,
+    };
+    await updateDoc(refDocPlan, { planos: arrayUnion(planArray) }); // atualiazndo o array com os valores antigos e novos
 
     alert(`Plano criado com sucesso.`);
   };
 
-
   return (
     <div className="w-full flex flex-col items-center bg-whitePrimary pb-[100px]">
       <div className="w-[390px] px-7 pb-[40px]">
-        <Link href="/Pages/Home" className="flex gap-1 items-center pt-4 text-blackPrimary">
+        <Link
+          href="/Pages/Home"
+          className="flex gap-1 items-center pt-4 text-blackPrimary"
+        >
           <FontAwesomeIcon icon={faAngleLeft} />
           <p>Voltar para a home</p>
         </Link>
