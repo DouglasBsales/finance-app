@@ -1,6 +1,4 @@
 import { HomeContext } from "@/Context/HomeContext";
-import { faHouse, faUmbrellaBeach } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useContext } from "react";
 import CardsPlans from "./CardsPlans";
