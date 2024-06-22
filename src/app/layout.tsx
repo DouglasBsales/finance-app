@@ -24,8 +24,8 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={`${montSerrat.className}`}>
         <HomeContextProvider>
-          <div className="w-full h-screen overflow-auto flex justify-center bg-whitePrimary">
-            <div className="w-full  bg-whitePrimary">{children}</div>
+          <div className="w-full h-screen flex justify-center bg-whitePrimary">
+            <div className="w-full bg-whitePrimary overflow-x-hidden">{children}</div>
           </div>
         </HomeContextProvider>
       </body>
