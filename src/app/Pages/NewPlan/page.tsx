@@ -1,11 +1,16 @@
 "use client";
 
+import { HomeContext } from "@/Context/HomeContext";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { doc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 export default function NewPlan() {
+
+  const {collectionRefPlan} = useContext(HomeContext)
+
   const [nameOfPlan, setNameOfPlan] = useState<string>("");
   const [valueOfPlan, setValueOfPlan] = useState<string>("");
   const [categorySelected, setCategorySelected] = useState<string>("");
@@ -13,6 +18,13 @@ export default function NewPlan() {
   const [errorOfName, setErrorOfName] = useState<boolean>(false);
   const [errorValuePlan, setErrorValuePlan] = useState<boolean>(false);
   const [errorcategory, setErrorCategory] = useState<boolean>(false);
+
+type DataType = {
+  nameOfPlan: string, 
+  valueOfPlan: number, 
+  categorySelected: string
+
+}
 
   const createNewPlan = async () => {
     if (!nameOfPlan && !valueOfPlan && !categorySelected) {
@@ -35,17 +47,20 @@ export default function NewPlan() {
       return;
     }
 
-    const data = {
+    const data: DataType = {
       nameOfPlan,
       valueOfPlan: parseFloat(valueOfPlan),
       categorySelected,
     };
 
-    alert(
-      `Plano criado com sucesso. Nome:${data.nameOfPlan}, Meta:${data.valueOfPlan}, Categoria:${data.categorySelected}`
-    );
-    console.log(data)
+    const docsPlan = await getDocs(collectionRefPlan) 
+    const docPlanId = docsPlan.docs[0].id
+    const refDocPlan = doc(collectionRefPlan, docPlanId)
+    await updateDoc(refDocPlan, {planos: [data]})
+
+    alert(`Plano criado com sucesso.`);
   };
+
 
   return (
     <div className="w-full flex flex-col items-center bg-whitePrimary pb-[100px]">
