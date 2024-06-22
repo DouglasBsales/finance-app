@@ -31,7 +31,7 @@ export default function HomeContextProvider({ children }: any) {
     };
 
     getDataUser();
-  }, [userGoogleObj?.uid]); 
+  }, [userGoogleObj?.uid]);
 
   const [idWalletAtt, setIdWalletAtt] = useState<any>()
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function HomeContextProvider({ children }: any) {
         const walletRefSnap = await getDocs(walletCollectionRef);
         const walletData = walletRefSnap.docs.map((doc) => doc.data());
         const walletDocRef = await getDocs(walletCollectionRef)
-        const walletDocId =   walletDocRef.docs[0];
+        const walletDocId = walletDocRef.docs[0];
         const walletDocIdref = doc(walletCollectionRef, walletDocId.id) || null;
         setValueWallet(walletData);
         setIdWalletAtt(walletDocIdref)
@@ -51,8 +51,22 @@ export default function HomeContextProvider({ children }: any) {
   }, [walletCollectionRef]); // Use walletCollectionRef como dependência
 
 
+  const [plansData, setPlansData] = useState<any>()
+  useEffect(() => {
+    const getPlans = async () => {
+      const plansCollect = collection(db, "users", userGoogleObj.uid, "planos")
+      const plansDocs = await getDocs(plansCollect)
+      const plansArray = plansDocs.docs.map((doc)=> doc.data())
+      setPlansData(plansArray)
+      console.log(plansData)
+    }
+
+    getPlans()
+  }, [])
+
+
   return (
-    <HomeContext.Provider value={{ dataUser, valueWallet, userGoogle,  walletCollectionRef, idWalletAtt}}>
+    <HomeContext.Provider value={{ dataUser, valueWallet, userGoogle, walletCollectionRef, idWalletAtt, plansData }}>
       {children}
     </HomeContext.Provider>
   );
