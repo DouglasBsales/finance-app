@@ -52,21 +52,22 @@ export default function HomeContextProvider({ children }: any) {
 
 
   const [plansData, setPlansData] = useState<any>()
+  const [collectionRefPlan, setCollectionRefPlan] = useState<any>()
   useEffect(() => {
     const getPlans = async () => {
       const plansCollect = collection(db, "users", userGoogleObj.uid, "planos")
+      setCollectionRefPlan(plansCollect)
       const plansDocs = await getDocs(plansCollect)
       const plansArray = plansDocs.docs.map((doc)=> doc.data())
       setPlansData(plansArray)
-      console.log(plansData)
     }
 
     getPlans()
-  }, [])
+  }, [plansData])
 
 
   return (
-    <HomeContext.Provider value={{ dataUser, valueWallet, userGoogle, walletCollectionRef, idWalletAtt, plansData }}>
+    <HomeContext.Provider value={{ dataUser, valueWallet, userGoogle, walletCollectionRef, idWalletAtt, plansData, collectionRefPlan }}>
       {children}
     </HomeContext.Provider>
   );
