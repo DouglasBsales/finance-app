@@ -60,7 +60,7 @@ const ModalSentValue: React.FC<ModalSentValueProps> = ({
               />
               <input
                 type="text"
-                className="rounded-md outline-none pl-[9px] text-blackPrimary"
+                className="h-[40px] rounded-md outline-none pl-[9px] text-blackPrimary"
                 placeholder="ex: 100"
                 onChange={(e) => setValueSentWallet(e.target.value)}
               />
