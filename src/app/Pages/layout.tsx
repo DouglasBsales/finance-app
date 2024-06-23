@@ -8,10 +8,8 @@ interface LayoutWithMenuProps {
 const LayoutWithMenu: React.FC<LayoutWithMenuProps> = ({ children }) => {
   return (
     <div>
-      <div className="w-full flex justify-center bg-whitePrimary ">
-        {children}
-        <Menu />
-      </div>
+      {children}
+      <Menu />
     </div>
   );
 };
