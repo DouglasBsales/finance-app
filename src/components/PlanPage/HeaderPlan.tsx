@@ -15,23 +15,33 @@ const HeaderPlan = () => {
 
   const { PlanSelectIfId } = useContext(HomeContext);
 
+  const planSelected = PlanSelectIfId !== "undefined" ? PlanSelectIfId : null;
+
   return (
-    <div className="w-full flex flex-col items-center h-[357px] bg-white rounded-b-[30px] overflow-x-hidden overflow-y-hidden">
+    <div className="w-full flex flex-col items-center h-[357px] bg-white rounded-b-[30px] overflow-x-hidden">
       <div className="w-[390px] px-[28px]">
         <div className="pt-11 ">
           <div className="w-full flex gap-5 justify-between">
             <div className="w-[92px] h-[92px] flex justify-center items-center bg-whitePrimary rounded-full">
-              <Image
-                src={PlanSelectIfId.data.iconCategory}
-                alt="Imagem do plano"
-              />
+              {planSelected && planSelected.data.iconCategory ? (
+                <Image
+                  src={planSelected.data.iconCategory}
+                  alt="Imagem do plano"
+                />
+              ) : (
+                <div>Imagem não disponível</div>
+              )}
             </div>
             <div className="flex flex-col justify-center pr-7">
               <p className="text-[28px] text-blackPrimary font-medium">
-                {PlanSelectIfId.data.nameOfPlan}
+                {planSelected ? planSelected.data.nameOfPlan : "Nome do Plano"}
               </p>
               <p className="text-blackOpacity">
-                {PlanSelectIfId.data.categorySelected}
+                {planSelected ? (
+                  planSelected.data.categorySelected
+                ) : (
+                  "Não foi possível selecionar a categoria"
+                )}
               </p>
             </div>
             <div className="relative">
@@ -58,7 +68,7 @@ const HeaderPlan = () => {
           <div>
             <p className="text-blackPrimary font-medium">Meta a ser atingida</p>
             <p className="text-xl text-blackOpacity font-medium">
-              {PlanSelectIfId.data.valueOfPlan}
+              {planSelected ? planSelected.data.valueOfPlan : "Meta não definida"}
             </p>
           </div>
         </div>
