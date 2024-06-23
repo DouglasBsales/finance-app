@@ -14,8 +14,12 @@ export default function HomeContextProvider({ children }: any) {
 
   const userCollectionRef = collection(db, "users");
   const userGoogleObj = userGoogle ? JSON.parse(userGoogle) : null;
-  const userDocRef = userGoogleObj ? doc(userCollectionRef, userGoogleObj.uid) : null; // Selecionando conta do usuário
-  const walletCollectionRef = userDocRef ? collection(userDocRef, "valueWallet") : null; // selecionando valueWallet no banco de dados 
+  const userDocRef = userGoogleObj
+    ? doc(userCollectionRef, userGoogleObj.uid)
+    : null; // Selecionando conta do usuário
+  const walletCollectionRef = userDocRef
+    ? collection(userDocRef, "valueWallet")
+    : null; // selecionando valueWallet no banco de dados
 
   const [dataUser, setDataUser] = useState<any>({});
   const [valueWallet, setValueWallet] = useState<any>(0); // Inicializando como array
@@ -33,41 +37,58 @@ export default function HomeContextProvider({ children }: any) {
     getDataUser();
   }, [userGoogleObj?.uid]);
 
-  const [idWalletAtt, setIdWalletAtt] = useState<any>()
+  const [idWalletAtt, setIdWalletAtt] = useState<any>();
   useEffect(() => {
     const getValueWallet = async () => {
       if (walletCollectionRef) {
         const walletRefSnap = await getDocs(walletCollectionRef);
         const walletData = walletRefSnap.docs.map((doc) => doc.data());
-        const walletDocRef = await getDocs(walletCollectionRef)
+        const walletDocRef = await getDocs(walletCollectionRef);
         const walletDocId = walletDocRef.docs[0];
-        const walletDocIdref = doc(walletCollectionRef, walletDocId.id) || null;
+        const walletDocIdref = walletDocId
+          ? doc(walletCollectionRef, walletDocId.id)
+          : null;
         setValueWallet(walletData);
-        setIdWalletAtt(walletDocIdref)
+        setIdWalletAtt(walletDocIdref);
       }
     };
 
     getValueWallet();
   }, [walletCollectionRef]); // Use walletCollectionRef como dependência
 
-
-  const [plansData, setPlansData] = useState<any>()
-  const [collectionRefPlan, setCollectionRefPlan] = useState<any>()
+  const [plansData, setPlansData] = useState<any>();
+  const [collectionRefPlan, setCollectionRefPlan] = useState<any>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [planSelectIfId, setPlanSelectIfId] = useState<any>();
   useEffect(() => {
     const getPlans = async () => {
-      const plansCollect = collection(db, "users", userGoogleObj.uid, "planos")
-      setCollectionRefPlan(plansCollect)
-      const plansDocs = await getDocs(plansCollect)
-      const plansArray = plansDocs.docs.map((doc)=> doc.data())
-      setPlansData(plansArray)
-    }
+      setIsLoading(true);
+      const plansCollect = collection(db, "users", userGoogleObj.uid, "planos");
+      setCollectionRefPlan(plansCollect);
+      const plansDocs = await getDocs(plansCollect);
+      const plansArray = plansDocs.docs.map((doc) => doc.data());
+      setPlansData(plansArray);
+      setIsLoading(false);
+    };
 
-    getPlans()
-  }, [plansData])
-
+    getPlans();
+  }, [userGoogleObj?.uid]);
 
   return (
-    <HomeContext.Provider value={{ dataUser, valueWallet, userGoogle, walletCollectionRef, idWalletAtt, plansData, collectionRefPlan }}>
+    <HomeContext.Provider
+      value={{
+        dataUser,
+        valueWallet,
+        userGoogle,
+        walletCollectionRef,
+        idWalletAtt,
+        plansData,
+        collectionRefPlan,
+        isLoading,
+        setPlanSelectIfId,
+        planSelectIfId
+      }}
+    >
       {children}
     </HomeContext.Provider>
   );
