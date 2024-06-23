@@ -4,7 +4,13 @@ import { useContext } from "react";
 import CardsPlans from "./CardsPlans";
 
 export const Planos = () => {
-  const { plansData } = useContext(HomeContext);
+  const { plansData, isLoading } = useContext(HomeContext);
+
+  const hasPlans =
+    Array.isArray(plansData) &&
+    plansData.length > 0 &&
+    Array.isArray(plansData[0].planos) &&
+    plansData[0].planos.length > 0;
 
   return (
     <div className="pl-[28px] pt-[25px]">
@@ -18,16 +24,26 @@ export const Planos = () => {
         </Link>
       </div>
       <div className="flex gap-3 pt-5">
-        {plansData.length > 0 ? (
-          <div>
-            <p className="text-blackOpacity">Você ainda nao possui planos a serem exibidos</p>
-          </div>
+        {hasPlans ? (
+          plansData.map((plan: any) =>
+            plan.planos.map((plano: any) => (
+              <div key={plano.id}>
+                <CardsPlans
+                  planId={plano.id}
+                  nameOfPlan={plano.data.nameOfPlan}
+                  valueOfPlan={plano.data.valueOfPlan}
+                />
+              </div>
+            ))
+          )
         ) : (
-          plansData.map((plan: any) => (
-            <div key={plan.id}>
-              <CardsPlans />
-            </div>
-          ))
+          <div>
+            {isLoading ? (
+              <p className="text-blackOpacity">Carregando seus planos...</p>
+            ) : (
+              <p className="text-blackOpacity">Você ainda nao possui planos a serem exibidos</p>
+            )}
+          </div>
         )}
       </div>
     </div>
