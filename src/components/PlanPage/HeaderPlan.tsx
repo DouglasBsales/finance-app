@@ -1,12 +1,19 @@
-import { faCircleArrowUp, faCircleChevronDown, faEllipsis, faHouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleArrowUp,
+  faCircleChevronDown,
+  faEllipsis,
+  faHouse,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import MiniModalOptionsPlan from "./MiniModalOptionsPlan";
+import { HomeContext } from "@/Context/HomeContext";
+import Image from "next/image";
 
 const HeaderPlan = () => {
-
   const [showOptionsPlan, setShowOptionsPlan] = useState(false);
 
+  const { PlanSelectIfId } = useContext(HomeContext);
 
   return (
     <div className="w-full flex flex-col items-center h-[357px] bg-white rounded-b-[30px] overflow-x-hidden overflow-y-hidden">
@@ -14,23 +21,30 @@ const HeaderPlan = () => {
         <div className="pt-11 ">
           <div className="w-full flex gap-5 justify-between">
             <div className="w-[92px] h-[92px] flex justify-center items-center bg-whitePrimary rounded-full">
-              <FontAwesomeIcon
-                icon={faHouse}
-                className="text-bluePrimary text-5xl"
+              <Image
+                src={PlanSelectIfId.data.iconCategory}
+                alt="Imagem do plano"
               />
             </div>
             <div className="flex flex-col justify-center pr-7">
-              <p className="text-[28px] text-blackPrimary font-medium">House</p>
-              <p className="text-blackOpacity">Projetos pessoais</p>
+              <p className="text-[28px] text-blackPrimary font-medium">
+                {PlanSelectIfId.data.nameOfPlan}
+              </p>
+              <p className="text-blackOpacity">
+                {PlanSelectIfId.data.categorySelected}
+              </p>
             </div>
             <div className="relative">
-              <button onClick={() => setShowOptionsPlan(!showOptionsPlan)} className="outline-none">
+              <button
+                onClick={() => setShowOptionsPlan(!showOptionsPlan)}
+                className="outline-none"
+              >
                 <FontAwesomeIcon
                   icon={faEllipsis}
                   className="text-blackOpacity text-4xl"
                 />
               </button>
-              {showOptionsPlan && <MiniModalOptionsPlan/>}
+              {showOptionsPlan && <MiniModalOptionsPlan />}
             </div>
           </div>
         </div>
@@ -44,27 +58,27 @@ const HeaderPlan = () => {
           <div>
             <p className="text-blackPrimary font-medium">Meta a ser atingida</p>
             <p className="text-xl text-blackOpacity font-medium">
-              R$ 200.000,00
+              {PlanSelectIfId.data.valueOfPlan}
             </p>
           </div>
         </div>
         <div className="pt-6">
-        <div className="flex gap-[37px]">
-          <button className=" w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium">
-            <FontAwesomeIcon
-              icon={faCircleChevronDown}
-              className="text-bluePrimary text-2xl"
-            />
-            <p className="text-blackPrimary">Saída</p>
-          </button>
-          <button className="w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium">
-            <FontAwesomeIcon
-              icon={faCircleArrowUp}
-              className="text-bluePrimary text-2xl"
-            />
-            <p className="text-blackPrimary">Entrada</p>
-          </button>
-        </div>
+          <div className="flex gap-[37px]">
+            <button className=" w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium">
+              <FontAwesomeIcon
+                icon={faCircleChevronDown}
+                className="text-bluePrimary text-2xl"
+              />
+              <p className="text-blackPrimary">Saída</p>
+            </button>
+            <button className="w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium">
+              <FontAwesomeIcon
+                icon={faCircleArrowUp}
+                className="text-bluePrimary text-2xl"
+              />
+              <p className="text-blackPrimary">Entrada</p>
+            </button>
+          </div>
         </div>
       </div>
     </div>
