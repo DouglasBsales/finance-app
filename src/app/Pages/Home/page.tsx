@@ -9,10 +9,6 @@ import { useContext } from "react";
 
 export default function Home() {
 
-  const {plansData} = useContext(HomeContext)
-
-  console.log(plansData)
-
   return (
     <div className="w-full flex flex-col items-center bg-whitePrimary pb-[100px]">
       <Header />
