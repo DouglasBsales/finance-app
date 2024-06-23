@@ -13,22 +13,22 @@ type UserGoogleType = {
   lastLoginTime: string;
 };
 
-const addedUserWithGoogle = async (user: any) => {
+const addedUserWithGoogle = (user: any) => {
   const planosCollectionRef = collection(db, "users", user.uid, "planos");
   const planoDocRef = doc(planosCollectionRef); // Cria um novo documento com ID gerado automaticamente
-  await setDoc(planoDocRef, {});
+  setDoc(planoDocRef, {planos: []});
 
   const valueWalletCollectionRef = collection(db, "users", user.uid, "valueWallet");
   const valueWalletDocRef = doc(valueWalletCollectionRef); // Cria um novo documento com ID gerado automaticamente
-  await setDoc(valueWalletDocRef, { valueWallet: 0 });
+  setDoc(valueWalletDocRef, { valueWallet: 0 });
 
   const custosCollectionRef = collection(db, "users", user.uid, "custos");
   const custosDocRef = doc(custosCollectionRef); // Cria um novo documento com ID gerado automaticamente
-  await setDoc(custosDocRef, {});
+  setDoc(custosDocRef, {custos: []});
 
   const transacoesCollectionRef = collection(db, "users", user.uid, "transacoes");
   const transacoesDocRef = doc(transacoesCollectionRef); // Cria um novo documento com ID gerado automaticamente
-  await setDoc(transacoesDocRef, {});
+  setDoc(transacoesDocRef, {transacoes: []});
 }
 
 
