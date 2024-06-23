@@ -7,6 +7,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const Menu = () => {
@@ -31,7 +32,7 @@ const Menu = () => {
   return (
     <div className="w-full h-[70px] flex justify-center items-center bg-white fixed bottom-0">
       <div className="flex w-[310px] items-center gap-[62px]">
-      <button onClick={isPageHome}>
+      <Link href="/Pages/Home" onClick={isPageHome}>
           <FontAwesomeIcon
             icon={faHouse}
             className={`${
@@ -47,7 +48,7 @@ const Menu = () => {
                 : " border-white"
             } mt-[8px]`}
           ></div>
-        </button>
+        </Link>
         <button onClick={isPageTransacao}>
           <FontAwesomeIcon
             icon={faClockRotateLeft}
@@ -65,7 +66,7 @@ const Menu = () => {
             } mt-[8px]`}
           ></div>
         </button>
-        <button onClick={ isPageSearchTransition}>
+        <Link href="/Pages/SearchTransacoes" onClick={ isPageSearchTransition}>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
             className={`${
@@ -81,7 +82,7 @@ const Menu = () => {
                 : " border-white"
             } mt-[8px]`}
           ></div>
-        </button>
+        </Link>
         <button onClick={isPageConfigUser}>
           <FontAwesomeIcon
             icon={faUser}
