@@ -1,16 +1,12 @@
 "use client";
 
+import Link from "next/link";
+
 import { HomeContext } from "@/Context/HomeContext";
-import {
-  faAngleLeft,
-  faPlaneDeparture,
-  faStore,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { arrayUnion, doc, getDocs, updateDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
-import Image from "next/image";
-import Link from "next/link";
 import { useContext, useState } from "react";
 
 export default function NewPlan() {
@@ -78,7 +74,6 @@ export default function NewPlan() {
     const refDocPlan = doc(collectionRefPlan, docPlanId);
 
     const planArray = {
-      // adicionando o novo Objeto no array
       id: nanoid(),
       data: data,
     };
@@ -167,7 +162,8 @@ export default function NewPlan() {
         <div className="w-full flex justify-center items-center pt-16">
           <button
             className="w-full bg-bluePrimary rounded-md"
-            onClick={createNewPlan}>
+            onClick={createNewPlan}
+          >
             <p className="text-white font-bold py-4">Criar plano</p>
           </button>
         </div>
