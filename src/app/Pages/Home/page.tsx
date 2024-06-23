@@ -10,9 +10,9 @@ import { useContext } from "react";
 export default function Home() {
 
   return (
-    <div className="w-full flex flex-col items-center bg-whitePrimary pb-[100px]">
+    <div className="w-full flex flex-col items-center bg-whitePrimary ">
       <Header />
-      <div className="w-[390px]">
+      <div className="w-[390px] h-screen ">
       <Planos />
       <Custos/>
       <LastTransacoes/>
