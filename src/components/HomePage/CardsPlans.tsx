@@ -1,7 +1,5 @@
 import { FunctionComponent, useContext } from "react";
 
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { HomeContext } from "@/Context/HomeContext";
 import Image from "next/image";
