@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { arrayUnion, doc, getDocs, updateDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
 import { useContext, useState } from "react";
+import { ModalPlanCreated } from "@/components/NewPlanPage/ModalPlanCreated";
 
 export default function NewPlan() {
   const { collectionRefPlan } = useContext(HomeContext);
@@ -19,6 +20,8 @@ export default function NewPlan() {
   const [errorOfName, setErrorOfName] = useState<boolean>(false);
   const [errorValuePlan, setErrorValuePlan] = useState<boolean>(false);
   const [errorcategory, setErrorCategory] = useState<boolean>(false);
+
+  const[showModalPlanCreated, setShowModalPlanCreated] = useState<Boolean>(false)
 
   type DataType = {
     nameOfPlan: string;
@@ -79,8 +82,9 @@ export default function NewPlan() {
     };
 
     await updateDoc(refDocPlan, { planos: arrayUnion(planArray) }); // atualiazndo o array com os valores antigos e novos
+    window.location.href="/Pages/Plan"
 
-    alert(`Plano criado com sucesso.`);
+    setShowModalPlanCreated(true)
   };
 
   return (
@@ -168,6 +172,7 @@ export default function NewPlan() {
           </button>
         </div>
       </div>
+      {showModalPlanCreated && <ModalPlanCreated />}
     </div>
   );
 }
