@@ -24,10 +24,10 @@ const HeaderPlan = () => {
         setPlanSelected(convertedPlanSelectIfIdStorage);
       }
     }
-  }, [planSelected]);
+  }, []); // planSelected
 
   return (
-    <div className="w-full flex flex-col items-center h-[357px] bg-white rounded-b-[30px] overflow-x-hidden">
+    <div className="w-full flex flex-col items-center bg-white rounded-b-[30px] pb-5 overflow-x-hidden">
       <div className="w-[390px] px-[28px]">
         <Link
           href="/Pages/Home"
@@ -38,23 +38,26 @@ const HeaderPlan = () => {
         </Link>
         <div className="pt-11 ">
           <div className="w-full flex gap-5 justify-between">
-            <div className="w-[92px] h-[92px] flex justify-center items-center bg-whitePrimary rounded-full">
-              {planSelected ? (
-                <Image
-                  src={planSelected.data.iconCategory}
-                  alt="Imagem do plano"
-                  width={50}
-                  height={50}
-                />
-              ) : (
-                <div>Imagem não disponível</div>
-              )}
+            <div>
+              <div className="w-[92px] h-[92px] flex justify-center items-center bg-whitePrimary rounded-full">
+                {planSelected ? (
+                  <Image
+                    src={planSelected.data.iconCategory}
+                    alt="Imagem do plano"
+                    width={50}
+                    height={50}
+                  />
+                ) : (
+                  <div>Imagem não disponível</div>
+                )}
+              </div>
             </div>
-            <div className="flex flex-col justify-center pr-7">
+            <div className="flex flex-col justify-center ">
               <p className="text-[28px] text-blackPrimary font-medium">
                 {planSelected ? planSelected.data.nameOfPlan : "Nome do Plano"}
               </p>
-              <p className="text-blackOpacity">
+              <p className="text-blackprimary">Categoria:</p>
+              <p className="text-blackOpacity relative">
                 {planSelected
                   ? planSelected.data.categorySelected
                   : "Não foi possível selecionar a categoria"}
