@@ -59,7 +59,6 @@ export default function HomeContextProvider({ children }: any) {
   const [plansData, setPlansData] = useState<any>();
   const [collectionRefPlan, setCollectionRefPlan] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [planSelectIfId, setPlanSelectIfId] = useState<any>();
   useEffect(() => {
     const getPlans = async () => {
       setIsLoading(true);
@@ -72,7 +71,7 @@ export default function HomeContextProvider({ children }: any) {
     };
 
     getPlans();
-  }, [userGoogleObj?.uid]);
+  }, [plansData, userGoogleObj?.uid]);
 
   return (
     <HomeContext.Provider
@@ -85,8 +84,6 @@ export default function HomeContextProvider({ children }: any) {
         plansData,
         collectionRefPlan,
         isLoading,
-        setPlanSelectIfId,
-        planSelectIfId
       }}
     >
       {children}
