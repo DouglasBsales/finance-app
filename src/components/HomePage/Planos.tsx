@@ -32,6 +32,8 @@ export const Planos = () => {
                   planId={plano.id}
                   nameOfPlan={plano.data.nameOfPlan}
                   valueOfPlan={plano.data.valueOfPlan}
+                  iconCategory={plano.data.iconCategory}
+                  categorySelected={plano.data.categorySelected}
                 />
               </div>
             ))
