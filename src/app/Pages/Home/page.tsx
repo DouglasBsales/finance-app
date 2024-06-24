@@ -1,11 +1,9 @@
 "use client";
 
-import { HomeContext } from "@/Context/HomeContext";
 import { Custos } from "@/components/HomePage/Custos";
 import { Header } from "@/components/HomePage/Header";
 import LastTransacoes from "@/components/HomePage/LastTransacoes";
 import { Planos } from "@/components/HomePage/Planos";
-import { useContext } from "react";
 
 export default function Home() {
 
