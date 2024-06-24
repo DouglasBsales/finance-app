@@ -27,7 +27,7 @@ export const Header = () => {
   }
 
   return (
-    <div className="w-full flex flex-col items-center h-[330px] bg-bluePrimary rounded-b-[30px] overflow-x-hidden ">
+    <div className="w-full flex flex-col items-center h-[350px] bg-bluePrimary rounded-b-[30px] overflow-x-hidden ">
       <div className="w-[390px] flex pt-[41px] pl-[28px]">
         <div>
           <Image
