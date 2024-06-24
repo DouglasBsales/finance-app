@@ -1,32 +1,50 @@
 import {
+  faAngleLeft,
   faCircleArrowUp,
   faCircleChevronDown,
   faEllipsis,
-  faHouse,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import MiniModalOptionsPlan from "./MiniModalOptionsPlan";
-import { HomeContext } from "@/Context/HomeContext";
 import Image from "next/image";
+import Link from "next/link";
 
 const HeaderPlan = () => {
   const [showOptionsPlan, setShowOptionsPlan] = useState(false);
+  const [planSelected, setPlanSelected] = useState<any>();
 
-  const { PlanSelectIfId } = useContext(HomeContext);
-
-  const planSelected = PlanSelectIfId !== "undefined" ? PlanSelectIfId : null;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      let PlanSelectIfIdStorage: any = localStorage.getItem("planSelected");
+      let convertedPlanSelectIfIdStorage: any = JSON.parse(
+        PlanSelectIfIdStorage
+      );
+      if (convertedPlanSelectIfIdStorage) {
+        setPlanSelected(convertedPlanSelectIfIdStorage);
+      }
+    }
+  }, [planSelected]);
 
   return (
     <div className="w-full flex flex-col items-center h-[357px] bg-white rounded-b-[30px] overflow-x-hidden">
       <div className="w-[390px] px-[28px]">
+        <Link
+          href="/Pages/Home"
+          className="flex gap-1 items-center pt-4 text-blackPrimary"
+        >
+          <FontAwesomeIcon icon={faAngleLeft} />
+          <p>Voltar para a home</p>
+        </Link>
         <div className="pt-11 ">
           <div className="w-full flex gap-5 justify-between">
             <div className="w-[92px] h-[92px] flex justify-center items-center bg-whitePrimary rounded-full">
-              {planSelected && planSelected.data.iconCategory ? (
+              {planSelected ? (
                 <Image
                   src={planSelected.data.iconCategory}
                   alt="Imagem do plano"
+                  width={50}
+                  height={50}
                 />
               ) : (
                 <div>Imagem não disponível</div>
@@ -37,11 +55,9 @@ const HeaderPlan = () => {
                 {planSelected ? planSelected.data.nameOfPlan : "Nome do Plano"}
               </p>
               <p className="text-blackOpacity">
-                {planSelected ? (
-                  planSelected.data.categorySelected
-                ) : (
-                  "Não foi possível selecionar a categoria"
-                )}
+                {planSelected
+                  ? planSelected.data.categorySelected
+                  : "Não foi possível selecionar a categoria"}
               </p>
             </div>
             <div className="relative">
@@ -61,14 +77,19 @@ const HeaderPlan = () => {
         <div className="flex flex-col gap-[5px] pt-6">
           <div>
             <p className="font-medium text-blackPrimary">Valor atual</p>
-            <p className="text-xl text-bluePrimary font-medium">
-              R$ 31.400,00{" "}
-            </p>
+            <p className="text-xl text-bluePrimary font-medium">R$ 0,00</p>
           </div>
           <div>
             <p className="text-blackPrimary font-medium">Meta a ser atingida</p>
             <p className="text-xl text-blackOpacity font-medium">
-              {planSelected ? planSelected.data.valueOfPlan : "Meta não definida"}
+              {planSelected ? (
+                <p>
+                  R${" "}
+                  {planSelected.data.valueOfPlan.toFixed(2).replace(".", ",")}
+                </p>
+              ) : (
+                "Meta não definida"
+              )}
             </p>
           </div>
         </div>
