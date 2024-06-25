@@ -7,6 +7,7 @@ import Image from "next/image";
 type CardPlansProps = {
   nameOfPlan: string;
   valueOfPlan: number;
+  valuePlanWallet: number;
   planId: string;
   iconCategory: any;
   categorySelected: string;
@@ -15,6 +16,7 @@ type CardPlansProps = {
 const CardsPlans: FunctionComponent<CardPlansProps> = ({
   nameOfPlan,
   valueOfPlan,
+  valuePlanWallet,
   planId,
   iconCategory,
   categorySelected,
@@ -37,7 +39,7 @@ const CardsPlans: FunctionComponent<CardPlansProps> = ({
   };
 
   return (
-    <div className=" rounded-md bg-white px-3 pb-3">
+    <div className="w-[150px] rounded-md bg-white px-3 pb-3">
       <Link href="/Pages/Plan" onClick={() => selectPlan(planId)}>
         <div className="pt-4">
           <div className="w-9 h-9 flex justify-center items-center rounded-full bg-whitePrimary">
@@ -48,7 +50,9 @@ const CardsPlans: FunctionComponent<CardPlansProps> = ({
           <p className="text-xs text-blackOpacity">{categorySelected}</p>
           <p className="text-blackPrimary font-semibold">{nameOfPlan}</p>
           <div className="flex gap-1">
-            <p className="text-xs font-medium text-blackPrimary">R$ 0,00</p>
+            <p className="text-xs font-medium text-blackPrimary">
+              R$ {valuePlanWallet.toFixed(2).replace(".", ",")}
+            </p>
             <p className="text-xs font-medium text-blackOpacity">
               /R$ {valueOfPlan}
             </p>
