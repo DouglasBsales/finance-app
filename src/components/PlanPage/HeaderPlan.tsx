@@ -9,10 +9,12 @@ import { useEffect, useState } from "react";
 import MiniModalOptionsPlan from "./MiniModalOptionsPlan";
 import Image from "next/image";
 import Link from "next/link";
+import ModalSentvalueWallet from "./ModalSentValueWallet";
 
 const HeaderPlan = () => {
   const [showOptionsPlan, setShowOptionsPlan] = useState(false);
   const [planSelected, setPlanSelected] = useState<any>();
+  const [showModalSentValue, setShowModalSentValue] = useState<boolean>(false)
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -80,7 +82,19 @@ const HeaderPlan = () => {
         <div className="flex flex-col gap-[5px] pt-6">
           <div>
             <p className="font-medium text-blackPrimary">Valor atual</p>
-            <p className="text-xl text-bluePrimary font-medium">R$ 0,00</p>
+            <p className="text-xl text-bluePrimary font-medium">
+              {" "}
+              {planSelected ? (
+                <p>
+                  R${" "}
+                  {planSelected.data.valuePlanWallet
+                    .toFixed(2)
+                    .replace(".", ",")}
+                </p>
+              ) : (
+                "Carregando seu saldo"
+              )}
+            </p>
           </div>
           <div>
             <p className="text-blackPrimary font-medium">Meta a ser atingida</p>
@@ -105,7 +119,7 @@ const HeaderPlan = () => {
               />
               <p className="text-blackPrimary">Saída</p>
             </button>
-            <button className="w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium">
+            <button className="w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium" onClick={()=> setShowModalSentValue(true)}>
               <FontAwesomeIcon
                 icon={faCircleArrowUp}
                 className="text-bluePrimary text-2xl"
@@ -115,6 +129,7 @@ const HeaderPlan = () => {
           </div>
         </div>
       </div>
+      {showModalSentValue && <ModalSentvalueWallet setShowModalSentValue={setShowModalSentValue}/>}
     </div>
   );
 };
