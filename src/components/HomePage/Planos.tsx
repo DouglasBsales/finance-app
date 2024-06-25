@@ -23,7 +23,7 @@ export const Planos = () => {
           Novo plano
         </Link>
       </div>
-      <div className="flex gap-3 pt-5">
+      <div className="flex gap-3 pt-5 overflow-x-scroll" style={{ scrollbarWidth: 'thin', scrollbarColor: 'transparent transparent' }}>
         {hasPlans ? (
           plansData.map((plan: any) =>
             plan.planos.map((plano: any) => (
@@ -32,6 +32,7 @@ export const Planos = () => {
                   planId={plano.id}
                   nameOfPlan={plano.data.nameOfPlan}
                   valueOfPlan={plano.data.valueOfPlan}
+                  valuePlanWallet={plano.data.valuePlanWallet}
                   iconCategory={plano.data.iconCategory}
                   categorySelected={plano.data.categorySelected}
                 />
