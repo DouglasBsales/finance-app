@@ -26,6 +26,7 @@ export default function NewPlan() {
   type DataType = {
     nameOfPlan: string;
     valueOfPlan: number;
+    valuePlanWallet: number;
     categorySelected: string;
     iconCategory: any;
   };
@@ -68,6 +69,7 @@ export default function NewPlan() {
     const data: DataType = {
       nameOfPlan,
       valueOfPlan: parseFloat(valueOfPlan),
+      valuePlanWallet: 0,
       categorySelected,
       iconCategory: iconsOfCatgeory[categorySelected],
     };
@@ -82,6 +84,9 @@ export default function NewPlan() {
     };
 
     await updateDoc(refDocPlan, { planos: arrayUnion(planArray) }); // atualiazndo o array com os valores antigos e novos
+    if(typeof window !== "undefined"){
+      localStorage.setItem("planSelected", JSON.stringify(planArray))
+    }
     window.location.href="/Pages/Plan"
 
     setShowModalPlanCreated(true)
