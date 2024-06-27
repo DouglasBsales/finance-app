@@ -94,7 +94,9 @@ export default function NewPlan() {
     if(typeof window !== "undefined"){
       localStorage.setItem("planSelected", JSON.stringify(planArray))
     }
-    window.location.href="/Pages/Plan"
+    setTimeout(()=> {
+      window.location.href="/Pages/Plan"
+    }, 3000)
 
     setShowModalPlanCreated(true)
   };
