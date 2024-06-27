@@ -39,7 +39,7 @@ const CardsPlans: FunctionComponent<CardPlansProps> = ({
   };
 
   return (
-    <div className="w-[150px] rounded-md bg-white px-3 pb-3">
+    <div className="w-[180px] rounded-md bg-white px-3 pb-3">
       <Link href="/Pages/Plan" onClick={() => selectPlan(planId)}>
         <div className="pt-4">
           <div className="w-9 h-9 flex justify-center items-center rounded-full bg-whitePrimary">
