@@ -22,7 +22,10 @@ export default function HomeContextProvider({ children }: any) {
     : null; // selecionando valueWallet no banco de dados
 
   const [dataUser, setDataUser] = useState<any>({});
-  const [valueWallet, setValueWallet] = useState<any>(0); // Inicializando como array
+  const [valueWallet, setValueWallet] = useState<any>(0); 
+
+  // LINHA ACIMA OS STATES SETADOS DA HOME
+  // LINHA ABAIXO PARA CAPTURAR OS DADOS ESPECÍFICOS DO USUARIO NA DATABASE DO FIREBASE
 
   useEffect(() => {
     const getDataUser = async () => {
@@ -35,7 +38,9 @@ export default function HomeContextProvider({ children }: any) {
     };
 
     getDataUser();
-  }, [userGoogleObj?.uid]);
+  }, [userGoogleObj?.uid, userCollectionRef]);
+
+  // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET PRINCIPAL DA HOME
 
   const [idWalletAtt, setIdWalletAtt] = useState<any>();
   useEffect(() => {
@@ -56,6 +61,7 @@ export default function HomeContextProvider({ children }: any) {
     getValueWallet();
   }, [walletCollectionRef]); // Use walletCollectionRef como dependência
 
+  // LINHA ABAIXO PARA ATUALIZAÇÃO DOS PLANOS CRIADOS
   const [plansData, setPlansData] = useState<any>();
   const [collectionRefPlan, setCollectionRefPlan] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -72,6 +78,20 @@ export default function HomeContextProvider({ children }: any) {
 
     getPlans();
   }, [plansData, userGoogleObj?.uid]);
+
+  // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET DOS PLANOS
+
+  const [refDocPlan, setRefDocPlan] = useState<any>(); 
+  useEffect(() => {
+    const updateValueWallet = async () => {
+      const docsPlan = await getDocs(collectionRefPlan);
+      const docPlanId = docsPlan.docs[0].id;
+      const refDocPlan = doc(collectionRefPlan, docPlanId);
+      setRefDocPlan(refDocPlan);
+    };
+
+    updateValueWallet();
+  }, [refDocPlan, collectionRefPlan]);
 
   return (
     <HomeContext.Provider
