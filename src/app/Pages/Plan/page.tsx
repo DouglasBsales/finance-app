@@ -9,10 +9,12 @@ export default function Plan() {
       <div className="w-full">
         <HeaderPlan />
       </div>
-      <div className="w-[390px] px-7 pb-[100px]">
-        <div className="pt-12">
-          <p className="text-white text-3xl font-medium">Ultimas transações</p>
-          <CardsTransacoesPlan />
+      <div className="w-full px-7 pb-[100px] bg-bluePrimary">
+        <div className="flex flex-col items-center pt-12 px-7">
+          <div>
+            <p className="text-white text-3xl font-medium">Ultimas transações</p>
+            <CardsTransacoesPlan />
+          </div>
         </div>
       </div>
     </div>

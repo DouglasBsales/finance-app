@@ -2,10 +2,7 @@ import React, { useContext, useState } from "react";
 import { updateDoc } from "firebase/firestore";
 import { HomeContext } from "@/Context/HomeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleArrowUp,
-  faMoneyCheckDollar,
-} from "@fortawesome/free-solid-svg-icons";
+import {faCircleArrowUp,faMoneyCheckDollar,} from "@fortawesome/free-solid-svg-icons";
 
 type ModalSentValueProps = {
   setOpenModalSentValue: React.Dispatch<React.SetStateAction<boolean>>;
