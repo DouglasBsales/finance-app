@@ -13,7 +13,7 @@ import ModalSentvalueWallet from "./ModalSentValueWallet";
 import ModalExitValueWallet from "./ModalExitValueWallet";
 
 
-function formatarNumero(numero: number) {
+export function formatarNumero(numero: number) {
   let partes = numero.toFixed(2).split(".");
   partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   return partes.join(",");

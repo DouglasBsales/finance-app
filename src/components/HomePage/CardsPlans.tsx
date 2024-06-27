@@ -4,6 +4,8 @@ import Link from "next/link";
 import { HomeContext } from "@/Context/HomeContext";
 import Image from "next/image";
 
+import { formatarNumero } from "../PlanPage/HeaderPlan";
+
 type CardPlansProps = {
   nameOfPlan: string;
   valueOfPlan: number;
@@ -23,6 +25,7 @@ const CardsPlans: FunctionComponent<CardPlansProps> = ({
 }) => {
   const { plansData } = useContext(HomeContext);
 
+
   const selectPlan = (id: string): void => {
     const planData = plansData.find((plan: any) =>
       plan.planos.some((plano: any) => plano.id === id)
@@ -39,7 +42,7 @@ const CardsPlans: FunctionComponent<CardPlansProps> = ({
   };
 
   return (
-    <div className="w-[180px] rounded-md bg-white px-3 pb-3">
+    <div className="rounded-md bg-white px-3 pb-3">
       <Link href="/Pages/Plan" onClick={() => selectPlan(planId)}>
         <div className="pt-4">
           <div className="w-9 h-9 flex justify-center items-center rounded-full bg-whitePrimary">
@@ -51,7 +54,7 @@ const CardsPlans: FunctionComponent<CardPlansProps> = ({
           <p className="text-blackPrimary font-semibold">{nameOfPlan}</p>
           <div className="flex gap-1">
             <p className="text-xs font-medium text-blackPrimary">
-              R$ {valuePlanWallet.toFixed(2).replace(".", ",")}
+              R$ {formatarNumero(valuePlanWallet)}
             </p>
             <p className="text-xs font-medium text-blackOpacity">
               /R$ {valueOfPlan}

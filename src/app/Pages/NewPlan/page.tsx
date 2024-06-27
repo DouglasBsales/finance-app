@@ -96,7 +96,7 @@ export default function NewPlan() {
     }
     setTimeout(()=> {
       window.location.href="/Pages/Plan"
-    }, 3000)
+    }, 1000)
 
     setShowModalPlanCreated(true)
   };
@@ -130,7 +130,7 @@ export default function NewPlan() {
               className="w-full h-[35px] outline-none rounded-md pl-3"
               placeholder="Ex: Viagem "
               onChange={(e) => setNameOfPlan(e.target.value)}
-              maxLength={20}
+              maxLength={15}
               required
             />
           </div>
@@ -142,10 +142,11 @@ export default function NewPlan() {
             >
               Meta do plano
             </p>
+            <p className="text-xs text-blackOpacity">Coloque o número sem virgulas ou ponto</p>
             <input
               type="number"
               className="w-full h-[35px] outline-none rounded-md pl-3"
-              placeholder="Ex: 7000.00 "
+              placeholder="Ex: 7000"
               onChange={(e) => setValueOfPlan(e.target.value)}
               required
             />

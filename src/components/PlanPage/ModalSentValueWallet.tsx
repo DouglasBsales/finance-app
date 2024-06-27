@@ -13,17 +13,41 @@ type ModalTypeProps = {
   planSelected: any;
 };
 
+type DataType = {
+  nameOfPlan: string;
+  valueOfPlan: number;
+  valuePlanWallet: any;
+  categorySelected: string;
+  iconCategory: any;
+};
+
 const ModalSentvalueWallet: FunctionComponent<ModalTypeProps> = ({
   setShowModalSentValue,
   planSelected,
 }) => {
   const { refDocPlan } = useContext(HomeContext);
 
-  const [valueSentWallet, setValueSentWallet] = useState<string>();
+  const [valueSentWallet, setValueSentWallet] = useState<any>();
+  
 
   const updateValueWalletPlan = async () => {
-    const planAtt = [...planSelected, { valueWallet: Number(valueSentWallet) }];
+
+    const data: DataType = {
+      nameOfPlan:planSelected.data.nameOfPlan,
+      valueOfPlan:planSelected.data.valueOfPlan,
+      valuePlanWallet: parseFloat(valueSentWallet),
+      categorySelected: planSelected.data.categorySelected,
+      iconCategory:planSelected.data.iconCategory
+    };
+
+    const planAtt = {
+      id: planSelected.id,
+      data: data
+    };
     await updateDoc(refDocPlan, { planos: planAtt });
+    if(typeof window !== "undefined"){
+      localStorage.setItem("planSelected", JSON.stringify(planAtt))
+    }
     setShowModalSentValue(false);
   };
 

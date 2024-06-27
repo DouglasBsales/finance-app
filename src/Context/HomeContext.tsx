@@ -65,11 +65,13 @@ export default function HomeContextProvider({ children }: any) {
   useEffect(() => {
     const getPlans = async () => {
       setIsLoading(true);
-      const plansCollect = collection(db, "users", userGoogleObj.uid, "planos");
-      setCollectionRefPlan(plansCollect);
-      const plansDocs = await getDocs(plansCollect);
-      const plansArray = plansDocs.docs.map((doc) => doc.data());
+      if(userGoogleObj?.uid){ 
+        const plansCollect = collection(db, "users", userGoogleObj.uid, "planos")
+        setCollectionRefPlan(plansCollect);
+        const plansDocs = await getDocs(plansCollect);
+        const plansArray = plansDocs.docs.map((doc) => doc.data());
       setPlansData(plansArray);
+        ;}
       setIsLoading(false);
     };
 
@@ -81,10 +83,12 @@ export default function HomeContextProvider({ children }: any) {
   const [refDocPlan, setRefDocPlan] = useState<any>(); 
   useEffect(() => {
     const updateValueWallet = async () => {
-      const docsPlan = await getDocs(collectionRefPlan);
-      const docPlanId = docsPlan.docs[0].id;
-      const refDocPlan = doc(collectionRefPlan, docPlanId);
-      setRefDocPlan(refDocPlan);
+      if(collectionRefPlan){
+        const docsPlan = await getDocs(collectionRefPlan);
+        const docPlanId = docsPlan.docs[0];
+        const refDocPlan = docPlanId ? doc(collectionRefPlan, docPlanId.id): null;
+        setRefDocPlan(refDocPlan);
+      }
     };
 
     updateValueWallet();
@@ -101,6 +105,7 @@ export default function HomeContextProvider({ children }: any) {
         plansData,
         collectionRefPlan,
         isLoading,
+        refDocPlan
       }}
     >
       {children}
