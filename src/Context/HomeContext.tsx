@@ -48,16 +48,13 @@ export default function HomeContextProvider({ children }: any) {
       if (walletCollectionRef) {
         const walletRefSnap = await getDocs(walletCollectionRef);
         const walletData = walletRefSnap.docs.map((doc) => doc.data());
-        const walletDocRef = await getDocs(walletCollectionRef);
-        const walletDocId = walletDocRef.docs[0];
-        const walletDocIdref = walletDocId
-          ? doc(walletCollectionRef, walletDocId.id)
-          : null;
+        const walletDocId = walletRefSnap.docs[0];
+        const walletDocIdref = walletDocId ? doc(walletCollectionRef, walletDocId.id) : null;
         setValueWallet(walletData);
         setIdWalletAtt(walletDocIdref);
       }
     };
-
+  
     getValueWallet();
   }, [walletCollectionRef]); // Use walletCollectionRef como dependência
 
@@ -77,7 +74,7 @@ export default function HomeContextProvider({ children }: any) {
     };
 
     getPlans();
-  }, [plansData, userGoogleObj?.uid]);
+  }, [userGoogleObj?.uid]);
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET DOS PLANOS
 
@@ -91,7 +88,7 @@ export default function HomeContextProvider({ children }: any) {
     };
 
     updateValueWallet();
-  }, [refDocPlan, collectionRefPlan]);
+  }, [collectionRefPlan]);
 
   return (
     <HomeContext.Provider
