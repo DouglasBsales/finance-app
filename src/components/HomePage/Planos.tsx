@@ -23,7 +23,15 @@ export const Planos = () => {
           Novo plano
         </Link>
       </div>
-      <div className="flex gap-3 pt-5 overflow-x-scroll" style={{ scrollbarWidth: 'thin', scrollbarColor: 'transparent transparent' }}>
+      <div
+        className="flex gap-3 pt-5 overflow-x-scroll"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          overflow: "hidden",
+          overflowX: "scroll",
+        }}
+      >
         {hasPlans ? (
           plansData.map((plan: any) =>
             plan.planos.map((plano: any) => (
@@ -44,7 +52,9 @@ export const Planos = () => {
             {isLoading ? (
               <p className="text-blackOpacity">Carregando seus planos...</p>
             ) : (
-              <p className="text-blackOpacity">Você ainda nao possui planos a serem exibidos</p>
+              <p className="text-blackOpacity">
+                Você ainda nao possui planos a serem exibidos
+              </p>
             )}
           </div>
         )}
