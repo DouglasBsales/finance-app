@@ -10,30 +10,31 @@ import MiniModalOptionsPlan from "./MiniModalOptionsPlan";
 import Image from "next/image";
 import Link from "next/link";
 import ModalSentvalueWallet from "./ModalSentValueWallet";
+import ModalExitValueWallet from "./ModalExitValueWallet";
+
 
 function formatarNumero(numero: number) {
-  let partes = numero.toFixed(2).split('.');
+  let partes = numero.toFixed(2).split(".");
   partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  return partes.join(',');
+  return partes.join(",");
 }
 
 const HeaderPlan = () => {
   const [showOptionsPlan, setShowOptionsPlan] = useState(false);
   const [planSelected, setPlanSelected] = useState<any>();
-  const [showModalSentValue, setShowModalSentValue] = useState<boolean>(false)
+  const [showModalSentValue, setShowModalSentValue] = useState<boolean>(false);
+  const [showModalExitValue, setShowModalExitValue] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       let PlanSelectIfIdStorage: any = localStorage.getItem("planSelected");
-      let convertedPlanSelectIfIdStorage: any = JSON.parse(
-        PlanSelectIfIdStorage
-      );
-      if (convertedPlanSelectIfIdStorage) {
+      let convertedPlanSelectIfIdStorage: any = JSON.parse( PlanSelectIfIdStorage);
+      if(convertedPlanSelectIfIdStorage){
         setPlanSelected(convertedPlanSelectIfIdStorage);
       }
-    }
-  }, [planSelected]); // planSelected
 
+    }
+  }, []);
 
   return (
     <div className="w-full flex flex-col items-center bg-white rounded-b-[30px] pb-5 overflow-x-hidden">
@@ -89,37 +90,20 @@ const HeaderPlan = () => {
         <div className="flex flex-col gap-[5px] pt-6">
           <div>
             <p className="font-medium text-blackPrimary">Valor atual</p>
-<<<<<<< HEAD
-            <p className="text-xl text-bluePrimary font-medium">{planSelected ? (
-                <p>
-                  R$ {formatarNumero(planSelected.data.valuePlanWallet)}
-                </p>
-              ) : (
-                "Meta não definida"
-              )}</p>
-=======
             <p className="text-xl text-bluePrimary font-medium">
-              {" "}
               {planSelected ? (
-                <p>
-                  R${" "}
-                  {planSelected.data.valuePlanWallet
-                    .toFixed(2)
-                    .replace(".", ",")}
-                </p>
+                <p>R$ {formatarNumero(planSelected.data.valuePlanWallet)}</p>
               ) : (
-                "Carregando seu saldo"
+                "Carregando seu saldo..."
               )}
             </p>
->>>>>>> 3b54c7821b09dcf93422b3da5eb95e97d940bbd3
           </div>
           <div>
             <p className="text-blackPrimary font-medium">Meta a ser atingida</p>
             <p className="text-xl text-blackOpacity font-medium">
               {planSelected ? (
                 <p>
-                  R${" "}
-                  {planSelected.data.valueOfPlan.toFixed(2).replace(".", ",")}
+                  R$ {formatarNumero(planSelected.data.valueOfPlan)}
                 </p>
               ) : (
                 "Meta não definida"
@@ -129,14 +113,17 @@ const HeaderPlan = () => {
         </div>
         <div className="pt-6">
           <div className="flex gap-[37px]">
-            <button className=" w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium">
+            <button className=" w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium" onClick={()=> setShowModalExitValue(true)}>
               <FontAwesomeIcon
                 icon={faCircleChevronDown}
                 className="text-bluePrimary text-2xl"
               />
               <p className="text-blackPrimary">Saída</p>
             </button>
-            <button className="w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium" onClick={()=> setShowModalSentValue(true)}>
+            <button
+              className="w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium"
+              onClick={() => setShowModalSentValue(true)}
+            >
               <FontAwesomeIcon
                 icon={faCircleArrowUp}
                 className="text-bluePrimary text-2xl"
@@ -146,7 +133,8 @@ const HeaderPlan = () => {
           </div>
         </div>
       </div>
-      {showModalSentValue && <ModalSentvalueWallet setShowModalSentValue={setShowModalSentValue}/>}
+      {showModalSentValue && ( <ModalSentvalueWallet setShowModalSentValue={setShowModalSentValue} planSelected={planSelected} />)}
+      {showModalExitValue && ( <ModalExitValueWallet setShowModalExitValue={setShowModalExitValue} />)}
     </div>
   );
 };
