@@ -128,6 +128,7 @@ export default function NewPlan() {
               className="w-full h-[35px] outline-none rounded-md pl-3"
               placeholder="Ex: Viagem "
               onChange={(e) => setNameOfPlan(e.target.value)}
+              maxLength={20}
               required
             />
           </div>
