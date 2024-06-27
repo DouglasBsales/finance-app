@@ -7,7 +7,7 @@ export const Custos = () => {
       <div className="flex justify-between items-center">
         <p className="text-blackPrimary text-xl font-medium">Seus custos</p>
         <button className="text-bluePrimary font-medium pr-[28px]">
-          Seus custos
+          Novo custo
         </button>
       </div>
       <div className="flex gap-3 pt-5">
