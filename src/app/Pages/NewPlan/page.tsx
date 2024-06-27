@@ -59,6 +59,13 @@ export default function NewPlan() {
       return;
     }
 
+    const regex = /[.,]/;
+    if(regex.test(valueOfPlan)){
+      alert("Insira um valor inteiro, sem pontos ou virgulas")
+      setErrorValuePlan(true);
+      return;
+    }
+
     if (categorySelected === "0") {
       alert("Insira uma categoria válida");
       setErrorCategory(true);
