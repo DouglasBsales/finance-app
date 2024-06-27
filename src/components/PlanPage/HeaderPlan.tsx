@@ -10,6 +10,12 @@ import MiniModalOptionsPlan from "./MiniModalOptionsPlan";
 import Image from "next/image";
 import Link from "next/link";
 
+function formatarNumero(numero: number) {
+  let partes = numero.toFixed(2).split('.');
+  partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return partes.join(',');
+}
+
 const HeaderPlan = () => {
   const [showOptionsPlan, setShowOptionsPlan] = useState(false);
   const [planSelected, setPlanSelected] = useState<any>();
@@ -24,7 +30,8 @@ const HeaderPlan = () => {
         setPlanSelected(convertedPlanSelectIfIdStorage);
       }
     }
-  }, []); // planSelected
+  }, [planSelected]); // planSelected
+
 
   return (
     <div className="w-full flex flex-col items-center bg-white rounded-b-[30px] pb-5 overflow-x-hidden">
@@ -80,7 +87,13 @@ const HeaderPlan = () => {
         <div className="flex flex-col gap-[5px] pt-6">
           <div>
             <p className="font-medium text-blackPrimary">Valor atual</p>
-            <p className="text-xl text-bluePrimary font-medium">R$ 0,00</p>
+            <p className="text-xl text-bluePrimary font-medium">{planSelected ? (
+                <p>
+                  R$ {formatarNumero(planSelected.data.valuePlanWallet)}
+                </p>
+              ) : (
+                "Meta não definida"
+              )}</p>
           </div>
           <div>
             <p className="text-blackPrimary font-medium">Meta a ser atingida</p>
