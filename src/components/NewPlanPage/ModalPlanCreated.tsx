@@ -1,5 +1,10 @@
-import { faCircleCheck, faSpinner, faTruckLoading } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleCheck,
+  faSpinner,
+  faTruckLoading,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 
 export const ModalPlanCreated = () => {
   return (
@@ -15,10 +20,9 @@ export const ModalPlanCreated = () => {
         </div>
         <div className="flex flex-col items-center pt-[5px]">
           <p className="font-bold text-bluePrimary">Plano criado com sucesso</p>
-          <div className="flex items-center pt-3 gap-2">
-          <FontAwesomeIcon
-              icon={faSpinner} className="text-bluePrimary text-xl"/>
-              <p className="text-sm text-blackOpacity">Carregando novo plano</p>
+          <div className="flex items-center pt-3 gap-1">
+            <Image src="/loading2.gif" alt="loading" width={35} height={35} />
+            <p className="text-sm text-blackOpacity">Carregando novo plano</p>
           </div>
         </div>
       </div>
