@@ -27,16 +27,14 @@ const HeaderPlan = () => {
   useEffect(() => {
     const getterPlanDataStorage = () => {
       if (typeof window !== "undefined") {
-        if (planSelected) {
           const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
           const convertedPlanSelectIfIdStorage: any = JSON.parse(planSelectIfIdStorage);
           setPlanSelected(convertedPlanSelectIfIdStorage);
-        }
       }
     };
 
     getterPlanDataStorage();
-  }, [planSelected]);
+  }, []);
 
   return (
     <div className="w-full flex flex-col items-center bg-white rounded-b-[30px] pb-5 overflow-x-hidden">
