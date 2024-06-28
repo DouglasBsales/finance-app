@@ -7,6 +7,7 @@ import {faCircleArrowUp,faCircleChevronDown,} from "@fortawesome/free-solid-svg-
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import ModalSentValue from "./ModalSentValue";
 import { ModalExitValue } from "./ModalExitValue";
+import { formatarNumero } from "../PlanPage/HeaderPlan";
 
 
 export const Header = () => {
@@ -25,6 +26,7 @@ export const Header = () => {
   const openModalExitValueFn = ()=> {
     setOpenModalExitValue(true)
   }
+
 
   return (
     <div className="w-full flex flex-col items-center h-[350px] bg-bluePrimary rounded-b-[30px] overflow-x-hidden ">
@@ -57,7 +59,7 @@ export const Header = () => {
                     : "bg-transparent px-1 text-white"
                 } text-center outline-none font-semibold text-4xl pl-3`}
               >
-                R$ {wallet.valueWallet.toFixed(2).replace(".", ",")}
+                R$ {formatarNumero(wallet.valueWallet)}
               </p>
               <button onClick={() => setShowValueWallet(!showValueWallet)} className="flex items-center">
                 {showValueWallet ? (
