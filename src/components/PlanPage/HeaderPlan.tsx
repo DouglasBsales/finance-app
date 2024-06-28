@@ -12,7 +12,6 @@ import Link from "next/link";
 import ModalSentvalueWallet from "./ModalSentValueWallet";
 import ModalExitValueWallet from "./ModalExitValueWallet";
 
-
 export function formatarNumero(numero: number) {
   let partes = numero.toFixed(2).split(".");
   partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -26,15 +25,20 @@ const HeaderPlan = () => {
   const [showModalExitValue, setShowModalExitValue] = useState<boolean>(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      let PlanSelectIfIdStorage: any = localStorage.getItem("planSelected");
-      let convertedPlanSelectIfIdStorage: any = JSON.parse( PlanSelectIfIdStorage);
-      if(convertedPlanSelectIfIdStorage){
-        setPlanSelected(convertedPlanSelectIfIdStorage);
+    const getterPlanDataStorage = () => {
+      if (typeof window !== "undefined") {
+        const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
+        if (planSelectIfIdStorage) {
+          const convertedPlanSelectIfIdStorage: any = JSON.parse(
+            planSelectIfIdStorage
+          );
+          setPlanSelected(convertedPlanSelectIfIdStorage);
+        }
       }
+    };
 
-    }
-  }, []);
+    getterPlanDataStorage();
+  }, [planSelected]);
 
   return (
     <div className="w-full flex flex-col items-center bg-white rounded-b-[30px] pb-5 overflow-x-hidden">
@@ -102,9 +106,7 @@ const HeaderPlan = () => {
             <p className="text-blackPrimary font-medium">Meta a ser atingida</p>
             <p className="text-xl text-blackOpacity font-medium">
               {planSelected ? (
-                <p>
-                  R$ {formatarNumero(planSelected.data.valueOfPlan)}
-                </p>
+                <p>R$ {formatarNumero(planSelected.data.valueOfPlan)}</p>
               ) : (
                 "Meta não definida"
               )}
@@ -113,7 +115,10 @@ const HeaderPlan = () => {
         </div>
         <div className="pt-6">
           <div className="flex gap-[37px]">
-            <button className=" w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium" onClick={()=> setShowModalExitValue(true)}>
+            <button
+              className=" w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium"
+              onClick={() => setShowModalExitValue(true)}
+            >
               <FontAwesomeIcon
                 icon={faCircleChevronDown}
                 className="text-bluePrimary text-2xl"
@@ -133,8 +138,15 @@ const HeaderPlan = () => {
           </div>
         </div>
       </div>
-      {showModalSentValue && ( <ModalSentvalueWallet setShowModalSentValue={setShowModalSentValue} planSelected={planSelected} />)}
-      {showModalExitValue && ( <ModalExitValueWallet setShowModalExitValue={setShowModalExitValue} />)}
+      {showModalSentValue && (
+        <ModalSentvalueWallet
+          setShowModalSentValue={setShowModalSentValue}
+          planSelected={planSelected}
+        />
+      )}
+      {showModalExitValue && (
+        <ModalExitValueWallet setShowModalExitValue={setShowModalExitValue} />
+      )}
     </div>
   );
 };
