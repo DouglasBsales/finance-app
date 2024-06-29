@@ -34,7 +34,7 @@ const HeaderPlan = () => {
     };
 
     getterPlanDataStorage();
-  }, []);
+  }, []); // adicionar dependencia para atualizar o valor no plano 
 
   return (
     <div className="w-full flex flex-col items-center bg-white rounded-b-[30px] pb-5 overflow-x-hidden">
@@ -149,6 +149,7 @@ const HeaderPlan = () => {
         <ModalSentvalueWallet
           setShowModalSentValue={setShowModalSentValue}
           planSelected={planSelected}
+          setPlanSelected={setPlanSelected}
         />
       )}
       {showModalExitValue && (
