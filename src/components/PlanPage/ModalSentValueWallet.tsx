@@ -4,13 +4,14 @@ import {
   faMoneyCheckDollar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { doc, getDocs, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDocs, updateDoc } from "firebase/firestore";
 import { useContext, useState } from "react";
 import { FunctionComponent } from "react";
 
 type ModalTypeProps = {
   setShowModalSentValue: any;
   planSelected: any;
+  setPlanSelected:any
 };
 
 type DataType = {
@@ -24,29 +25,36 @@ type DataType = {
 const ModalSentvalueWallet: FunctionComponent<ModalTypeProps> = ({
   setShowModalSentValue,
   planSelected,
+  setPlanSelected
 }) => {
   const { refDocPlan } = useContext(HomeContext);
 
   const [valueSentWallet, setValueSentWallet] = useState<any>();
-  
+  const valueParsed = parseFloat(valueSentWallet);
+
+  const data: DataType = {
+    nameOfPlan: planSelected.data.nameOfPlan,
+    valueOfPlan: planSelected.data.valueOfPlan,
+    valuePlanWallet: valueParsed + planSelected.data.valuePlanWalet,
+    categorySelected: planSelected.data.categorySelected,
+    iconCategory: planSelected.data.iconCategory,
+  };
+
+  const planArray = {
+    id: planSelected.id,
+    data: data,
+  };
 
   const updateValueWalletPlan = async () => {
+    await updateDoc(refDocPlan, { planos: [planArray] }); // CRIAR OBJ COM AS MESMAS CARACTERISTICAS DO PLAN SELECIONADO MUDANDO APENAS VALUEPLANWALLET
 
-    const data: DataType = {
-      nameOfPlan:planSelected.data.nameOfPlan,
-      valueOfPlan:planSelected.data.valueOfPlan,
-      valuePlanWallet: parseFloat(valueSentWallet),
-      categorySelected: planSelected.data.categorySelected,
-      iconCategory:planSelected.data.iconCategory
-    };
+    if (typeof window !== "undefined") {
+      const updatedPlan = {...planSelected, data: { ...planSelected.data, valuePlanWallet: valueParsed + planSelected.data.valuePlanWallet },};
 
-    const planAtt = {
-      id: planSelected.id,
-      data: data
-    };
-    await updateDoc(refDocPlan, { planos: planAtt });
-    if(typeof window !== "undefined"){
-      localStorage.setItem("planSelected", JSON.stringify(planAtt))
+      localStorage.setItem("planSelected", JSON.stringify(updatedPlan));
+      const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
+      const convertedPlanSelectIfIdStorage: any = JSON.parse(planSelectIfIdStorage);
+      setPlanSelected(convertedPlanSelectIfIdStorage);
     }
     setShowModalSentValue(false);
   };
@@ -88,7 +96,10 @@ const ModalSentvalueWallet: FunctionComponent<ModalTypeProps> = ({
             >
               <p className="py-[8px] px-4 text-blackOpacity">Cancelar</p>
             </button>
-            <button className="bg-bluePrimary rounded-md"onClick={updateValueWalletPlan}>
+            <button
+              className="bg-bluePrimary rounded-md"
+              onClick={updateValueWalletPlan}
+            >
               <p className="py-[8px] px-4 text-white">Confirmar</p>
             </button>
           </div>
