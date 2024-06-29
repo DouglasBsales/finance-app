@@ -21,7 +21,8 @@ export default function NewPlan() {
   const [errorValuePlan, setErrorValuePlan] = useState<boolean>(false);
   const [errorcategory, setErrorCategory] = useState<boolean>(false);
 
-  const[showModalPlanCreated, setShowModalPlanCreated] = useState<Boolean>(false)
+  const [showModalPlanCreated, setShowModalPlanCreated] =
+    useState<Boolean>(false);
 
   type DataType = {
     nameOfPlan: string;
@@ -61,8 +62,8 @@ export default function NewPlan() {
     }
 
     const regex = /[.,]/;
-    if(regex.test(valueOfPlan)){
-      alert("Insira um valor inteiro, sem pontos ou virgulas")
+    if (regex.test(valueOfPlan)) {
+      alert("Insira um valor inteiro, sem pontos ou virgulas");
       setErrorValuePlan(true);
       return;
     }
@@ -91,14 +92,12 @@ export default function NewPlan() {
     };
 
     await updateDoc(refDocPlan, { planos: arrayUnion(planArray) }); // atualiazndo o array com os valores antigos e novos
-    if(typeof window !== "undefined"){
-      localStorage.setItem("planSelected", JSON.stringify(planArray))
+    if (typeof window !== "undefined") {
+      localStorage.setItem("planSelected", JSON.stringify(planArray));
     }
-    setTimeout(()=> {
-      window.location.href="/Pages/Plan"
-    }, 1000)
 
-    setShowModalPlanCreated(true)
+    window.location.href = "/Pages/Plan";
+    setShowModalPlanCreated(true);
   };
 
   return (
@@ -142,7 +141,9 @@ export default function NewPlan() {
             >
               Meta do plano
             </p>
-            <p className="text-xs text-blackOpacity">Coloque o número sem virgulas ou ponto</p>
+            <p className="text-xs text-blackOpacity">
+              Coloque o número sem virgulas ou ponto
+            </p>
             <input
               type="number"
               className="w-full h-[35px] outline-none rounded-md pl-3"
