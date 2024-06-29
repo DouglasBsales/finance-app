@@ -11,6 +11,8 @@ import Image from "next/image";
 import Link from "next/link";
 import ModalSentvalueWallet from "./ModalSentValueWallet";
 import ModalExitValueWallet from "./ModalExitValueWallet";
+import Lottie from "lottie-react";
+import constructor from "../../../public/constructor.json"
 
 export function formatarNumero(numero: number) {
   let partes = numero.toFixed(2).split(".");
@@ -140,9 +142,14 @@ const HeaderPlan = () => {
           </div>
         </div>
       ) : (
+        // alterado agora ver se está funcionando tudo ok!
         <div className="w-full fixed inset-0 bg-white flex items-center justify-center z-50">
-          <p>Carregando seu plano...</p>{" "}
-          {/* ALTERAR ISSO URGENTE PARA LOADING COM LOTTIE*/}
+          <div className="flex flex-col items-center px-7">
+            <p className="text-blackOpacity text-center">Seu plano está sendo criado,</p>
+            <p className="text-blackOpacity text-center"> aguarde um pouco</p>
+            <Lottie animationData={constructor} className="relative bottom-12"></Lottie>
+          </div>
+          {/* ALTERAR ISSO URGENTE PARA LOADING COM LOTTIE*/} 
         </div>
       )}
       {showModalSentValue && (
