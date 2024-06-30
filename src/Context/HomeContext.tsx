@@ -22,7 +22,7 @@ export default function HomeContextProvider({ children }: any) {
     : null; // selecionando valueWallet no banco de dados
 
   const [dataUser, setDataUser] = useState<any>({});
-  const [valueWallet, setValueWallet] = useState<any>(0); 
+  const [valueWallet, setValueWallet] = useState<any>(0);
 
   // LINHA ACIMA OS STATES SETADOS DA HOME
   // LINHA ABAIXO PARA CAPTURAR OS DADOS ESPECÍFICOS DO USUARIO NA DATABASE DO FIREBASE
@@ -49,50 +49,51 @@ export default function HomeContextProvider({ children }: any) {
         const walletRefSnap = await getDocs(walletCollectionRef);
         const walletData = walletRefSnap.docs.map((doc) => doc.data());
         const walletDocId = walletRefSnap.docs[0];
-        const walletDocIdref = walletDocId ? doc(walletCollectionRef, walletDocId.id) : null;
+        const walletDocIdref = walletDocId
+          ? doc(walletCollectionRef, walletDocId.id)
+          : null;
         setValueWallet(walletData);
         setIdWalletAtt(walletDocIdref);
       }
     };
-  
+
     getValueWallet();
   }, [walletCollectionRef]); // Use walletCollectionRef como dependência
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DOS PLANOS CRIADOS
   const [plansData, setPlansData] = useState<any>();
-  const [collectionRefPlan, setCollectionRefPlan] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const plansCollect = userDocRef? collection(db, "users", userGoogleObj.uid, "planos"): null;
   useEffect(() => {
     const getPlans = async () => {
       setIsLoading(true);
-      if(userGoogleObj?.uid){ 
-        const plansCollect = collection(db, "users", userGoogleObj.uid, "planos")
-        setCollectionRefPlan(plansCollect);
+      if (plansCollect) {
         const plansDocs = await getDocs(plansCollect);
         const plansArray = plansDocs.docs.map((doc) => doc.data());
-      setPlansData(plansArray);
-        ;}
+        setPlansData(plansArray);
+      }
       setIsLoading(false);
     };
 
     getPlans();
-  }, [userGoogleObj?.uid]);
+  }, [plansCollect]);
+
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET DOS PLANOS
 
-  const [refDocPlan, setRefDocPlan] = useState<any>(); 
+  const [refDocPlan, setRefDocPlan] = useState<any>();
   useEffect(() => {
     const updateValueWallet = async () => {
-      if(collectionRefPlan){
-        const docsPlan = await getDocs(collectionRefPlan);
+      if (plansCollect) {
+        const docsPlan = await getDocs(plansCollect);
         const docPlanId = docsPlan.docs[0];
-        const refDocPlan = docPlanId ? doc(collectionRefPlan, docPlanId.id): null;
+        const refDocPlan = docPlanId ? doc(plansCollect, docPlanId.id) : null;
         setRefDocPlan(refDocPlan);
       }
     };
 
     updateValueWallet();
-  }, [collectionRefPlan]);
+  }, [plansCollect]);
 
   return (
     <HomeContext.Provider
@@ -103,9 +104,9 @@ export default function HomeContextProvider({ children }: any) {
         walletCollectionRef,
         idWalletAtt,
         plansData,
-        collectionRefPlan,
+        plansCollect,
         isLoading,
-        refDocPlan
+        refDocPlan,
       }}
     >
       {children}
