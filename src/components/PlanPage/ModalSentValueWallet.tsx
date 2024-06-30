@@ -4,14 +4,14 @@ import {
   faMoneyCheckDollar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { arrayUnion, doc, getDocs, updateDoc } from "firebase/firestore";
+import { updateDoc } from "firebase/firestore";
 import { useContext, useState } from "react";
 import { FunctionComponent } from "react";
 
 type ModalTypeProps = {
   setShowModalSentValue: any;
   planSelected: any;
-  setPlanSelected:any
+  setPlanSelected: any;
 };
 
 type DataType = {
@@ -25,17 +25,19 @@ type DataType = {
 const ModalSentvalueWallet: FunctionComponent<ModalTypeProps> = ({
   setShowModalSentValue,
   planSelected,
-  setPlanSelected
+  setPlanSelected,
 }) => {
   const { refDocPlan } = useContext(HomeContext);
 
   const [valueSentWallet, setValueSentWallet] = useState<any>();
+
   const valueParsed = parseFloat(valueSentWallet);
+  const valueAttWallet = valueParsed + planSelected.data.valuePlanWallet;
 
   const data: DataType = {
     nameOfPlan: planSelected.data.nameOfPlan,
     valueOfPlan: planSelected.data.valueOfPlan,
-    valuePlanWallet: valueParsed + planSelected.data.valuePlanWalet,
+    valuePlanWallet: valueAttWallet,
     categorySelected: planSelected.data.categorySelected,
     iconCategory: planSelected.data.iconCategory,
   };
@@ -49,11 +51,19 @@ const ModalSentvalueWallet: FunctionComponent<ModalTypeProps> = ({
     await updateDoc(refDocPlan, { planos: [planArray] }); // CRIAR OBJ COM AS MESMAS CARACTERISTICAS DO PLAN SELECIONADO MUDANDO APENAS VALUEPLANWALLET
 
     if (typeof window !== "undefined") {
-      const updatedPlan = {...planSelected, data: { ...planSelected.data, valuePlanWallet: valueParsed + planSelected.data.valuePlanWallet },};
+      const updatedPlan = {
+        ...planSelected,
+        data: {
+          ...planSelected.data,
+          valuePlanWallet: valueParsed + planSelected.data.valuePlanWallet,
+        },
+      };
 
       localStorage.setItem("planSelected", JSON.stringify(updatedPlan));
       const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
-      const convertedPlanSelectIfIdStorage: any = JSON.parse(planSelectIfIdStorage);
+      const convertedPlanSelectIfIdStorage: any = JSON.parse(
+        planSelectIfIdStorage
+      );
       setPlanSelected(convertedPlanSelectIfIdStorage);
     }
     setShowModalSentValue(false);
