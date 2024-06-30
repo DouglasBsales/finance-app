@@ -11,7 +11,7 @@ import { useContext, useState } from "react";
 import { ModalPlanCreated } from "@/components/NewPlanPage/ModalPlanCreated";
 
 export default function NewPlan() {
-  const { collectionRefPlan } = useContext(HomeContext);
+  const { plansCollect } = useContext(HomeContext);
 
   const [nameOfPlan, setNameOfPlan] = useState<string>("");
   const [valueOfPlan, setValueOfPlan] = useState<string>("");
@@ -82,9 +82,9 @@ export default function NewPlan() {
       iconCategory: iconsOfCatgeory[categorySelected],
     };
 
-    const docsPlan = await getDocs(collectionRefPlan);
+    const docsPlan = await getDocs(plansCollect);
     const docPlanId = docsPlan.docs[0].id;
-    const refDocPlan = doc(collectionRefPlan, docPlanId);
+    const refDocPlan = doc(plansCollect, docPlanId);
 
     const planArray = {
       id: nanoid(),
