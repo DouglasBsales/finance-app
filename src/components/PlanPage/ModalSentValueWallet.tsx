@@ -1,12 +1,12 @@
-import { HomeContext } from "@/Context/HomeContext";
-import {
-  faCircleArrowUp,
-  faMoneyCheckDollar,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { updateDoc } from "firebase/firestore";
 import { useContext, useState } from "react";
 import { FunctionComponent } from "react";
+
+import { HomeContext } from "@/Context/HomeContext";
+
+import { arrayUnion, arrayRemove, updateDoc } from "firebase/firestore";
+
+import {faCircleArrowUp, faMoneyCheckDollar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type ModalTypeProps = {
   setShowModalSentValue: any;
@@ -48,7 +48,15 @@ const ModalSentvalueWallet: FunctionComponent<ModalTypeProps> = ({
   };
 
   const updateValueWalletPlan = async () => {
-    await updateDoc(refDocPlan, { planos: [planArray] }); // CRIAR OBJ COM AS MESMAS CARACTERISTICAS DO PLAN SELECIONADO MUDANDO APENAS VALUEPLANWALLET
+    // Remove o plano selecionado do array no Firestore
+    await updateDoc(refDocPlan, {
+      planos: arrayRemove(planSelected),
+    });
+
+    // Adiciona o novo plano atualizado ao array no Firestore
+    await updateDoc(refDocPlan, {
+      planos: arrayUnion(planArray),
+    });
 
     if (typeof window !== "undefined") {
       const updatedPlan = {
