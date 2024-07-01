@@ -22,17 +22,14 @@ type DataType = {
   iconCategory: any;
 };
 
-const ModalSentvalueWallet: FunctionComponent<ModalTypeProps> = ({
-  setShowModalSentValue,
-  planSelected,
-  setPlanSelected,
-}) => {
+const ModalSentvalueWallet: FunctionComponent<ModalTypeProps> = ({setShowModalSentValue, planSelected, setPlanSelected}) => {
+  
   const { refDocPlan } = useContext(HomeContext);
 
   const [valueSentWallet, setValueSentWallet] = useState<any>();
 
-  const valueParsed = parseFloat(valueSentWallet);
-  const valueAttWallet = valueParsed + planSelected.data.valuePlanWallet;
+  const valueParsed:number = parseFloat(valueSentWallet);
+  const valueAttWallet:number = valueParsed + planSelected.data.valuePlanWallet;
 
   const data: DataType = {
     nameOfPlan: planSelected.data.nameOfPlan,
