@@ -4,7 +4,7 @@ import { db } from "@/services/firebase";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";
 
-export const HomeContext = createContext({} as any);
+export const HomeContext = createContext<any>(null);
 
 export default function HomeContextProvider({ children }: any) {
   let userGoogle: any = "";
@@ -14,12 +14,8 @@ export default function HomeContextProvider({ children }: any) {
 
   const userCollectionRef = collection(db, "users");
   const userGoogleObj = userGoogle ? JSON.parse(userGoogle) : null;
-  const userDocRef = userGoogleObj
-    ? doc(userCollectionRef, userGoogleObj.uid)
-    : null; // Selecionando conta do usuário
-  const walletCollectionRef = userDocRef
-    ? collection(userDocRef, "valueWallet")
-    : null; // selecionando valueWallet no banco de dados
+  const userDocRef = userGoogleObj ? doc(userCollectionRef, userGoogleObj.uid) : null; // Selecionando conta do usuário
+  const walletCollectionRef = userDocRef ? collection(userDocRef, "valueWallet"): null; // selecionando valueWallet no banco de dados
 
   const [dataUser, setDataUser] = useState<any>({});
   const [valueWallet, setValueWallet] = useState<any>(0);
@@ -38,7 +34,7 @@ export default function HomeContextProvider({ children }: any) {
     };
 
     getDataUser();
-  }, [userGoogleObj?.uid, userCollectionRef]);
+  }, [userGoogleObj?.uid]);
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET PRINCIPAL DA HOME
 
@@ -49,21 +45,19 @@ export default function HomeContextProvider({ children }: any) {
         const walletRefSnap = await getDocs(walletCollectionRef);
         const walletData = walletRefSnap.docs.map((doc) => doc.data());
         const walletDocId = walletRefSnap.docs[0];
-        const walletDocIdref = walletDocId
-          ? doc(walletCollectionRef, walletDocId.id)
-          : null;
+        const walletDocIdref = walletDocId? doc(walletCollectionRef, walletDocId.id): null;
         setValueWallet(walletData);
         setIdWalletAtt(walletDocIdref);
       }
     };
 
     getValueWallet();
-  }, [walletCollectionRef]); // Use walletCollectionRef como dependência
+  }, [userGoogleObj?.uid]); // Use walletCollectionRef como dependência
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DOS PLANOS CRIADOS
   const [plansData, setPlansData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const plansCollect = userDocRef? collection(db, "users", userGoogleObj.uid, "planos"): null;
+  const plansCollect = userDocRef ? collection(db, "users", userGoogleObj.uid, "planos"): null;
   useEffect(() => {
     const getPlans = async () => {
       setIsLoading(true);
