@@ -116,8 +116,8 @@ export default function HomeContextProvider({ children }: any) {
 
   const updateValueWalletPlan = async () => {
 
-    if(valueParsedExit > valueWalletDb){
-      alert("Saldo insuficiente")
+    if (methodWallet === "saida" && valueParsedExit > valueWalletDb) {
+      alert("Saldo insuficiente");
       return;
     }
 
