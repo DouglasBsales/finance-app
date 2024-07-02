@@ -1,18 +1,18 @@
-import {
-  faAngleLeft,
-  faCircleArrowUp,
-  faCircleChevronDown,
-  faEllipsis,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
-import MiniModalOptionsPlan from "./MiniModalOptionsPlan";
+import { useContext, useEffect, useState } from "react";
+import { HomeContext } from "@/Context/HomeContext";
+
+import Lottie from "lottie-react";
+import constructor from "../../../public/constructor.json";
+
 import Image from "next/image";
 import Link from "next/link";
+
+import MiniModalOptionsPlan from "./MiniModalOptionsPlan"
 import ModalSentvalueWallet from "./ModalSentValueWallet";
 import ModalExitValueWallet from "./ModalExitValueWallet";
-import Lottie from "lottie-react";
-import constructor from "../../../public/constructor.json"
+
+import {faAngleLeft, faCircleArrowUp, faCircleChevronDown, faEllipsis,} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function formatarNumero(numero: number) {
   let partes = numero.toFixed(2).split(".");
@@ -21,22 +21,33 @@ export function formatarNumero(numero: number) {
 }
 
 const HeaderPlan = () => {
+  const {planSelected,setPlanSelected,showModalSentValue,setShowModalSentValue,setMethodWallet, setShowModalExitValue, showModalExitValue} = useContext(HomeContext);
   const [showOptionsPlan, setShowOptionsPlan] = useState(false);
-  const [planSelected, setPlanSelected] = useState<any>();
-  const [showModalSentValue, setShowModalSentValue] = useState<boolean>(false);
-  const [showModalExitValue, setShowModalExitValue] = useState<boolean>(false);
 
   useEffect(() => {
     const getterPlanDataStorage = () => {
       if (typeof window !== "undefined") {
-          const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
-          const convertedPlanSelectIfIdStorage: any = JSON.parse(planSelectIfIdStorage);
-          setPlanSelected(convertedPlanSelectIfIdStorage);
+        const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
+        const convertedPlanSelectIfIdStorage: any = JSON.parse(
+          planSelectIfIdStorage
+        );
+        setPlanSelected(convertedPlanSelectIfIdStorage);
       }
     };
 
     getterPlanDataStorage();
-  }, []); // adicionar dependencia para atualizar o valor no plano 
+  }, []);
+
+  const openModalSentWallet = () => {
+    setShowModalSentValue(true);
+    setMethodWallet("entrada")
+  };
+
+  const openModalExitWallet = () => {
+    setShowModalExitValue(true);
+    setMethodWallet("saida")
+  };
+
 
   return (
     <div className="w-full flex flex-col items-center bg-white rounded-b-[30px] pb-5 overflow-x-hidden">
@@ -120,7 +131,7 @@ const HeaderPlan = () => {
             <div className="flex gap-[37px]">
               <button
                 className=" w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium"
-                onClick={() => setShowModalExitValue(true)}
+                onClick={openModalExitWallet}
               >
                 <FontAwesomeIcon
                   icon={faCircleChevronDown}
@@ -130,7 +141,7 @@ const HeaderPlan = () => {
               </button>
               <button
                 className="w-[144px] h-[40px] flex justify-center items-center gap-1 bg-whitePrimary rounded-[20px] font-medium"
-                onClick={() => setShowModalSentValue(true)}
+                onClick={openModalSentWallet}
               >
                 <FontAwesomeIcon
                   icon={faCircleArrowUp}
@@ -145,23 +156,20 @@ const HeaderPlan = () => {
         // alterado agora ver se está funcionando tudo ok!
         <div className="w-full fixed inset-0 bg-white flex items-center justify-center z-50">
           <div className="flex flex-col items-center px-7">
-            <p className="text-blackOpacity text-center">Seu plano está sendo criado,</p>
+            <p className="text-blackOpacity text-center">
+              Seu plano está sendo criado,
+            </p>
             <p className="text-blackOpacity text-center"> aguarde um pouco</p>
-            <Lottie animationData={constructor} className="relative bottom-12"></Lottie>
+            <Lottie
+              animationData={constructor}
+              className="relative bottom-12"
+            ></Lottie>
           </div>
-          {/* ALTERAR ISSO URGENTE PARA LOADING COM LOTTIE*/} 
+          {/* ALTERAR ISSO URGENTE PARA LOADING COM LOTTIE*/}
         </div>
       )}
-      {showModalSentValue && (
-        <ModalSentvalueWallet
-          setShowModalSentValue={setShowModalSentValue}
-          planSelected={planSelected}
-          setPlanSelected={setPlanSelected}
-        />
-      )}
-      {showModalExitValue && (
-        <ModalExitValueWallet setShowModalExitValue={setShowModalExitValue} />
-      )}
+      {showModalSentValue && <ModalSentvalueWallet />}
+      {showModalExitValue && (<ModalExitValueWallet/>)}
     </div>
   );
 };
