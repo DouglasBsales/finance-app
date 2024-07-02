@@ -1,78 +1,13 @@
-import { useContext, useState } from "react";
-import { FunctionComponent } from "react";
-
+import { useContext } from "react";
 import { HomeContext } from "@/Context/HomeContext";
 
-import { arrayUnion, arrayRemove, updateDoc } from "firebase/firestore";
-
-import {faCircleArrowUp, faMoneyCheckDollar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faCircleArrowUp, faMoneyCheckDollar } from "@fortawesome/free-solid-svg-icons";
 
-type ModalTypeProps = {
-  setShowModalSentValue: any;
-  planSelected: any;
-  setPlanSelected: any;
-};
 
-type DataType = {
-  nameOfPlan: string;
-  valueOfPlan: number;
-  valuePlanWallet: any;
-  categorySelected: string;
-  iconCategory: any;
-};
-
-const ModalSentvalueWallet: FunctionComponent<ModalTypeProps> = ({setShowModalSentValue, planSelected, setPlanSelected}) => {
+const ModalSentvalueWallet= () => {
   
-  const { refDocPlan } = useContext(HomeContext);
-
-  const [valueSentWallet, setValueSentWallet] = useState<any>();
-
-  const valueParsed:number = parseFloat(valueSentWallet);
-  const valueAttWallet:number = valueParsed + planSelected.data.valuePlanWallet;
-
-  const data: DataType = {
-    nameOfPlan: planSelected.data.nameOfPlan,
-    valueOfPlan: planSelected.data.valueOfPlan,
-    valuePlanWallet: valueAttWallet,
-    categorySelected: planSelected.data.categorySelected,
-    iconCategory: planSelected.data.iconCategory,
-  };
-
-  const planArray = {
-    id: planSelected.id,
-    data: data,
-  };
-
-  const updateValueWalletPlan = async () => {
-    // Remove o plano selecionado do array no Firestore
-    await updateDoc(refDocPlan, {
-      planos: arrayRemove(planSelected),
-    });
-
-    // Adiciona o novo plano atualizado ao array no Firestore
-    await updateDoc(refDocPlan, {
-      planos: arrayUnion(planArray),
-    });
-
-    if (typeof window !== "undefined") {
-      const updatedPlan = {
-        ...planSelected,
-        data: {
-          ...planSelected.data,
-          valuePlanWallet: valueParsed + planSelected.data.valuePlanWallet,
-        },
-      };
-
-      localStorage.setItem("planSelected", JSON.stringify(updatedPlan));
-      const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
-      const convertedPlanSelectIfIdStorage: any = JSON.parse(
-        planSelectIfIdStorage
-      );
-      setPlanSelected(convertedPlanSelectIfIdStorage);
-    }
-    setShowModalSentValue(false);
-  };
+  const { setValueSentWallet, setShowModalSentValue, updateValueWalletPlan } = useContext(HomeContext);
 
   return (
     <div>
