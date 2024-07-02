@@ -1,29 +1,15 @@
+import { useContext} from "react";
 import { HomeContext } from "@/Context/HomeContext";
-import {
-  faCircleArrowUp,
-  faMoneyCheckDollar,
-} from "@fortawesome/free-solid-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { doc, getDocs, updateDoc } from "firebase/firestore";
-import { useContext, useState } from "react";
-import { FunctionComponent } from "react";
+import {faCircleArrowUp,faMoneyCheckDollar,} from "@fortawesome/free-solid-svg-icons";
 
-type ModalTypeProps = {
-  setShowModalExitValue: any;
-};
 
-const ModalExitValueWallet: FunctionComponent<ModalTypeProps> = ({ setShowModalExitValue }) => {
-  const { collectionRefPlan } = useContext(HomeContext);
 
-  const updateValueWalletPlan = async () => {
-    const docsPlan = await getDocs(collectionRefPlan);
-    const docPlanId = docsPlan.docs[0].id;
-    const refDocPlan = doc(collectionRefPlan, docPlanId);
-    await updateDoc(refDocPlan, {valueWallet: Number(valueExitWallet),});
-    setShowModalExitValue(false);
-  };
 
-  const [valueExitWallet, setValueExitWallet] = useState<string>();
+const ModalExitValueWallet = () => {
+
+  const { setValueExitWallet, setShowModalExitValue, updateValueWalletPlan} = useContext(HomeContext);
 
   return (
     <div>
