@@ -42,14 +42,14 @@ const CardsPlans: FunctionComponent<CardPlansProps> = ({
   };
 
   return (
-    <div className="rounded-md bg-white px-3 pb-3">
+    <div className=" rounded-md bg-white px-3 pb-3">
       <Link href="/Pages/Plan" onClick={() => selectPlan(planId)}>
         <div className="pt-4">
-          <div className="w-9 h-9 flex justify-center items-center rounded-full bg-whitePrimary">
-            <Image src={iconCategory} alt="fotoPlano" width={20} height={20} />
+          <div className="w-11 h-11 flex justify-center items-center rounded-full bg-whitePrimary">
+            <Image src={iconCategory} alt="fotoPlano" width={28} height={28} />
           </div>
         </div>
-        <div className="pt-4">
+        <div className="w-[130px] pt-4">
           <p className="text-xs text-blackOpacity">{categorySelected}</p>
           <p className="text-blackPrimary font-semibold">{nameOfPlan}</p>
           <div className="flex gap-1">

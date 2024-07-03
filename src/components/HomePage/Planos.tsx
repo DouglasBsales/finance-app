@@ -24,11 +24,10 @@ export const Planos = () => {
         </Link>
       </div>
       <div
-        className="flex gap-3 pt-5 overflow-x-scroll"
+        className="w-full flex gap-3 pt-5 overflow-x-scroll"
         style={{
           scrollbarWidth: "none",
           msOverflowStyle: "none",
-          overflow: "hidden",
           overflowX: "scroll",
         }}
       >
