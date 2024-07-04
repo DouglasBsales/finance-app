@@ -7,6 +7,10 @@ import { createContext, useEffect, useState } from "react";
 export const HomeContext = createContext<any>(null);
 
 export default function HomeContextProvider({ children }: any) {
+
+  const [optionPlan, setOptionPlan] = useState<String>("")
+
+
   let userGoogle: any = "";
   if (typeof window !== "undefined") {
     userGoogle = localStorage.getItem("userGoogle");
@@ -34,7 +38,7 @@ export default function HomeContextProvider({ children }: any) {
     };
 
     getDataUser();
-  }, [userGoogleObj?.uid]);
+  }, [userGoogleObj?.uid, userCollectionRef]);
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET PRINCIPAL DA HOME
 
@@ -52,7 +56,7 @@ export default function HomeContextProvider({ children }: any) {
     };
 
     getValueWallet();
-  }, [userGoogleObj?.uid]); // Use walletCollectionRef como dependência
+  }, [userGoogleObj?.uid, walletCollectionRef]); // Use walletCollectionRef como dependência
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DOS PLANOS CRIADOS
   const [plansData, setPlansData] = useState<any>();
@@ -187,7 +191,9 @@ export default function HomeContextProvider({ children }: any) {
         setShowModalExitValue,
         setMethodWallet,
         methodWallet,
-        updateValueWalletPlan
+        updateValueWalletPlan,
+        setOptionPlan,
+        optionPlan
       }}
     >
       {children}
