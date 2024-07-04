@@ -8,10 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { arrayUnion, doc, getDocs, updateDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
 import { useContext, useState } from "react";
-import { ModalPlanCreated } from "@/components/NewPlanPage/ModalPlanCreated";
+import { ModalPlanCreatedOrDeleted } from "@/components/NewPlanPage/ModalPlanCreatedOrDeleted";
 
 export default function NewPlan() {
-  const { plansCollect } = useContext(HomeContext);
+  const { plansCollect, setOptionPlan } = useContext(HomeContext);
 
   const [nameOfPlan, setNameOfPlan] = useState<string>("");
   const [valueOfPlan, setValueOfPlan] = useState<string>("");
@@ -21,8 +21,7 @@ export default function NewPlan() {
   const [errorValuePlan, setErrorValuePlan] = useState<boolean>(false);
   const [errorcategory, setErrorCategory] = useState<boolean>(false);
 
-  const [showModalPlanCreated, setShowModalPlanCreated] =
-    useState<Boolean>(false);
+  const [showModalPlanCreated, setShowModalPlanCreated] = useState<Boolean>(false);
 
   type DataType = {
     nameOfPlan: string;
@@ -92,6 +91,7 @@ export default function NewPlan() {
     };
 
     await updateDoc(refDocPlan, { planos: arrayUnion(planArray) }); // atualiazndo o array com os valores antigos e novos
+    setOptionPlan("created")
     if (typeof window !== "undefined") {
       localStorage.setItem("planSelected", JSON.stringify(planArray));
     }
@@ -189,7 +189,7 @@ export default function NewPlan() {
           </button>
         </div>
       </div>
-      {showModalPlanCreated && <ModalPlanCreated />}
+      {showModalPlanCreated && <ModalPlanCreatedOrDeleted />}
     </div>
   );
 }
