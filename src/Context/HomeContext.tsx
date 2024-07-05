@@ -1,15 +1,21 @@
 "use client";
 
 import { db } from "@/services/firebase";
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";
 
 export const HomeContext = createContext<any>(null);
 
 export default function HomeContextProvider({ children }: any) {
-
-  const [optionPlan, setOptionPlan] = useState<String>("")
-
+  const [optionPlan, setOptionPlan] = useState<String>("");
 
   let userGoogle: any = "";
   if (typeof window !== "undefined") {
@@ -18,8 +24,12 @@ export default function HomeContextProvider({ children }: any) {
 
   const userCollectionRef = collection(db, "users");
   const userGoogleObj = userGoogle ? JSON.parse(userGoogle) : null;
-  const userDocRef = userGoogleObj ? doc(userCollectionRef, userGoogleObj.uid) : null; // Selecionando conta do usuário
-  const walletCollectionRef = userDocRef ? collection(userDocRef, "valueWallet"): null; // selecionando valueWallet no banco de dados
+  const userDocRef = userGoogleObj
+    ? doc(userCollectionRef, userGoogleObj.uid)
+    : null; // Selecionando conta do usuário
+  const walletCollectionRef = userDocRef
+    ? collection(userDocRef, "valueWallet")
+    : null; // selecionando valueWallet no banco de dados
 
   const [dataUser, setDataUser] = useState<any>({});
   const [valueWallet, setValueWallet] = useState<any>(0);
@@ -49,7 +59,9 @@ export default function HomeContextProvider({ children }: any) {
         const walletRefSnap = await getDocs(walletCollectionRef);
         const walletData = walletRefSnap.docs.map((doc) => doc.data());
         const walletDocId = walletRefSnap.docs[0];
-        const walletDocIdref = walletDocId? doc(walletCollectionRef, walletDocId.id): null;
+        const walletDocIdref = walletDocId
+          ? doc(walletCollectionRef, walletDocId.id)
+          : null;
         setValueWallet(walletData);
         setIdWalletAtt(walletDocIdref);
       }
@@ -61,7 +73,7 @@ export default function HomeContextProvider({ children }: any) {
   // LINHA ABAIXO PARA ATUALIZAÇÃO DOS PLANOS CRIADOS
   const [plansData, setPlansData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const plansCollect = userDocRef ? collection(db, "users", userGoogleObj.uid, "planos"): null;
+  const plansCollect = userDocRef? collection(db, "users", userGoogleObj.uid, "planos"): null;
   useEffect(() => {
     const getPlans = async () => {
       setIsLoading(true);
@@ -86,32 +98,34 @@ export default function HomeContextProvider({ children }: any) {
     iconCategory: any;
   };
 
-  const [methodWallet, setMethodWallet] = useState<string>("") // state utilizado para selecionar entre entrada e saida
+  const [methodWallet, setMethodWallet] = useState<string>(""); // state utilizado para selecionar entre entrada e saida
   const [planSelected, setPlanSelected] = useState<any>();
   const [valueSentWallet, setValueSentWallet] = useState<any>(); // method para capturar o valor enviado
   const [valueExitWallet, setValueExitWallet] = useState<any>(); // method para capturar o valor de saída
 
-  const valueWalletDb = planSelected ? planSelected.data.valuePlanWallet : null
+  const valueWalletDb = planSelected ? planSelected.data.valuePlanWallet : null;
 
-  const valueParsedSent:number = parseFloat(valueSentWallet);
-  const valueAttSent:number = planSelected ? valueParsedSent + valueWalletDb: null
+  const valueParsedSent: number = parseFloat(valueSentWallet);
+  const valueAttSent: number = planSelected
+    ? valueParsedSent + valueWalletDb
+    : null;
 
-  const valueParsedExit:number = parseFloat(valueExitWallet);
-  const valueAttExit = valueWalletDb - valueParsedExit
+  const valueParsedExit: number = parseFloat(valueExitWallet);
+  const valueAttExit = valueWalletDb - valueParsedExit;
 
-
-  const selectOptionWallet = methodWallet === "entrada" ? valueAttSent : valueAttExit
+  const selectOptionWallet =
+    methodWallet === "entrada" ? valueAttSent : valueAttExit;
 
   const data: DataType = {
-    nameOfPlan: planSelected ? planSelected.data.nameOfPlan: null ,
-    valueOfPlan:  planSelected ? planSelected.data.valueOfPlan: null,
+    nameOfPlan: planSelected ? planSelected.data.nameOfPlan : null,
+    valueOfPlan: planSelected ? planSelected.data.valueOfPlan : null,
     valuePlanWallet: selectOptionWallet,
-    categorySelected:  planSelected ? planSelected.data.categorySelected: null,
-    iconCategory:  planSelected ? planSelected.data.iconCategory: null,
+    categorySelected: planSelected ? planSelected.data.categorySelected : null,
+    iconCategory: planSelected ? planSelected.data.iconCategory : null,
   };
 
   const planArray = {
-    id:  planSelected ? planSelected.id : null, 
+    id: planSelected ? planSelected.id : null,
     data: data,
   };
 
@@ -119,7 +133,6 @@ export default function HomeContextProvider({ children }: any) {
   const [showModalExitValue, setShowModalExitValue] = useState<boolean>(false);
 
   const updateValueWalletPlan = async () => {
-
     if (methodWallet === "saida" && valueParsedExit > valueWalletDb) {
       alert("Saldo insuficiente");
       return;
@@ -135,9 +148,10 @@ export default function HomeContextProvider({ children }: any) {
       planos: arrayUnion(planArray),
     });
 
-
     if (typeof window !== "undefined") {
-      const updatedPlan = {...planSelected,data: {...planSelected.data,valuePlanWallet: selectOptionWallet,}
+      const updatedPlan = {
+        ...planSelected,
+        data: { ...planSelected.data, valuePlanWallet: selectOptionWallet },
       };
 
       localStorage.setItem("planSelected", JSON.stringify(updatedPlan));
@@ -147,9 +161,10 @@ export default function HomeContextProvider({ children }: any) {
       );
       setPlanSelected(convertedPlanSelectIfIdStorage);
     }
-   methodWallet === "entrada" ?  setShowModalSentValue(false) : setShowModalExitValue(false);
+    methodWallet === "entrada"
+      ? setShowModalSentValue(false)
+      : setShowModalExitValue(false);
   };
-
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET DOS PLANOS
 
@@ -166,6 +181,21 @@ export default function HomeContextProvider({ children }: any) {
 
     updateValueWallet();
   }, [plansCollect]);
+
+  const transationsCollect = userDocRef? collection(db, "users", userGoogleObj.uid, "transacoes"): null;
+  const [transations, setTransations] = useState<any>([])
+  const [typeTransations, setSetTypeTransations] = useState<string>("")
+  useEffect(() => {
+    const getTransations = async () => {
+      if (transationsCollect) {
+        const transationsDocs = await getDocs(transationsCollect);
+        const transationsArray = transationsDocs.docs.map((doc) => doc.data());
+        setTransations(transationsArray)
+      }
+    };
+
+    getTransations();
+  }, [transationsCollect]);
 
   return (
     <HomeContext.Provider
@@ -193,7 +223,10 @@ export default function HomeContextProvider({ children }: any) {
         methodWallet,
         updateValueWalletPlan,
         setOptionPlan,
-        optionPlan
+        optionPlan,
+        transations,
+        setSetTypeTransations,
+        typeTransations
       }}
     >
       {children}
