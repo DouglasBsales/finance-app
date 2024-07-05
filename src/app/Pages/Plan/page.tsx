@@ -27,7 +27,7 @@ export default function Plan() {
           <div>
             {hasTransations ? (
               transations.map((cards: any) =>
-                cards.transacoes.slice(0, 5).map((transacao: any) => (
+                cards.transacoes.map((transacao: any) => (
                   <div key={transacao.id}>
                     <CardsTransacoesPlan infoCards={{ ...transacao }} />
                   </div>
