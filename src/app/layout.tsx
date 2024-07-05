@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 
-import Menu from "@/components/MenuGlobal/Menu";
-import HomeContextProvider from "@/Context/HomeContext";
+import Root from "../Context/Root";
 
 const montSerrat = Montserrat({
   weight: ["200", "300", "400", "500", "700"],
@@ -20,14 +19,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return ( 
+  return (
     <html lang="pt-br">
       <body className={`${montSerrat.className}`}>
-        <HomeContextProvider>
           <div className="w-full h-screen flex justify-center bg-whitePrimary">
-            <div className="w-full bg-whitePrimary overflow-x-hidden">{children}</div>
+            <div className="w-full bg-whitePrimary overflow-x-hidden">
+              <Root>{children}</Root>
+            </div>
           </div>
-        </HomeContextProvider>
       </body>
     </html>
   );
