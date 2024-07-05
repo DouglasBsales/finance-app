@@ -10,15 +10,17 @@ const MiniModalOptionsPlan = () => {
   const deletPlan = async () => {
     setOptionPlan("delete");
 
-    await updateDoc(refDocPlan, {planos: arrayRemove(planSelected)});
+    await updateDoc(refDocPlan, { planos: arrayRemove(planSelected) });
 
     setIsModalPlanDelete(true);
 
-    if (typeof window !== "undefined") {
-      window.location.href = "/Pages/Home";
-    }
+    setTimeout(() => {
+      if (typeof window !== "undefined") {
+        window.location.href = "/Pages/Home";
+      }
 
-    setIsModalPlanDelete(false);
+      setIsModalPlanDelete(false);
+    }, 1000);
   };
 
   return (
