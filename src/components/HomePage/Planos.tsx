@@ -6,7 +6,7 @@ import CardsPlans from "./CardsPlans";
 export const Planos = () => {
   const { plansData, isLoading } = useContext(HomeContext);
 
-  const hasPlans =
+  const hasPlans: any =
     Array.isArray(plansData) &&
     plansData.length > 0 &&
     Array.isArray(plansData[0].planos) &&
@@ -47,11 +47,11 @@ export const Planos = () => {
           )
         ) : (
           <div>
-            {isLoading ? (
-              <p className="text-blackOpacity">Carregando seus planos...</p>
+            {hasPlans === "null" ?(
+              <p className="text-blackOpacity"> Você ainda nao possui planos a serem exibidos</p>
             ) : (
               <p className="text-blackOpacity">
-                Você ainda nao possui planos a serem exibidos
+               Carregando seus planos...
               </p>
             )}
           </div>
