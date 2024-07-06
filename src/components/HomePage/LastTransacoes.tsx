@@ -8,6 +8,14 @@ const LastTransacoes = () => {
   // Verifica se transations existe e se é um array com elementos
   const hasTransations = Array.isArray(transations) && transations.length > 0;
 
+  // Coletar todas as transações em uma única array
+  const allTransacoes = hasTransations 
+    ? transations.flatMap((transaction: any) => transaction.transacoes) 
+    : [];
+
+  // Selecionar as últimas 5 transações
+  const latestTransacoes = allTransacoes.slice(0, 5);
+
   return (
     <div className="pl-[28px] pt-[25px]">
       <div className="flex justify-between items-center">
@@ -18,25 +26,21 @@ const LastTransacoes = () => {
           Ver todas
         </button>
       </div>
-      {hasTransations ? (
-        transations.slice(0, 5).map((transaction: any) =>
-          transaction.transacoes.map((transacao: any) => (
-            <div key={transaction.id}>
-              <CardsTransacoesPlan
-                infoCards={{
-                  date: transacao.data.date,
-                  icon: transacao.data.icon,
-                  id: transacao.id,
-                  name: transacao.data.name,
-                  value: transacao.data.value,
-                  sentValue: transacao.data.sentValue,
-                }}
-              />
-            </div>
-          ))
-        )
-      ) : transations === null ? (
-        <p className="pt-7 text-blackOpacity">Carregando suas transações ...</p>
+      {latestTransacoes.length > 0 ? (
+        latestTransacoes.map((transacao: any) => (
+          <div key={transacao.id}>
+            <CardsTransacoesPlan
+              infoCards={{
+                date: transacao.data.date,
+                icon: transacao.data.icon,
+                id: transacao.id,
+                name: transacao.data.name,
+                value: transacao.data.value,
+                sentValue: transacao.data.sentValue,
+              }}
+            />
+          </div>
+        ))
       ) : (
         <p className="pt-7 text-blackOpacity">
           Você ainda não realizou transações.
