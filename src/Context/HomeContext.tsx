@@ -233,6 +233,7 @@ export default function HomeContextProvider({ children }: any) {
     sentValue: typeTransations === "walletHomeSent" ? true : false,
   };
 
+  const [currentTransationDb, setCurrentTransationDb] = useState<any>([]);
   const getTransations = async () => {
     let transationsArray = null;
     let transationsRefId = null;
@@ -241,10 +242,10 @@ export default function HomeContextProvider({ children }: any) {
       const transationsDocs = await getDocs(transationsCollect);
       transationsArray = transationsDocs.docs.map((doc) => doc.data());
       const transationId = transationsDocs.docs[0];
-      transationsRefId = transationId
-        ? doc(transationsCollect, transationId.id)
-        : null;
+      const currentTransation = transationsDocs.docs.map((doc) => doc.data().transacoes);
+      transationsRefId = transationId? doc(transationsCollect, transationId.id): null;
       setTransationsRefId(transationsRefId);
+      setCurrentTransationDb(currentTransation)
     }
 
     return transationsArray;
@@ -294,7 +295,8 @@ export default function HomeContextProvider({ children }: any) {
         setValueExitWalletPlan,
         newValueExitAtt,
         numberWallet,
-        valueWallExitPlan
+        valueWallExitPlan,
+        currentTransationDb
       }}
     >
       {children}
