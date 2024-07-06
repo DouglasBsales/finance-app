@@ -227,7 +227,7 @@ export default function HomeContextProvider({ children }: any) {
   const transationsData: TransationsType = { // tipo de dados a serem enviados para as transacoes na wallet principal
     id: nanoid(),
     name: typeTransations === "walletHomeSent" ? "Entrada de dinheiro carteira" : "Saida de dinheiro carteira",
-    value: typeTransations === "walletHomeSent" ? newValueSentAtt : newValueExitAtt,
+    value: typeTransations === "walletHomeSent" ?  valueWalletSentPlan : valueWallExitPlan,
     icon: typeTransations === "walletHomeSent" ? "/arrowUp.svg" : "/arrowDown.svg",
     date: new Date().toLocaleDateString("pt-BR"),
     sentValue: typeTransations === "walletHomeSent" ? true : false,
@@ -242,7 +242,8 @@ export default function HomeContextProvider({ children }: any) {
       const transationsDocs = await getDocs(transationsCollect);
       transationsArray = transationsDocs.docs.map((doc) => doc.data());
       const transationId = transationsDocs.docs[0];
-      const currentTransation = transationsDocs.docs.map((doc) => doc.data().transacoes);
+
+      const currentTransation = transationsDocs.docs.map((doc) => doc.data().transacoes).flat();
       transationsRefId = transationId? doc(transationsCollect, transationId.id): null;
       setTransationsRefId(transationsRefId);
       setCurrentTransationDb(currentTransation)
