@@ -11,7 +11,7 @@ import { formatarNumero } from "../PlanPage/HeaderPlan";
 
 
 export const Header = () => {
-  const { dataUser, valueWallet } = useContext(HomeContext);
+  const { dataUser, valueWallet, setSetTypeTransations } = useContext(HomeContext);
 
   const [showValueWallet, setShowValueWallet] = useState(false);
 
@@ -21,10 +21,12 @@ export const Header = () => {
 
   const openModalValue = ()=> {
     setOpenModalSentValue(true)
+    setSetTypeTransations("walletHomeSent")
   }
 
   const openModalExitValueFn = ()=> {
     setOpenModalExitValue(true)
+    setSetTypeTransations("walletHomeExit")
   }
 
 
