@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { arrayUnion, DocumentData, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { HomeContext } from "@/Context/HomeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
