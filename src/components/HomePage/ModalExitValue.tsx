@@ -1,8 +1,11 @@
+import { useContext } from "react";
 import { HomeContext } from "@/Context/HomeContext";
-import { faCircleArrowDown, faMoneyCheckDollar } from "@fortawesome/free-solid-svg-icons";
+
+import { arrayUnion, updateDoc } from "firebase/firestore";
+import { nanoid } from "nanoid";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { updateDoc } from "firebase/firestore";
-import { useContext, useState } from "react";
+import { faCircleArrowDown, faMoneyCheckDollar } from "@fortawesome/free-solid-svg-icons";
 
 type ModalSentValueProps = {
   setOpenModalSentValue: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,25 +13,21 @@ type ModalSentValueProps = {
 
 export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSentValue }) => {
 
-  const { valueWallet, idWalletAtt } = useContext(HomeContext);
-
-  const [valueExitWallet, setValueExitWallet] = useState<string>("");
-
-  const numberWallet = valueWallet.reduce(
-    (acc: number, wallet: any) => acc + parseFloat(wallet.valueWallet),
-    0
-  );
-
+  const {idWalletAtt, setValueExitWalletPlan, newValueExitAtt, numberWallet, valueWallExitPlan, transationsData, transationRefId} = useContext(HomeContext);
 
   const exitValueWallet = async () => {
 
-    const changeValueOfNumber = parseFloat(valueExitWallet);
-
-    if (numberWallet === 0 || changeValueOfNumber > numberWallet ) {
+    if (numberWallet === 0 || valueWallExitPlan > numberWallet ) {
       return;
     }
-    const newValueWallet = numberWallet - changeValueOfNumber;
-    await updateDoc(idWalletAtt, {valueWallet: newValueWallet}) // utilizamos para atualizar os dados
+
+    const transationsAtt = {
+      id: nanoid(),
+      data: transationsData,
+    };
+  
+    await updateDoc(idWalletAtt, {valueWallet: newValueExitAtt}) // utilizamos para atualizar os dados
+    await updateDoc(transationRefId, {transacoes: arrayUnion(transationsAtt)});
 
     setOpenModalSentValue(false)
   }
@@ -58,7 +57,7 @@ export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSent
                 type="text"
                 className="h-[40px] rounded-md outline-none pl-[9px] text-blackPrimary"
                 placeholder="ex: 100"
-                onChange={(e) => setValueExitWallet(e.target.value)}
+                onChange={(e) =>setValueExitWalletPlan(e.target.value)}
               />
             </div>
           </div>

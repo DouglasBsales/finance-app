@@ -1,31 +1,34 @@
 import React, { useContext, useState } from "react";
-import { updateDoc } from "firebase/firestore";
+import { arrayUnion, updateDoc } from "firebase/firestore";
 import { HomeContext } from "@/Context/HomeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faCircleArrowUp,faMoneyCheckDollar,} from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleArrowUp,
+  faMoneyCheckDollar,
+} from "@fortawesome/free-solid-svg-icons";
+import { nanoid } from "nanoid";
 
 type ModalSentValueProps = {
   setOpenModalSentValue: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+
 const ModalSentValue: React.FC<ModalSentValueProps> = ({
   setOpenModalSentValue,
 }) => {
-  const { valueWallet, idWalletAtt } = useContext(HomeContext);
+  const {idWalletAtt,transationRefId,transationsData,setValueSentWalletPlan, newValueSentAtt } = useContext(HomeContext);
 
-  const numberWallet = valueWallet.reduce(
-    (acc: number, wallet: any) => acc + parseFloat(wallet.valueWallet),
-    0
-  );
 
-  const [valueSentWallet, setValueSentWallet] = useState<string>("");
 
   const changeSentValueWallet = async () => {
-    const changeValueOfNumber = parseFloat(valueSentWallet);
 
-    const newValueWallet = numberWallet + changeValueOfNumber;
+    const transationsAtt = {
+      id: nanoid(),
+      data: transationsData,
+    };
 
-    await updateDoc(idWalletAtt, { valueWallet: newValueWallet });
+    await updateDoc(idWalletAtt, { valueWallet: newValueSentAtt });
+    await updateDoc(transationRefId, {transacoes: arrayUnion(transationsAtt)});
     setOpenModalSentValue(false);
   };
 
@@ -59,7 +62,7 @@ const ModalSentValue: React.FC<ModalSentValueProps> = ({
                 type="text"
                 className="h-[40px] rounded-md outline-none pl-[9px] text-blackPrimary"
                 placeholder="ex: 100"
-                onChange={(e) => setValueSentWallet(e.target.value)}
+                onChange={(e) => setValueSentWalletPlan(e.target.value)}
               />
             </div>
           </div>
