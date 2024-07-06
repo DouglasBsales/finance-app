@@ -20,11 +20,11 @@ export default function Plan() {
         <HeaderPlan />
       </div>
       <div className="w-full px-7 pb-[100px] bg-bluePrimary">
-        <p className="text-white text-3xl font-medium pt-12 ">
+        <div className="flex flex-col">
+        <p className="text-white text-3xl font-medium pt-12">
           Ultimas transações
         </p>
-        <div className="flex flex-col items-center">
-          <div>
+          <div className="flex flex-col items-center">
             {hasTransations ? (
               transations.map((cards: any) =>
                 cards.transacoes.map((transacao: any) => (
