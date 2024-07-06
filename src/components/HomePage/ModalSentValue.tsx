@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { arrayUnion, updateDoc } from "firebase/firestore";
+import React, { useContext } from "react";
+import { arrayUnion, DocumentData, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { HomeContext } from "@/Context/HomeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,33 +12,47 @@ type ModalSentValueProps = {
   setOpenModalSentValue: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-
 const ModalSentValue: React.FC<ModalSentValueProps> = ({
   setOpenModalSentValue,
 }) => {
-  const {idWalletAtt,transationRefId,transationsData,setValueSentWalletPlan, newValueSentAtt, currentTransationDb } = useContext(HomeContext);
-
-
+  const {
+    idWalletAtt,
+    transationRefId,
+    transationsData,
+    setValueSentWalletPlan,
+    newValueSentAtt,
+    currentTransationDb,
+  } = useContext(HomeContext);
 
   const changeSentValueWallet = async () => {
-
     const transationsAtt = {
       id: nanoid(),
       data: transationsData,
     };
-
-    const updatedTransacoes = [transationsAtt, ...currentTransationDb];
-
+  
+    // Atualiza o valor da carteira no Firestore
     await updateDoc(idWalletAtt, { valueWallet: newValueSentAtt });
-    await updateDoc(transationRefId, {transacoes: arrayUnion( updatedTransacoes)});
+  
+    if (transationRefId) {
+      // Recupera o documento de transações
+      const transationDoc: any = await getDoc( transationRefId)
+  
+      if (transationDoc.exists()) {
+        const existingTransacoes = transationDoc.data().transacoes || [];    // Recupera o array existente de transações
+        const updatedTransacoes = [transationsAtt, ...existingTransacoes];   // Adiciona a nova transação ao início do array
+        await updateDoc( transationRefId, { transacoes: updatedTransacoes });   // Atualiza o documento de transações com o novo array
+      } else {
+        await setDoc( transationRefId, { transacoes: [transationsAtt] });   // Adiciona a primeira transação ao documento de transações
+      }
+    }
+  
     setOpenModalSentValue(false);
   };
+  
 
   const closedModal = () => {
     setOpenModalSentValue(false);
   };
-
-  // criar funcao para adicionar os dados de valor adicionaos
 
   return (
     <div className="w-full fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

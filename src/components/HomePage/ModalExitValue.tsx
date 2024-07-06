@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { HomeContext } from "@/Context/HomeContext";
 
-import { arrayUnion, updateDoc } from "firebase/firestore";
+import { arrayUnion, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,9 +25,20 @@ export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSent
       data: transationsData,
     };
 
-    const updatedTransacoes = [transationsAtt, ...currentTransationDb];
     await updateDoc(idWalletAtt, { valueWallet: newValueExitAtt });
-    await updateDoc(transationRefId, { transacoes: updatedTransacoes });
+
+    if (transationRefId) {
+      // Recupera o documento de transações
+      const transationDoc: any = await getDoc( transationRefId)
+  
+      if (transationDoc.exists()) {
+        const existingTransacoes = transationDoc.data().transacoes || [];    // Recupera o array existente de transações
+        const updatedTransacoes = [transationsAtt, ...existingTransacoes];   // Adiciona a nova transação ao início do array
+        await updateDoc( transationRefId, { transacoes: updatedTransacoes });   // Atualiza o documento de transações com o novo array
+      } else {
+        await setDoc( transationRefId, { transacoes: [transationsAtt] });   // Adiciona a primeira transação ao documento de transações
+      }
+    }
 
     setOpenModalSentValue(false);
   };
