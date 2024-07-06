@@ -10,7 +10,9 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
+import { nanoid } from "nanoid";
 import { createContext, useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 export const HomeContext = createContext<any>(null);
 
@@ -24,12 +26,8 @@ export default function HomeContextProvider({ children }: any) {
 
   const userCollectionRef = collection(db, "users");
   const userGoogleObj = userGoogle ? JSON.parse(userGoogle) : null;
-  const userDocRef = userGoogleObj
-    ? doc(userCollectionRef, userGoogleObj.uid)
-    : null; // Selecionando conta do usuário
-  const walletCollectionRef = userDocRef
-    ? collection(userDocRef, "valueWallet")
-    : null; // selecionando valueWallet no banco de dados
+  const userDocRef = userGoogleObj? doc(userCollectionRef, userGoogleObj.uid): null; // Selecionando conta do usuário
+  const walletCollectionRef = userDocRef? collection(userDocRef, "valueWallet"): null; // selecionando valueWallet no banco de dados
 
   const [dataUser, setDataUser] = useState<any>({});
   const [valueWallet, setValueWallet] = useState<any>(0);
@@ -37,56 +35,69 @@ export default function HomeContextProvider({ children }: any) {
   // LINHA ACIMA OS STATES SETADOS DA HOME
   // LINHA ABAIXO PARA CAPTURAR OS DADOS ESPECÍFICOS DO USUARIO NA DATABASE DO FIREBASE
 
-  useEffect(() => {
-    const getDataUser = async () => {
-      // Função para capturar os dados específicos do usuário no banco
-      if (userGoogleObj?.uid) {
-        const userDocRef = doc(userCollectionRef, userGoogleObj.uid);
-        const dataUserSnap = await getDoc(userDocRef);
-        setDataUser(dataUserSnap.data());
-      }
-    };
+  const getDataUser = async () => {
+    if (userGoogleObj?.uid) {
+      const userDocRef = doc(userCollectionRef, userGoogleObj.uid);
+      const dataUserSnap = await getDoc(userDocRef);
+      return dataUserSnap.data();
+    }
+  };
 
-    getDataUser();
-  }, [userGoogleObj?.uid, userCollectionRef]);
+  // Use useQuery to fetch data
+  const { data: userData, error } = useQuery("dataUser", getDataUser, {
+    onSuccess: (data) => setDataUser(data),
+  });
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET PRINCIPAL DA HOME
 
   const [idWalletAtt, setIdWalletAtt] = useState<any>();
-  useEffect(() => {
-    const getValueWallet = async () => {
-      if (walletCollectionRef) {
-        const walletRefSnap = await getDocs(walletCollectionRef);
-        const walletData = walletRefSnap.docs.map((doc) => doc.data());
-        const walletDocId = walletRefSnap.docs[0];
-        const walletDocIdref = walletDocId
-          ? doc(walletCollectionRef, walletDocId.id)
-          : null;
-        setValueWallet(walletData);
-        setIdWalletAtt(walletDocIdref);
-      }
-    };
 
-    getValueWallet();
-  }, [userGoogleObj?.uid, walletCollectionRef]); // Use walletCollectionRef como dependência
+  const getValueWallet = async () => {
+    if (walletCollectionRef) {
+      const walletRefSnap = await getDocs(walletCollectionRef);
+      const walletData = walletRefSnap.docs.map((doc) => doc.data());
+      const walletDocId = walletRefSnap.docs[0];
+      const walletDocIdref = walletDocId
+        ? doc(walletCollectionRef, walletDocId.id)
+        : null;
+      setIdWalletAtt(walletDocIdref);
+      return walletData;
+    }
+  };
+
+  const {} = useQuery("valueWalletHome", getValueWallet, {
+    onSuccess: (data) => setValueWallet(data),
+    enabled: !!walletCollectionRef, // Enable query only if walletCollectionRef is not null
+    staleTime: 1000 * 60 * 10, // 10 minutos
+    cacheTime: 1000 * 60 * 60, // 1 hora
+  });
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DOS PLANOS CRIADOS
   const [plansData, setPlansData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const plansCollect = userDocRef? collection(db, "users", userGoogleObj.uid, "planos"): null;
-  useEffect(() => {
-    const getPlans = async () => {
-      setIsLoading(true);
-      if (plansCollect) {
-        const plansDocs = await getDocs(plansCollect);
-        const plansArray = plansDocs.docs.map((doc) => doc.data());
-        setPlansData(plansArray);
-      }
-      setIsLoading(false);
-    };
+  const plansCollect = userDocRef
+    ? collection(db, "users", userGoogleObj.uid, "planos")
+    : null;
 
-    getPlans();
-  }, [plansCollect]);
+  const getPlans = async () => {
+    setIsLoading(true);
+
+    let plansArray: any = null;
+
+    if (plansCollect) {
+      const plansDocs = await getDocs(plansCollect);
+      plansArray = plansDocs.docs.map((doc) => doc.data());
+    }
+    setIsLoading(false);
+    return plansArray;
+  };
+
+  const {} = useQuery("plansData", getPlans, {
+    onSuccess: (data) => setPlansData(data),
+    enabled: !!plansCollect, // Enable query only if plansCollect is not null
+    staleTime: 1000 * 60 * 10, // 10 minutos
+    cacheTime: 1000 * 60 * 60, // 1 hora
+  });
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET DOS PLANOS DE MANEIRA DINÂMICA
 
@@ -182,20 +193,69 @@ export default function HomeContextProvider({ children }: any) {
     updateValueWallet();
   }, [plansCollect]);
 
-  const transationsCollect = userDocRef? collection(db, "users", userGoogleObj.uid, "transacoes"): null;
-  const [transations, setTransations] = useState<any>([])
-  const [typeTransations, setSetTypeTransations] = useState<string>("")
-  useEffect(() => {
-    const getTransations = async () => {
-      if (transationsCollect) {
-        const transationsDocs = await getDocs(transationsCollect);
-        const transationsArray = transationsDocs.docs.map((doc) => doc.data());
-        setTransations(transationsArray)
-      }
-    };
+  // LINHA ABAIXO PARA AS TRANSACOES DINAMICAS DA CARTEIRA PRINCIPAL 
 
-    getTransations();
-  }, [transationsCollect]);
+  const transationsCollect = userDocRef ? collection(db, "users", userGoogleObj.uid, "transacoes") : null;
+  const [transations, setTransations] = useState<any>([]); // recebe os dados do fecth em cache
+  const [transationRefId, setTransationsRefId] = useState<any>(); // recebe a referência do plano
+  const [typeTransations, setSetTypeTransations] = useState<string>(""); // seta o tip da transacao da carteira principal ou planos
+  const [valueSentWalletPlan, setValueSentWalletPlan] = useState<string>(""); // captuir o valor de adição do modal wallet principal
+  const [valueExitWalletPlan, setValueExitWalletPlan] = useState<string>("");  // captuir o valor de subtração do modal wallet principal
+
+  type TransationsType = { // tipo de dados a serem encviados para o dataBase nas transações
+    id: string;
+    name: string;
+    plano?: string;
+    value: number;
+    icon: string;
+    date: string;
+    sentValue: boolean;
+  };
+
+  const numberWallet = valueWallet ? valueWallet.reduce(
+    (acc: number, wallet: any) => acc + parseFloat(wallet.valueWallet),
+    0
+  ): null ;
+
+  const valueWalletSentPlan = parseFloat(valueSentWalletPlan);
+  const newValueSentAtt = numberWallet + valueWalletSentPlan
+
+  const valueWallExitPlan = parseFloat(valueExitWalletPlan)
+  const newValueExitAtt = numberWallet - valueWallExitPlan
+
+
+  const transationsData: TransationsType = { // tipo de dados a serem enviados para as transacoes na wallet principal
+    id: nanoid(),
+    name: typeTransations === "walletHomeSent" ? "Entrada de dinheiro carteira" : "Saida de dinheiro carteira",
+    value: typeTransations === "walletHomeSent" ? newValueSentAtt : newValueExitAtt,
+    icon: typeTransations === "walletHomeSent" ? "/arrowUp.svg" : "/arrowDown.svg",
+    date: new Date().toLocaleDateString("pt-BR"),
+    sentValue: typeTransations === "walletHomeSent" ? true : false,
+  };
+
+  const getTransations = async () => {
+    let transationsArray = null;
+    let transationsRefId = null;
+
+    if (transationsCollect) {
+      const transationsDocs = await getDocs(transationsCollect);
+      transationsArray = transationsDocs.docs.map((doc) => doc.data());
+      const transationId = transationsDocs.docs[0];
+      transationsRefId = transationId
+        ? doc(transationsCollect, transationId.id)
+        : null;
+      setTransationsRefId(transationsRefId);
+    }
+
+    return transationsArray;
+  };
+
+  const {} = useQuery("transationsData", getTransations, {
+    onSuccess: (data) => setTransations(data),
+    enabled: !!plansCollect, // Enable query only if plansCollect is not null
+    staleTime: 1000 * 60 * 10, // 10 minutos
+    cacheTime: 1000 * 60 * 60,
+  });
 
   return (
     <HomeContext.Provider
@@ -226,7 +286,15 @@ export default function HomeContextProvider({ children }: any) {
         optionPlan,
         transations,
         setSetTypeTransations,
-        typeTransations
+        typeTransations,
+        transationRefId,
+        transationsData,
+        setValueSentWalletPlan,
+        newValueSentAtt,
+        setValueExitWalletPlan,
+        newValueExitAtt,
+        numberWallet,
+        valueWallExitPlan
       }}
     >
       {children}
