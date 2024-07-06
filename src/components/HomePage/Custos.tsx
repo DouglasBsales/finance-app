@@ -6,7 +6,7 @@ export const Custos = () => {
     <div className="pl-[28px] pt-[25px]">
       <div className="flex justify-between items-center">
         <p className="text-blackPrimary text-xl font-medium">Seus custos</p>
-        <button className="text-bluePrimary font-medium pr-[28px]">
+        <button className="text-bluePrimary text-xs font-medium pr-[28px]">
           Novo custo
         </button>
       </div>
