@@ -16,7 +16,7 @@ type ModalSentValueProps = {
 const ModalSentValue: React.FC<ModalSentValueProps> = ({
   setOpenModalSentValue,
 }) => {
-  const {idWalletAtt,transationRefId,transationsData,setValueSentWalletPlan, newValueSentAtt } = useContext(HomeContext);
+  const {idWalletAtt,transationRefId,transationsData,setValueSentWalletPlan, newValueSentAtt, currentTransationDb } = useContext(HomeContext);
 
 
 
@@ -27,8 +27,10 @@ const ModalSentValue: React.FC<ModalSentValueProps> = ({
       data: transationsData,
     };
 
+    const updatedTransacoes = [transationsAtt, ...currentTransationDb];
+
     await updateDoc(idWalletAtt, { valueWallet: newValueSentAtt });
-    await updateDoc(transationRefId, {transacoes: arrayUnion(transationsAtt)});
+    await updateDoc(transationRefId, {transacoes: arrayUnion( updatedTransacoes)});
     setOpenModalSentValue(false);
   };
 

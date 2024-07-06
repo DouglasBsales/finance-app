@@ -13,11 +13,10 @@ type ModalSentValueProps = {
 
 export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSentValue }) => {
 
-  const {idWalletAtt, setValueExitWalletPlan, newValueExitAtt, numberWallet, valueWallExitPlan, transationsData, transationRefId} = useContext(HomeContext);
+  const {idWalletAtt, setValueExitWalletPlan, newValueExitAtt, numberWallet, valueWallExitPlan, transationsData, transationRefId, currentTransationDb} = useContext(HomeContext);
 
   const exitValueWallet = async () => {
-
-    if (numberWallet === 0 || valueWallExitPlan > numberWallet ) {
+    if (numberWallet === 0 || valueWallExitPlan > numberWallet) {
       return;
     }
 
@@ -25,12 +24,13 @@ export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSent
       id: nanoid(),
       data: transationsData,
     };
-  
-    await updateDoc(idWalletAtt, {valueWallet: newValueExitAtt}) // utilizamos para atualizar os dados
-    await updateDoc(transationRefId, {transacoes: arrayUnion(transationsAtt)});
 
-    setOpenModalSentValue(false)
-  }
+    const updatedTransacoes = [transationsAtt, ...currentTransationDb];
+    await updateDoc(idWalletAtt, { valueWallet: newValueExitAtt });
+    await updateDoc(transationRefId, { transacoes: updatedTransacoes });
+
+    setOpenModalSentValue(false);
+  };
 
 
   return (
