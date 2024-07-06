@@ -8,9 +8,9 @@ import { Planos } from "@/components/HomePage/Planos";
 export default function Home() {
 
   return (
-    <div className="w-full flex flex-col items-center bg-whitePrimary ">
+    <div className="w-full flex flex-col items-center bg-whitePrimary">
       <Header />
-      <div className="w-[390px] h-screen overflow-x-hidden">
+      <div className="w-[390px]  overflow-x-hidden pb-[100px]">
       <Planos />
       <Custos/>
       <LastTransacoes/>
