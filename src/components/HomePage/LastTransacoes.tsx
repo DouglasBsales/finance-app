@@ -1,6 +1,7 @@
 import { HomeContext } from "@/Context/HomeContext";
 import { useContext } from "react";
 import CardsTransacoesPlan from "../PlanPage/CardsTransacoesPlan";
+import Link from "next/link";
 
 const LastTransacoes = () => {
   const { transations } = useContext(HomeContext);
@@ -9,9 +10,7 @@ const LastTransacoes = () => {
   const hasTransations = Array.isArray(transations) && transations.length > 0;
 
   // Coletar todas as transações em uma única array
-  const allTransacoes = hasTransations 
-    ? transations.flatMap((transaction: any) => transaction.transacoes) 
-    : [];
+  const allTransacoes = hasTransations ? transations.flatMap((transaction: any) => transaction.transacoes) : [];
 
   // Selecionar as últimas 5 transações
   const latestTransacoes = allTransacoes.slice(0, 5);
@@ -20,11 +19,11 @@ const LastTransacoes = () => {
     <div className="pl-[28px] pt-[25px]">
       <div className="flex justify-between items-center">
         <p className="text-blackPrimary text-xl font-medium">
-          Últimas transações
+          Últimas movimentações
         </p>
-        <button className="text-bluePrimary font-medium pr-[28px]">
+        <Link href="/Pages/LastTransations"className="text-bluePrimary text-xs font-medium pr-[28px]">
           Ver todas
-        </button>
+        </Link>
       </div>
       {latestTransacoes.length > 0 ? (
         latestTransacoes.map((transacao: any) => (
