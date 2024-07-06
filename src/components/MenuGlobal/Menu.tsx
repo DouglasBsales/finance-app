@@ -49,7 +49,7 @@ const Menu = () => {
             } mt-[8px]`}
           ></div>
         </Link>
-        <button onClick={isPageTransacao}>
+        <Link href="/Pages/LastTransations" onClick={isPageTransacao}>
           <FontAwesomeIcon
             icon={faClockRotateLeft}
             className={`${
@@ -65,7 +65,7 @@ const Menu = () => {
                 : " border-white"
             } mt-[8px]`}
           ></div>
-        </button>
+        </Link>
         <Link href="/Pages/SearchTransacoes" onClick={ isPageSearchTransition}>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
