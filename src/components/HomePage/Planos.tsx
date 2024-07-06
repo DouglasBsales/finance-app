@@ -4,7 +4,7 @@ import { useContext } from "react";
 import CardsPlans from "./CardsPlans";
 
 export const Planos = () => {
-  const { plansData, isLoading } = useContext(HomeContext);
+  const { plansData } = useContext(HomeContext);
 
   const hasPlans: any =
     Array.isArray(plansData) &&
