@@ -1,47 +1,35 @@
-import { HomeContext } from "@/Context/HomeContext";
-import {
-  faCircleArrowDown,
-  faCircleChevronDown,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FunctionComponent, useContext } from "react";
+import Image from "next/image";
+import { FunctionComponent } from "react";
+import { formatarNumero } from "../PlanPage/HeaderPlan";
 
 type CardsProps = {
-  infoCards: Object;
+  infoCards: any;
 };
 
-const CardsTransacoesPlan: FunctionComponent<CardsProps> = ({infoCards}) => {
-  const { typeTransations } = useContext(HomeContext);
-
+const CardsTransacoesPlan: FunctionComponent<CardsProps> = ({ infoCards }) => {
   return (
     <div className="pt-7">
       <div className="w-[337px] flex items-center pl-4 bg-white rounded-md">
         <div className="w-full flex justify-between items-center py-3">
           <div className="flex justfiy-center items-center">
-            {typeTransations === "walletHomeSent" ? (
-              <FontAwesomeIcon
-                icon={faCircleChevronDown}
-                className="text-[#46E068] text-[38px]"
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={faCircleArrowDown}
-                className="text-[#E8270E] text-[38px]"
-              />
-            )}
+            <Image src={infoCards.icon} alt="" width={38} height={38} />
             <div className="w-[180px] flex flex-col pl-3">
-              <p className="text-blackOpacity text-sm font-light">15/06/2024</p>
-              <p className="font-medium text-blackPrimary ">
-                {typeTransations === "walletHomeSent"
-                  ? "Entrada de dinheiro carteira"
-                  : "Saída de dinheiro carteira"}
+              <p className="text-blackOpacity text-sm font-light">
+                {infoCards.date}
               </p>
+              <p className="font-medium text-blackPrimary ">{infoCards.name}</p>
               <p className="text-sm text-blackOpacity font-medium">
-                Plano: House
+                {infoCards.plano}
               </p>
             </div>
-            <div className="flex items-center pl-5">
-              <p className="text-[#46E068]">+ 100,00</p>
+            <div className="flex items-center pl-5">  {/* arrumar o padding left para que fique fixo independente do tamanho do texto */}
+              <p
+                className={`${
+                  infoCards.sentValue ? "text-[#46E068]" : "text-[#FF0000]"
+                }`}
+              >
+                {infoCards.sentValue ? "+" : "-"} {formatarNumero(infoCards.value)}
+              </p>
             </div>
           </div>
         </div>
