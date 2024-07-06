@@ -18,7 +18,7 @@ export const Planos = () => {
         <p className="text-blackPrimary text-xl font-medium">Seus planos</p>
         <Link
           href="/Pages/NewPlan"
-          className="text-bluePrimary font-medium pr-[28px]"
+          className="text-bluePrimary text-xs font-medium pr-[28px]"
         >
           Novo plano
         </Link>
