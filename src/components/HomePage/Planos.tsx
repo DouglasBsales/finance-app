@@ -47,13 +47,7 @@ export const Planos = () => {
           )
         ) : (
           <div>
-            {hasPlans === "null" ?(
-              <p className="text-blackOpacity"> Você ainda nao possui planos a serem exibidos</p>
-            ) : (
-              <p className="text-blackOpacity">
-               Carregando seus planos...
-              </p>
-            )}
+            <p className="text-blackOpacity">Você ainda não possui planos a serem exibidos</p>
           </div>
         )}
       </div>
