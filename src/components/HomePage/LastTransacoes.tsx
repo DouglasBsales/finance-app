@@ -31,6 +31,7 @@ const LastTransacoes = () => {
             <CardsTransacoesPlan
               infoCards={{
                 date: transacao.data.date,
+                plano: transacao.data.plano,
                 icon: transacao.data.icon,
                 id: transacao.id,
                 name: transacao.data.name,
