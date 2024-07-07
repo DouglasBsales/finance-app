@@ -20,8 +20,8 @@ export default function LastTransations() {
     <div className="w-full flex flex-col items-center bg-whitePrimary">
       <div className="w-[390px] overflow-x-hidden pb-[100px] px-7">
         <p className=" text-blackPrimary font-medium text-xl pt-[66px]">Ulitmas movimentações</p>
-        {allTransacoes
-          ?filteredTransacoes.map((transacao: any) => (
+        {allTransacoes ?
+          filteredTransacoes.map((transacao: any) => (
               <div key={transacao.id}>
                 <CardsTransacoesPlan 
                  infoCards={{
