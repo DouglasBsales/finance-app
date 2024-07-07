@@ -6,13 +6,15 @@ import { HomeContext } from "@/Context/HomeContext";
 import { useContext } from "react";
 
 export default function Plan() {
-  const { transations } = useContext(HomeContext);
+  const { transations, planSelected } = useContext(HomeContext);
+
+  const planName = planSelected ? planSelected.data.nameOfPlan: null
 
   const hasTransations = Array.isArray(transations) && transations.length > 0;
 
-  const allTransacoes = hasTransations
-    ? transations.flatMap((transaction: any) => transaction.transacoes)
-    : null;
+  const allTransacoes = hasTransations ? transations.flatMap((transaction: any) => transaction.transacoes) : [];
+
+  const filteredTransacoes = allTransacoes.filter((transacao: any) => transacao.data.plano === planName);
 
   return (
     <div className="w-full h-screen flex flex-col items-center bg-bluePrimary">
@@ -25,12 +27,13 @@ export default function Plan() {
             Ultimas transações
           </p>
           <div className="flex flex-col items-center">
-            {allTransacoes ? (
-              allTransacoes.map((transacao: any) => (
+            {filteredTransacoes.length > 0 ? (
+              filteredTransacoes.map((transacao: any) => (
                 <div key={transacao.id}>
                   <CardsTransacoesPlan
                     infoCards={{
                       date: transacao.data.date,
+                      plano: transacao.data.plano,
                       icon: transacao.data.icon,
                       id: transacao.id,
                       name: transacao.data.name,
