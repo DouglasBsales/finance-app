@@ -21,7 +21,6 @@ const ModalSentValue: React.FC<ModalSentValueProps> = ({
     transationsData,
     setValueSentWalletPlan,
     newValueSentAtt,
-    currentTransationDb,
   } = useContext(HomeContext);
 
   const changeSentValueWallet = async () => {
@@ -35,7 +34,7 @@ const ModalSentValue: React.FC<ModalSentValueProps> = ({
   
     if (transationRefId) {
       // Recupera o documento de transações
-      const transationDoc: any = await getDoc( transationRefId)
+      const transationDoc: any = await getDoc(transationRefId)
   
       if (transationDoc.exists()) {
         const existingTransacoes = transationDoc.data().transacoes || [];    // Recupera o array existente de transações
