@@ -8,6 +8,7 @@ import {
   doc,
   getDoc,
   getDocs,
+  setDoc,
   updateDoc,
 } from "firebase/firestore";
 import { nanoid } from "nanoid";
@@ -15,6 +16,17 @@ import { createContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
 export const HomeContext = createContext<any>(null);
+
+
+type TransationsType = { // tipo de dados a serem encviados para o dataBase nas transações
+  id: string;
+  name: string;
+  plano?: string;
+  value: number;
+  icon: string;
+  date: string;
+  sentValue: boolean;
+};
 
 export default function HomeContextProvider({ children }: any) {
   const [optionPlan, setOptionPlan] = useState<String>("");
@@ -57,9 +69,7 @@ export default function HomeContextProvider({ children }: any) {
       const walletRefSnap = await getDocs(walletCollectionRef);
       const walletData = walletRefSnap.docs.map((doc) => doc.data());
       const walletDocId = walletRefSnap.docs[0];
-      const walletDocIdref = walletDocId
-        ? doc(walletCollectionRef, walletDocId.id)
-        : null;
+      const walletDocIdref = walletDocId? doc(walletCollectionRef, walletDocId.id) : null;
       setIdWalletAtt(walletDocIdref);
       return walletData;
     }
@@ -75,18 +85,21 @@ export default function HomeContextProvider({ children }: any) {
   // LINHA ABAIXO PARA ATUALIZAÇÃO DOS PLANOS CRIADOS
   const [plansData, setPlansData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const plansCollect = userDocRef
-    ? collection(db, "users", userGoogleObj.uid, "planos")
-    : null;
+  const plansCollect = userDocRef ? collection(db, "users", userGoogleObj.uid, "planos"): null;
 
+  
+  let plansArray: any = null
+  let planDocIdref: any = null
+  let currentPlan: any = null
   const getPlans = async () => {
     setIsLoading(true);
-
-    let plansArray: any = null;
 
     if (plansCollect) {
       const plansDocs = await getDocs(plansCollect);
       plansArray = plansDocs.docs.map((doc) => doc.data());
+      const planDocsId = plansDocs.docs[0];
+      planDocIdref = planDocsId? doc(plansCollect, planDocsId.id) : null;
+      currentPlan = plansDocs.docs.map((doc) => doc.data().planos).flat();
     }
     setIsLoading(false);
     return plansArray;
@@ -117,9 +130,7 @@ export default function HomeContextProvider({ children }: any) {
   const valueWalletDb = planSelected ? planSelected.data.valuePlanWallet : null;
 
   const valueParsedSent: number = parseFloat(valueSentWallet);
-  const valueAttSent: number = planSelected
-    ? valueParsedSent + valueWalletDb
-    : null;
+  const valueAttSent: number = planSelected ? valueParsedSent + valueWalletDb : null;
 
   const valueParsedExit: number = parseFloat(valueExitWallet);
   const valueAttExit = valueWalletDb - valueParsedExit;
@@ -143,27 +154,55 @@ export default function HomeContextProvider({ children }: any) {
   const [showModalSentValue, setShowModalSentValue] = useState<boolean>(false);
   const [showModalExitValue, setShowModalExitValue] = useState<boolean>(false);
 
-  const updateValueWalletPlan = async () => {
+  const transationsDataPlan: TransationsType = { // tipo de dados a serem enviados para as transacoes na wallet do plano
+    id: nanoid(),
+    name:  methodWallet === "entrada" ? "Entrada de dinheiro no plano" : "Saida de dinheiro no plano",
+    value: valueParsedSent,
+    icon:  methodWallet === "entrada" ?  "/arrowUp.svg" : "/arrowDown.svg",
+    date: new Date().toLocaleDateString("pt-BR"),
+    sentValue:  methodWallet === "entrada" ? true : false
+  };
+
+  const transationsAttPlan = {
+    id: nanoid(),
+    data: transationsDataPlan,
+  };
+
+  const updateValueWalletPlan = async () => { // FUNCAO PARA ATUALIZAR OS DADOS DA WALLET DO PLAN
     if (methodWallet === "saida" && valueParsedExit > valueWalletDb) {
       alert("Saldo insuficiente");
       return;
     }
 
-    // Remove o plano selecionado do array no Firestore
-    await updateDoc(refDocPlan, {
-      planos: arrayRemove(planSelected),
-    });
+    await updateDoc(refDocPlan, {planos: arrayRemove(planSelected),});  // Remove o plano selecionado do array no Firestore
 
-    // Adiciona o novo plano atualizado ao array no Firestore
-    await updateDoc(refDocPlan, {
-      planos: arrayUnion(planArray),
-    });
+    if ( planDocIdref) { // Adiciona o novo plano atualizado ao array no Firestore conforme a condição setada
+      const planDoc: any = await getDoc(planDocIdref)  // Recupera o documento de transações
+  
+      if (planDoc.exists()) {
+        const existingPlan = planDoc.data().planos || [];    // Recupera o array existente de transações
+        const updatedPlan = [ planArray, ...existingPlan];   // Adiciona a nova transação ao início do array
+        await updateDoc(refDocPlan, { planos: updatedPlan });   // Atualiza o documento de transações com o novo array
+      } else {
+        await setDoc( transationRefId, { planos: [  planArray ] });   // Adiciona a primeira transação ao documento de transações
+      }
+    }
+
+    if (transationRefId) {
+      // Recupera o documento de transações
+      const transationDoc: any = await getDoc(transationRefId)
+  
+      if (transationDoc.exists()) {
+        const existingTransacoes = transationDoc.data().transacoes || [];    // Recupera o array existente de transações
+        const updatedTransacoes = [ transationsAttPlan, ...existingTransacoes];   // Adiciona a nova transação ao início do array
+        await updateDoc( transationRefId, { transacoes: updatedTransacoes });   // Atualiza o documento de transações com o novo array
+      } else {
+        await setDoc( transationRefId, { transacoes: [ transationsAttPlan] });   // Adiciona a primeira transação ao documento de transações
+      }
+    }
 
     if (typeof window !== "undefined") {
-      const updatedPlan = {
-        ...planSelected,
-        data: { ...planSelected.data, valuePlanWallet: selectOptionWallet },
-      };
+      const updatedPlan = {...planSelected, data: { ...planSelected.data, valuePlanWallet: selectOptionWallet }};
 
       localStorage.setItem("planSelected", JSON.stringify(updatedPlan));
       const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
@@ -172,9 +211,7 @@ export default function HomeContextProvider({ children }: any) {
       );
       setPlanSelected(convertedPlanSelectIfIdStorage);
     }
-    methodWallet === "entrada"
-      ? setShowModalSentValue(false)
-      : setShowModalExitValue(false);
+    methodWallet === "entrada"? setShowModalSentValue(false) : setShowModalExitValue(false);
   };
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET DOS PLANOS
@@ -202,16 +239,6 @@ export default function HomeContextProvider({ children }: any) {
   const [valueSentWalletPlan, setValueSentWalletPlan] = useState<string>(""); // captuir o valor de adição do modal wallet principal
   const [valueExitWalletPlan, setValueExitWalletPlan] = useState<string>("");  // captuir o valor de subtração do modal wallet principal
 
-  type TransationsType = { // tipo de dados a serem encviados para o dataBase nas transações
-    id: string;
-    name: string;
-    plano?: string;
-    value: number;
-    icon: string;
-    date: string;
-    sentValue: boolean;
-  };
-
   const numberWallet = valueWallet ? valueWallet.reduce(
     (acc: number, wallet: any) => acc + parseFloat(wallet.valueWallet),
     0
@@ -222,7 +249,6 @@ export default function HomeContextProvider({ children }: any) {
 
   const valueWallExitPlan = parseFloat(valueExitWalletPlan)
   const newValueExitAtt = numberWallet - valueWallExitPlan
-
 
   const transationsData: TransationsType = { // tipo de dados a serem enviados para as transacoes na wallet principal
     id: nanoid(),
