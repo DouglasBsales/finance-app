@@ -38,12 +38,8 @@ export default function HomeContextProvider({ children }: any) {
 
   const userCollectionRef = collection(db, "users");
   const userGoogleObj = userGoogle ? JSON.parse(userGoogle) : null;
-  const userDocRef = userGoogleObj
-    ? doc(userCollectionRef, userGoogleObj.uid)
-    : null; // Selecionando conta do usuário
-  const walletCollectionRef = userDocRef
-    ? collection(userDocRef, "valueWallet")
-    : null; // selecionando valueWallet no banco de dados
+  const userDocRef = userGoogleObj? doc(userCollectionRef, userGoogleObj.uid): null; // Selecionando conta do usuário
+  const walletCollectionRef = userDocRef? collection(userDocRef, "valueWallet"): null; // selecionando valueWallet no banco de dados
 
   const [dataUser, setDataUser] = useState<any>({});
   const [valueWallet, setValueWallet] = useState<any>(0);
@@ -91,12 +87,9 @@ export default function HomeContextProvider({ children }: any) {
   // LINHA ABAIXO PARA ATUALIZAÇÃO DOS PLANOS CRIADOS
   const [plansData, setPlansData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const plansCollect = userDocRef
-    ? collection(db, "users", userGoogleObj.uid, "planos")
-    : null;
+  const plansCollect = userDocRef ? collection(db, "users", userGoogleObj.uid, "planos") : null;
 
   let plansArray: any = null;
-
   const getPlans = async () => {
     setIsLoading(true);
 
@@ -163,11 +156,9 @@ export default function HomeContextProvider({ children }: any) {
     // tipo de dados a serem enviados para as transacoes na wallet do plano
     id: nanoid(),
     name:
-      methodWallet === "entrada"
-        ? "Entrada de dinheiro no plano"
-        : "Saida de dinheiro no plano",
+    methodWallet === "entrada" ? "Entrada de dinheiro no plano" : "Saida de dinheiro no plano",
     plano: planSelected ? planSelected.data.nameOfPlan : null,
-    value: valueParsedSent,
+    value:  methodWallet === "entrada" ? valueParsedSent : valueParsedExit,
     icon: methodWallet === "entrada" ? "/arrowUp.svg" : "/arrowDown.svg",
     date: new Date().toLocaleDateString("pt-BR"),
     sentValue: methodWallet === "entrada" ? true : false,
@@ -185,8 +176,6 @@ export default function HomeContextProvider({ children }: any) {
     }
 
     if (!refDocPlan || !planSelected) return;
-
-    try {
       // Remove o plano atual
       await updateDoc(refDocPlan, {planos: arrayRemove(planSelected)});
 
@@ -210,6 +199,7 @@ export default function HomeContextProvider({ children }: any) {
           await updateDoc(transationRefId, { transacoes: updatedTransacoes }); // Atualiza o documento de transações com o novo array
         } else {
           await setDoc(transationRefId, { transacoes: [transationsAttPlan] }); // Adiciona a primeira transação ao documento de transações
+          // VERIFICAR SE REALMENTE PRECISA DESSE ELSE 
         }
       }
 
@@ -230,15 +220,13 @@ export default function HomeContextProvider({ children }: any) {
       methodWallet === "entrada"
         ? setShowModalSentValue(false)
         : setShowModalExitValue(false);
-    } catch (error) {
-      console.error("Error updating plan:", error);
-    }
+
   };
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET DOS PLANOS
 
   const [refDocPlan, setRefDocPlan] = useState<any>();
-
+  useEffect(() => {
     const updateValueWallet = async () => {
       if (plansCollect) {
         const docsPlan = await getDocs(plansCollect);
@@ -248,13 +236,8 @@ export default function HomeContextProvider({ children }: any) {
       }
     };
 
-    const {} = useQuery("updateValueWallet", updateValueWallet, {
-      onSuccess: (data) => setRefDocPlan(data),
-      enabled: !!plansCollect, // Enable query only if plansCollect is not null
-      staleTime: 1000 * 60 * 10, // 10 minutos
-      cacheTime: 1000 * 60 * 60, // 1 hora
-    });
-
+    updateValueWallet();
+  }, [plansCollect]);
 
   // LINHA ABAIXO PARA AS TRANSACOES DINAMICAS DA CARTEIRA PRINCIPAL
 
