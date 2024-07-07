@@ -17,8 +17,8 @@ import { useQuery } from "react-query";
 
 export const HomeContext = createContext<any>(null);
 
-
-type TransationsType = { // tipo de dados a serem encviados para o dataBase nas transações
+type TransationsType = {
+  // tipo de dados a serem encviados para o dataBase nas transações
   id: string;
   name: string;
   plano?: string;
@@ -38,8 +38,12 @@ export default function HomeContextProvider({ children }: any) {
 
   const userCollectionRef = collection(db, "users");
   const userGoogleObj = userGoogle ? JSON.parse(userGoogle) : null;
-  const userDocRef = userGoogleObj? doc(userCollectionRef, userGoogleObj.uid): null; // Selecionando conta do usuário
-  const walletCollectionRef = userDocRef? collection(userDocRef, "valueWallet"): null; // selecionando valueWallet no banco de dados
+  const userDocRef = userGoogleObj
+    ? doc(userCollectionRef, userGoogleObj.uid)
+    : null; // Selecionando conta do usuário
+  const walletCollectionRef = userDocRef
+    ? collection(userDocRef, "valueWallet")
+    : null; // selecionando valueWallet no banco de dados
 
   const [dataUser, setDataUser] = useState<any>({});
   const [valueWallet, setValueWallet] = useState<any>(0);
@@ -69,7 +73,9 @@ export default function HomeContextProvider({ children }: any) {
       const walletRefSnap = await getDocs(walletCollectionRef);
       const walletData = walletRefSnap.docs.map((doc) => doc.data());
       const walletDocId = walletRefSnap.docs[0];
-      const walletDocIdref = walletDocId? doc(walletCollectionRef, walletDocId.id) : null;
+      const walletDocIdref = walletDocId
+        ? doc(walletCollectionRef, walletDocId.id)
+        : null;
       setIdWalletAtt(walletDocIdref);
       return walletData;
     }
@@ -85,21 +91,18 @@ export default function HomeContextProvider({ children }: any) {
   // LINHA ABAIXO PARA ATUALIZAÇÃO DOS PLANOS CRIADOS
   const [plansData, setPlansData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const plansCollect = userDocRef ? collection(db, "users", userGoogleObj.uid, "planos"): null;
+  const plansCollect = userDocRef
+    ? collection(db, "users", userGoogleObj.uid, "planos")
+    : null;
 
-  
-  let plansArray: any = null
-  let planDocIdref: any = null
-  let currentPlan: any = null
+  let plansArray: any = null;
+
   const getPlans = async () => {
     setIsLoading(true);
 
     if (plansCollect) {
       const plansDocs = await getDocs(plansCollect);
       plansArray = plansDocs.docs.map((doc) => doc.data());
-      const planDocsId = plansDocs.docs[0];
-      planDocIdref = planDocsId? doc(plansCollect, planDocsId.id) : null;
-      currentPlan = plansDocs.docs.map((doc) => doc.data().planos).flat();
     }
     setIsLoading(false);
     return plansArray;
@@ -130,7 +133,9 @@ export default function HomeContextProvider({ children }: any) {
   const valueWalletDb = planSelected ? planSelected.data.valuePlanWallet : null;
 
   const valueParsedSent: number = parseFloat(valueSentWallet);
-  const valueAttSent: number = planSelected ? valueParsedSent + valueWalletDb : null;
+  const valueAttSent: number = planSelected
+    ? valueParsedSent + valueWalletDb
+    : null;
 
   const valueParsedExit: number = parseFloat(valueExitWallet);
   const valueAttExit = valueWalletDb - valueParsedExit;
@@ -154,13 +159,18 @@ export default function HomeContextProvider({ children }: any) {
   const [showModalSentValue, setShowModalSentValue] = useState<boolean>(false);
   const [showModalExitValue, setShowModalExitValue] = useState<boolean>(false);
 
-  const transationsDataPlan: TransationsType = { // tipo de dados a serem enviados para as transacoes na wallet do plano
+  const transationsDataPlan: TransationsType = {
+    // tipo de dados a serem enviados para as transacoes na wallet do plano
     id: nanoid(),
-    name:  methodWallet === "entrada" ? "Entrada de dinheiro no plano" : "Saida de dinheiro no plano",
+    name:
+      methodWallet === "entrada"
+        ? "Entrada de dinheiro no plano"
+        : "Saida de dinheiro no plano",
+    plano: planSelected ? planSelected.data.nameOfPlan : null,
     value: valueParsedSent,
-    icon:  methodWallet === "entrada" ?  "/arrowUp.svg" : "/arrowDown.svg",
+    icon: methodWallet === "entrada" ? "/arrowUp.svg" : "/arrowDown.svg",
     date: new Date().toLocaleDateString("pt-BR"),
-    sentValue:  methodWallet === "entrada" ? true : false
+    sentValue: methodWallet === "entrada" ? true : false,
   };
 
   const transationsAttPlan = {
@@ -168,56 +178,67 @@ export default function HomeContextProvider({ children }: any) {
     data: transationsDataPlan,
   };
 
-  const updateValueWalletPlan = async () => { // FUNCAO PARA ATUALIZAR OS DADOS DA WALLET DO PLAN
+  const updateValueWalletPlan = async () => {
     if (methodWallet === "saida" && valueParsedExit > valueWalletDb) {
       alert("Saldo insuficiente");
       return;
     }
 
-    await updateDoc(refDocPlan, {planos: arrayRemove(planSelected),});  // Remove o plano selecionado do array no Firestore
+    if (!refDocPlan || !planSelected) return;
 
-    if ( planDocIdref) { // Adiciona o novo plano atualizado ao array no Firestore conforme a condição setada
-      const planDoc: any = await getDoc(planDocIdref)  // Recupera o documento de transações
-  
-      if (planDoc.exists()) {
-        const existingPlan = planDoc.data().planos || [];    // Recupera o array existente de transações
-        const updatedPlan = [ planArray, ...existingPlan];   // Adiciona a nova transação ao início do array
-        await updateDoc(refDocPlan, { planos: updatedPlan });   // Atualiza o documento de transações com o novo array
-      } else {
-        await setDoc( transationRefId, { planos: [  planArray ] });   // Adiciona a primeira transação ao documento de transações
+    try {
+      // Remove o plano atual
+      await updateDoc(refDocPlan, {planos: arrayRemove(planSelected)});
+
+      // Espera um pouco para garantir que o Firestore processe a remoção
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Busca os dados atualizados dos planos
+      const updatedPlansSnap: any = await getDoc(refDocPlan);
+      const updatedPlansData = updatedPlansSnap.data()?.planos || [];
+
+      const newPlansArray = [planArray, ...updatedPlansData]; // Adiciona o novo plano na primeira posição do array
+      await updateDoc(refDocPlan, {planos: newPlansArray });   // Atualiza o documento do plano com o novo array de planos
+
+      if (transationRefId) {
+        // Recupera o documento de transações
+        const transationDoc: any = await getDoc(transationRefId);
+
+        if (transationDoc.exists()) {
+          const existingTransacoes = transationDoc.data().transacoes || []; // Recupera o array existente de transações
+          const updatedTransacoes = [transationsAttPlan, ...existingTransacoes]; // Adiciona a nova transação ao início do array
+          await updateDoc(transationRefId, { transacoes: updatedTransacoes }); // Atualiza o documento de transações com o novo array
+        } else {
+          await setDoc(transationRefId, { transacoes: [transationsAttPlan] }); // Adiciona a primeira transação ao documento de transações
+        }
       }
-    }
 
-    if (transationRefId) {
-      // Recupera o documento de transações
-      const transationDoc: any = await getDoc(transationRefId)
-  
-      if (transationDoc.exists()) {
-        const existingTransacoes = transationDoc.data().transacoes || [];    // Recupera o array existente de transações
-        const updatedTransacoes = [ transationsAttPlan, ...existingTransacoes];   // Adiciona a nova transação ao início do array
-        await updateDoc( transationRefId, { transacoes: updatedTransacoes });   // Atualiza o documento de transações com o novo array
-      } else {
-        await setDoc( transationRefId, { transacoes: [ transationsAttPlan] });   // Adiciona a primeira transação ao documento de transações
+      if (typeof window !== "undefined") {
+        const updatedPlan = {
+          ...planSelected,
+          data: { ...planSelected.data, valuePlanWallet: selectOptionWallet },
+        };
+
+        localStorage.setItem("planSelected", JSON.stringify(updatedPlan));
+        const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
+        const convertedPlanSelectIfIdStorage: any = JSON.parse(
+          planSelectIfIdStorage
+        );
+        setPlanSelected(convertedPlanSelectIfIdStorage);
       }
-    }
 
-    if (typeof window !== "undefined") {
-      const updatedPlan = {...planSelected, data: { ...planSelected.data, valuePlanWallet: selectOptionWallet }};
-
-      localStorage.setItem("planSelected", JSON.stringify(updatedPlan));
-      const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
-      const convertedPlanSelectIfIdStorage: any = JSON.parse(
-        planSelectIfIdStorage
-      );
-      setPlanSelected(convertedPlanSelectIfIdStorage);
+      methodWallet === "entrada"
+        ? setShowModalSentValue(false)
+        : setShowModalExitValue(false);
+    } catch (error) {
+      console.error("Error updating plan:", error);
     }
-    methodWallet === "entrada"? setShowModalSentValue(false) : setShowModalExitValue(false);
   };
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET DOS PLANOS
 
   const [refDocPlan, setRefDocPlan] = useState<any>();
-  useEffect(() => {
+
     const updateValueWallet = async () => {
       if (plansCollect) {
         const docsPlan = await getDocs(plansCollect);
@@ -227,34 +248,51 @@ export default function HomeContextProvider({ children }: any) {
       }
     };
 
-    updateValueWallet();
-  }, [plansCollect]);
+    const {} = useQuery("updateValueWallet", updateValueWallet, {
+      onSuccess: (data) => setRefDocPlan(data),
+      enabled: !!plansCollect, // Enable query only if plansCollect is not null
+      staleTime: 1000 * 60 * 10, // 10 minutos
+      cacheTime: 1000 * 60 * 60, // 1 hora
+    });
 
-  // LINHA ABAIXO PARA AS TRANSACOES DINAMICAS DA CARTEIRA PRINCIPAL 
 
-  const transationsCollect = userDocRef ? collection(db, "users", userGoogleObj.uid, "transacoes") : null;
+  // LINHA ABAIXO PARA AS TRANSACOES DINAMICAS DA CARTEIRA PRINCIPAL
+
+  const transationsCollect = userDocRef
+    ? collection(db, "users", userGoogleObj.uid, "transacoes")
+    : null;
   const [transations, setTransations] = useState<any>([]); // recebe os dados do fecth em cache
   const [transationRefId, setTransationsRefId] = useState<any>(); // recebe a referência do plano
   const [typeTransations, setSetTypeTransations] = useState<string>(""); // seta o tip da transacao da carteira principal ou planos
   const [valueSentWalletPlan, setValueSentWalletPlan] = useState<string>(""); // captuir o valor de adição do modal wallet principal
-  const [valueExitWalletPlan, setValueExitWalletPlan] = useState<string>("");  // captuir o valor de subtração do modal wallet principal
+  const [valueExitWalletPlan, setValueExitWalletPlan] = useState<string>(""); // captuir o valor de subtração do modal wallet principal
 
-  const numberWallet = valueWallet ? valueWallet.reduce(
-    (acc: number, wallet: any) => acc + parseFloat(wallet.valueWallet),
-    0
-  ): null ;
+  const numberWallet = valueWallet
+    ? valueWallet.reduce(
+        (acc: number, wallet: any) => acc + parseFloat(wallet.valueWallet),
+        0
+      )
+    : null;
 
   const valueWalletSentPlan = parseFloat(valueSentWalletPlan);
-  const newValueSentAtt = numberWallet + valueWalletSentPlan
+  const newValueSentAtt = numberWallet + valueWalletSentPlan;
 
-  const valueWallExitPlan = parseFloat(valueExitWalletPlan)
-  const newValueExitAtt = numberWallet - valueWallExitPlan
+  const valueWallExitPlan = parseFloat(valueExitWalletPlan);
+  const newValueExitAtt = numberWallet - valueWallExitPlan;
 
-  const transationsData: TransationsType = { // tipo de dados a serem enviados para as transacoes na wallet principal
+  const transationsData: TransationsType = {
+    // tipo de dados a serem enviados para as transacoes na wallet principal
     id: nanoid(),
-    name: typeTransations === "walletHomeSent" ? "Entrada de dinheiro carteira" : "Saida de dinheiro carteira",
-    value: typeTransations === "walletHomeSent" ?  valueWalletSentPlan : valueWallExitPlan,
-    icon: typeTransations === "walletHomeSent" ? "/arrowUp.svg" : "/arrowDown.svg",
+    name:
+      typeTransations === "walletHomeSent"
+        ? "Entrada de dinheiro carteira"
+        : "Saida de dinheiro carteira",
+    value:
+      typeTransations === "walletHomeSent"
+        ? valueWalletSentPlan
+        : valueWallExitPlan,
+    icon:
+      typeTransations === "walletHomeSent" ? "/arrowUp.svg" : "/arrowDown.svg",
     date: new Date().toLocaleDateString("pt-BR"),
     sentValue: typeTransations === "walletHomeSent" ? true : false,
   };
@@ -269,10 +307,14 @@ export default function HomeContextProvider({ children }: any) {
       transationsArray = transationsDocs.docs.map((doc) => doc.data());
       const transationId = transationsDocs.docs[0];
 
-      const currentTransation = transationsDocs.docs.map((doc) => doc.data().transacoes).flat();
-      transationsRefId = transationId? doc(transationsCollect, transationId.id): null;
+      const currentTransation = transationsDocs.docs
+        .map((doc) => doc.data().transacoes)
+        .flat();
+      transationsRefId = transationId
+        ? doc(transationsCollect, transationId.id)
+        : null;
       setTransationsRefId(transationsRefId);
-      setCurrentTransationDb(currentTransation)
+      setCurrentTransationDb(currentTransation);
     }
 
     return transationsArray;
@@ -323,7 +365,7 @@ export default function HomeContextProvider({ children }: any) {
         newValueExitAtt,
         numberWallet,
         valueWallExitPlan,
-        currentTransationDb
+        currentTransationDb,
       }}
     >
       {children}
