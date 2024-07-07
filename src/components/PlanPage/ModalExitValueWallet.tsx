@@ -3,10 +3,6 @@ import { HomeContext } from "@/Context/HomeContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCircleArrowUp,faMoneyCheckDollar,} from "@fortawesome/free-solid-svg-icons";
-
-
-
-
 const ModalExitValueWallet = () => {
 
   const { setValueExitWallet, setShowModalExitValue, updateValueWalletPlan} = useContext(HomeContext);
