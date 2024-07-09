@@ -7,22 +7,17 @@ import {
   faMoneyCheckDollar,
 } from "@fortawesome/free-solid-svg-icons";
 import { nanoid } from "nanoid";
+import queryClient  from "@/Context/Root";
+import { useQueryClient } from "react-query";
 
 type ModalSentValueProps = {
   setOpenModalSentValue: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ModalSentValue: React.FC<ModalSentValueProps> = ({
-  setOpenModalSentValue,
-}) => {
-  const {
-    idWalletAtt,
-    transationRefId,
-    transationsData,
-    setValueSentWalletPlan,
-    newValueSentAtt,
-  } = useContext(HomeContext);
+const ModalSentValue: React.FC<ModalSentValueProps> = ({ setOpenModalSentValue }) => {
+  const { idWalletAtt, transationRefId, transationsData, setValueSentWalletPlan, newValueSentAtt } = useContext(HomeContext);
 
+  const queryClient = useQueryClient();
   const changeSentValueWallet = async () => {
     const transationsAtt = {
       id: nanoid(),
@@ -31,6 +26,7 @@ const ModalSentValue: React.FC<ModalSentValueProps> = ({
   
     // Atualiza o valor da carteira no Firestore
     await updateDoc(idWalletAtt, { valueWallet: newValueSentAtt });
+    queryClient.invalidateQueries("valueWalletHome");
   
     if (transationRefId) {
       // Recupera o documento de transações
@@ -44,6 +40,8 @@ const ModalSentValue: React.FC<ModalSentValueProps> = ({
         await setDoc( transationRefId, { transacoes: [transationsAtt] });   // Adiciona a primeira transação ao documento de transações
       }
     }
+
+    queryClient.invalidateQueries("transationsData");
   
     setOpenModalSentValue(false);
   };

@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleArrowDown, faMoneyCheckDollar } from "@fortawesome/free-solid-svg-icons";
+import { useQueryClient } from "react-query";
 
 type ModalSentValueProps = {
   setOpenModalSentValue: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,7 +14,9 @@ type ModalSentValueProps = {
 
 export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSentValue }) => {
 
-  const {idWalletAtt, setValueExitWalletPlan, newValueExitAtt, numberWallet, valueWallExitPlan, transationsData, transationRefId, currentTransationDb} = useContext(HomeContext);
+  const {idWalletAtt, setValueExitWalletPlan, newValueExitAtt, numberWallet, valueWallExitPlan, transationsData, transationRefId } = useContext(HomeContext);
+
+  const queryClient = useQueryClient();
 
   const exitValueWallet = async () => {
     if (numberWallet === 0 || valueWallExitPlan > numberWallet) {
@@ -26,6 +29,7 @@ export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSent
     };
 
     await updateDoc(idWalletAtt, { valueWallet: newValueExitAtt });
+    queryClient.invalidateQueries("valueWalletHome");
 
     if (transationRefId) {
       // Recupera o documento de transações
@@ -39,6 +43,8 @@ export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSent
         await setDoc( transationRefId, { transacoes: [transationsAtt] });   // Adiciona a primeira transação ao documento de transações
       }
     }
+
+    queryClient.invalidateQueries("transationsData");
 
     setOpenModalSentValue(false);
   };
