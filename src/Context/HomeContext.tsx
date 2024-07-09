@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { nanoid } from "nanoid";
 import { createContext, useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 export const HomeContext = createContext<any>(null);
 
@@ -30,6 +30,8 @@ type TransationsType = {
 
 export default function HomeContextProvider({ children }: any) {
   const [optionPlan, setOptionPlan] = useState<String>("");
+
+  const queryClient = useQueryClient();
 
   let userGoogle: any = "";
   if (typeof window !== "undefined") {
@@ -169,6 +171,7 @@ export default function HomeContextProvider({ children }: any) {
     data: transationsDataPlan,
   };
 
+  const [isLoadingUpdatePlan, SetIsLoadingUpdatePlan] = useState<Boolean>(false);
   const updateValueWalletPlan = async () => {
     if (methodWallet === "saida" && valueParsedExit > valueWalletDb) {
       alert("Saldo insuficiente");
@@ -176,6 +179,8 @@ export default function HomeContextProvider({ children }: any) {
     }
 
     if (!refDocPlan || !planSelected) return;
+
+    SetIsLoadingUpdatePlan(true)
       // Remove o plano atual
       await updateDoc(refDocPlan, {planos: arrayRemove(planSelected)});
 
@@ -188,6 +193,8 @@ export default function HomeContextProvider({ children }: any) {
 
       const newPlansArray = [planArray, ...updatedPlansData]; // Adiciona o novo plano na primeira posição do array
       await updateDoc(refDocPlan, {planos: newPlansArray });   // Atualiza o documento do plano com o novo array de planos
+      queryClient.invalidateQueries("plansData");
+
 
       if (transationRefId) {
         // Recupera o documento de transações
@@ -204,10 +211,7 @@ export default function HomeContextProvider({ children }: any) {
       }
 
       if (typeof window !== "undefined") {
-        const updatedPlan = {
-          ...planSelected,
-          data: { ...planSelected.data, valuePlanWallet: selectOptionWallet },
-        };
+        const updatedPlan = {...planSelected,data: { ...planSelected.data, valuePlanWallet: selectOptionWallet }};
 
         localStorage.setItem("planSelected", JSON.stringify(updatedPlan));
         const planSelectIfIdStorage: any = localStorage.getItem("planSelected");
@@ -217,10 +221,9 @@ export default function HomeContextProvider({ children }: any) {
         setPlanSelected(convertedPlanSelectIfIdStorage);
       }
 
-      methodWallet === "entrada"
-        ? setShowModalSentValue(false)
-        : setShowModalExitValue(false);
-
+      methodWallet === "entrada" ? setShowModalSentValue(false) : setShowModalExitValue(false);
+      queryClient.invalidateQueries("transationsData");
+      SetIsLoadingUpdatePlan(false)
   };
 
   // LINHA ABAIXO PARA ATUALIZAÇÃO DA WALLET DOS PLANOS
@@ -241,9 +244,7 @@ export default function HomeContextProvider({ children }: any) {
 
   // LINHA ABAIXO PARA AS TRANSACOES DINAMICAS DA CARTEIRA PRINCIPAL
 
-  const transationsCollect = userDocRef
-    ? collection(db, "users", userGoogleObj.uid, "transacoes")
-    : null;
+  const transationsCollect = userDocRef? collection(db, "users", userGoogleObj.uid, "transacoes"): null;
   const [transations, setTransations] = useState<any>([]); // recebe os dados do fecth em cache
   const [transationRefId, setTransationsRefId] = useState<any>(); // recebe a referência do plano
   const [typeTransations, setSetTypeTransations] = useState<string>(""); // seta o tip da transacao da carteira principal ou planos
@@ -267,15 +268,9 @@ export default function HomeContextProvider({ children }: any) {
     // tipo de dados a serem enviados para as transacoes na wallet principal
     id: nanoid(),
     name:
-      typeTransations === "walletHomeSent"
-        ? "Entrada de dinheiro carteira"
-        : "Saida de dinheiro carteira",
-    value:
-      typeTransations === "walletHomeSent"
-        ? valueWalletSentPlan
-        : valueWallExitPlan,
-    icon:
-      typeTransations === "walletHomeSent" ? "/arrowUp.svg" : "/arrowDown.svg",
+    typeTransations === "walletHomeSent" ? "Entrada de dinheiro carteira" : "Saida de dinheiro carteira",
+    value: typeTransations === "walletHomeSent" ? valueWalletSentPlan : valueWallExitPlan,
+    icon: typeTransations === "walletHomeSent" ? "/arrowUp.svg" : "/arrowDown.svg",
     date: new Date().toLocaleDateString("pt-BR"),
     sentValue: typeTransations === "walletHomeSent" ? true : false,
   };
@@ -349,6 +344,7 @@ export default function HomeContextProvider({ children }: any) {
         numberWallet,
         valueWallExitPlan,
         currentTransationDb,
+        isLoadingUpdatePlan
       }}
     >
       {children}
