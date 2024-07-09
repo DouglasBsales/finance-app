@@ -7,7 +7,7 @@ import {faCircleArrowUp, faMoneyCheckDollar } from "@fortawesome/free-solid-svg-
 
 const ModalSentvalueWallet= () => {
   
-  const { setValueSentWallet, setShowModalSentValue, updateValueWalletPlan } = useContext(HomeContext);
+  const { setValueSentWallet, setShowModalSentValue, updateValueWalletPlan, isLoadingUpdatePlan  } = useContext(HomeContext);
 
   return (
     <div>
@@ -50,7 +50,7 @@ const ModalSentvalueWallet= () => {
               className="bg-bluePrimary rounded-md"
               onClick={updateValueWalletPlan}
             >
-              <p className="py-[8px] px-4 text-white">Confirmar</p>
+              <p className="py-[8px] px-4 text-white"> {isLoadingUpdatePlan ? "Aguarde..." : "Confirmar"}</p>
             </button>
           </div>
         </div>

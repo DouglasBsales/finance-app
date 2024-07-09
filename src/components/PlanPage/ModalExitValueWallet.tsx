@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCircleArrowUp,faMoneyCheckDollar,} from "@fortawesome/free-solid-svg-icons";
 const ModalExitValueWallet = () => {
 
-  const { setValueExitWallet, setShowModalExitValue, updateValueWalletPlan} = useContext(HomeContext);
+  const { setValueExitWallet, setShowModalExitValue, updateValueWalletPlan, isLoadingUpdatePlan} = useContext(HomeContext);
 
   return (
     <div>
@@ -49,7 +49,7 @@ const ModalExitValueWallet = () => {
                 className="py-[8px] px-4 text-white"
                 onClick={updateValueWalletPlan}
               >
-                Confirmar
+               {isLoadingUpdatePlan ? "Aguarde..." : "Confirmar"}
               </p>
             </button>
           </div>
