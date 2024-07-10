@@ -31,7 +31,7 @@ export const Custos = () => {
             />
           ))
         ) : (
-          <p>Sem custos</p>
+          <p>Você ainda não possui custos adicionados</p>
         )}
       </div>
     </div>
