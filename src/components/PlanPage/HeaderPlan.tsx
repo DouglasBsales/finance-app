@@ -15,6 +15,7 @@ import ModalExitValueWallet from "./ModalExitValueWallet";
 
 import {faAngleLeft, faCircleArrowUp, faCircleChevronDown, faEllipsis,} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ContextPlan } from "@/Context/ContextPlan";
 
 export function formatarNumero(numero: number) {
   let partes = numero.toFixed(2).split(".");
@@ -23,7 +24,7 @@ export function formatarNumero(numero: number) {
 }
 
 const HeaderPlan = () => {
-  const {planSelected,setPlanSelected,showModalSentValue,setShowModalSentValue,setMethodWallet, setShowModalExitValue, showModalExitValue} = useContext(HomeContext);
+  const {planSelected, setPlanSelected,showModalSentValue, setShowModalSentValue, setMethodWallet, setShowModalExitValue, showModalExitValue } = useContext(ContextPlan)
   const [showOptionsPlan, setShowOptionsPlan] = useState(false);
 
   useEffect(() => {
