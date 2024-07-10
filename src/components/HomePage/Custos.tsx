@@ -1,7 +1,16 @@
-import { faCreditCard, faHouse, faUmbrellaBeach } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { HomeContext } from "@/Context/HomeContext";
+import { useContext } from "react";
+import { CardsCustos } from "./CardsCustos";
 
 export const Custos = () => {
+  const { custosData } = useContext(HomeContext);
+
+  // Verifica se custosData não é undefined ou null antes de fazer o map
+  const hasCustos = custosData?.flatMap((custosData: any) => custosData.custos) || [];
+
+  // Verifica se algum dos arrays dentro de hasCustos não está vazio
+  const hasNonEmptyCustos = hasCustos.length > 0;
+
   return (
     <div className="pl-[28px] pt-[25px]">
       <div className="flex justify-between items-center">
@@ -11,38 +20,19 @@ export const Custos = () => {
         </button>
       </div>
       <div className="flex gap-3 pt-5">
-        <div className=" w-[130px] rounded-md bg-white pl-3 pb-3">
-          <div className="pt-4">
-            <div className="w-9 h-9 flex justify-center items-center rounded-full bg-whitePrimary">
-              <FontAwesomeIcon
-                icon={faCreditCard}
-                className="text-[#DAA520] text-xl"
-              />
-            </div>
-          </div>
-          <div className="pt-4">
-            <p className="text-blackPrimary font-semibold">Cartão itaú</p>
-            <div className="flex gap-1">
-              <p className="text-xs font-medium text-blackPrimary">R$ 500,35</p>
-            </div>
-          </div>
-        </div>
-        <div className=" w-[130px] rounded-md bg-white pl-3">
-          <div className="pt-4">
-            <div className="w-9 h-9 flex justify-center items-center rounded-full bg-whitePrimary">
-              <FontAwesomeIcon
-                icon={faCreditCard}
-                className="text-[#DAA520] text-xl"
-              />
-            </div>
-          </div>
-          <div className="pt-4">
-            <p className="text-blackPrimary font-semibold">Nubank</p>
-            <div className="flex gap-1">
-              <p className="text-xs font-medium text-blackPrimary">R$ 230,00</p>
-            </div>
-          </div>
-        </div>
+        {hasNonEmptyCustos ? (
+          hasCustos.map((custos: any) => (
+            <CardsCustos
+              key={custos.custoId}
+              infoCustos={{
+                name: custos.custoName,
+                value: custos.custoValue,
+              }}
+            />
+          ))
+        ) : (
+          <p>Sem custos</p>
+        )}
       </div>
     </div>
   );
