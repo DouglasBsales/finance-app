@@ -2,11 +2,13 @@
 
 import CardsTransacoesPlan from "@/components/PlanPage/CardsTransacoesPlan";
 import HeaderPlan from "@/components/PlanPage/HeaderPlan";
+import { ContextPlan } from "@/Context/ContextPlan";
 import { HomeContext } from "@/Context/HomeContext";
 import { useContext } from "react";
 
 export default function Plan() {
-  const { transations, planSelected } = useContext(HomeContext);
+  const { transations } = useContext(HomeContext);
+  const { planSelected } = useContext(ContextPlan)
 
   const planName = planSelected ? planSelected.data.nameOfPlan: null
 
