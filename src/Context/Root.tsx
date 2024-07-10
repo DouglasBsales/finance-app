@@ -3,6 +3,7 @@
 import { ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import HomeContextProvider from "@/Context/HomeContext";
+import ContextPlanProvider from "./ContextPlan";
 
 const queryClient = new QueryClient();
 
@@ -13,7 +14,9 @@ interface RootProps {
 const Root: React.FC<RootProps> = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>
-      <HomeContextProvider>{children}</HomeContextProvider>
+      <HomeContextProvider>
+        <ContextPlanProvider>{children}</ContextPlanProvider>
+      </HomeContextProvider>
     </QueryClientProvider>
   );
 };
