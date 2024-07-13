@@ -14,7 +14,7 @@ const MiniModalOptionsPlan = () => {
   } = useContext(HomeContext);
   const [isModalPlanDelete, setIsModalPlanDelete] = useState<Boolean>(false);
 
-  const deletPlan = async () => {
+  const deletPlanOrCustos = async () => {
     if (isPlansOrCustos === "planos") {
       setOptionPlan("delete");
       await updateDoc(refDocPlan, { planos: arrayRemove(planSelected) });
@@ -41,7 +41,7 @@ const MiniModalOptionsPlan = () => {
         <button>
           <p className="text-sm">Editar</p>
         </button>
-        <button onClick={deletPlan}>
+        <button onClick={deletPlanOrCustos}>
           <p className="text-sm">
             {isPlansOrCustos === "planos" ? "Excluir plano" : "Excluir custo"}
           </p>
