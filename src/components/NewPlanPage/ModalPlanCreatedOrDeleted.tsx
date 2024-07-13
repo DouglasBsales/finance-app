@@ -7,17 +7,17 @@ import { useContext } from "react";
 export const ModalPlanCreatedOrDeleted = () => {
   const { optionPlan, isPlansOrCustos } = useContext(HomeContext);
 
-  const selectText = ()=> {
-    if(optionPlan === "created"){
-      return "Plano criado com sucesso"
-    } else{
-      return "Plano excluido com sucesso"
+  const selectText = () => {
+    if (isPlansOrCustos === "custos") {
+      return "Custo excluido com sucesso";
     }
 
-    if(isPlansOrCustos ==="custos"){
-      return  "Custo excluido com sucesso" ; 
-    } 
-  }
+    if (optionPlan === "created") {
+      return "Plano criado com sucesso";
+    } else {
+      return "Plano excluido com sucesso";
+    }
+  };
 
   return (
     <div className="w-full fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -31,9 +31,7 @@ export const ModalPlanCreatedOrDeleted = () => {
           </div>
         </div>
         <div className="flex flex-col items-center pt-[5px]">
-          <p className="font-bold text-bluePrimary">
-          {selectText()}
-          </p>
+          <p className="font-bold text-bluePrimary">{selectText()}</p>
           <div className="flex items-center pt-3 gap-1">
             {optionPlan === "created" ? (
               <Image src="/loading2.gif" alt="loading" width={35} height={35} />
