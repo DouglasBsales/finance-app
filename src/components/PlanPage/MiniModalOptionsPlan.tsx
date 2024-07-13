@@ -4,13 +4,25 @@ import { useContext, useState } from "react";
 import { ModalPlanCreatedOrDeleted } from "../NewPlanPage/ModalPlanCreatedOrDeleted";
 
 const MiniModalOptionsPlan = () => {
-  const { planSelected, refDocPlan, setOptionPlan } = useContext(HomeContext);
+  const {
+    planSelected,
+    refDocPlan,
+    setOptionPlan,
+    isPlansOrCustos,
+    custoSelected,
+    refDocCustos,
+  } = useContext(HomeContext);
   const [isModalPlanDelete, setIsModalPlanDelete] = useState<Boolean>(false);
 
   const deletPlan = async () => {
-    setOptionPlan("delete");
+    if (isPlansOrCustos === "planos") {
+      setOptionPlan("delete");
+      await updateDoc(refDocPlan, { planos: arrayRemove(planSelected) });
+    }
 
-    await updateDoc(refDocPlan, { planos: arrayRemove(planSelected) });
+    if (isPlansOrCustos === "custos") {
+      await updateDoc(refDocCustos, { custos: arrayRemove(custoSelected) });
+    }
 
     setIsModalPlanDelete(true);
 
@@ -30,7 +42,9 @@ const MiniModalOptionsPlan = () => {
           <p className="text-sm">Editar</p>
         </button>
         <button onClick={deletPlan}>
-          <p className="text-sm">Excluir plano</p>
+          <p className="text-sm">
+            {isPlansOrCustos === "planos" ? "Excluir plano" : "Excluir custo"}
+          </p>
         </button>
       </div>
       {isModalPlanDelete && <ModalPlanCreatedOrDeleted />}
