@@ -4,10 +4,10 @@ import CardsTransacoesPlan from "@/components/PlanPage/CardsTransacoesPlan";
 import HeaderPlan from "@/components/PlanPage/HeaderPlan";
 import { ContextPlan } from "@/Context/ContextPlan";
 import { HomeContext } from "@/Context/HomeContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 export default function Plan() {
-  const { transations } = useContext(HomeContext);
+  const { transations, setIsPlansOrCustos } = useContext(HomeContext);
   const { planSelected } = useContext(ContextPlan)
 
   const planName = planSelected ? planSelected.data.nameOfPlan: null
@@ -17,6 +17,10 @@ export default function Plan() {
   const allTransacoes = hasTransations ? transations.flatMap((transaction: any) => transaction.transacoes) : [];
 
   const filteredTransacoes = allTransacoes.filter((transacao: any) => transacao.data.plano === planName);
+
+  useEffect(()=> {
+    setIsPlansOrCustos("planos")
+  })
 
   return (
     <div className="w-full h-screen flex flex-col items-center bg-bluePrimary">
