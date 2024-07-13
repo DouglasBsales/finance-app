@@ -81,6 +81,7 @@ export default function HomeContextProvider({ children }: any) {
   const [plansData, setPlansData] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const plansCollect = userDocRef ? collection(db, "users", userGoogleObj.uid, "planos") : null;
+  const [isPlansOrCustos, setIsPlansOrCustos] = useState<string>("")
 
   let plansArray: any = null;
   const getPlans = async () => {
@@ -104,12 +105,18 @@ export default function HomeContextProvider({ children }: any) {
   // LINHA ABAIXO PARA ATUALIZAÇÃO DOS CUSTOS CRIADOS
   const custosCollect = userDocRef ? collection(db, "users", userGoogleObj.uid, "custos"): null;
   const [custosData, setCustosData] = useState<any>([]);
+  const [custoSelected, setCustoSelected] = useState<any>(null);
   let custosArray: any = null;
-  const getCustos = async () => {
 
+  const [refDocCustos, setRefDocCusto] = useState<any>(null)
+
+  const getCustos = async () => {
     if (custosCollect) {
       const plansDocs = await getDocs(custosCollect);
       custosArray = plansDocs.docs.map((doc) => doc.data());
+      const custosRefId = plansDocs.docs[0].id
+      const refDocCustos = doc (custosCollect, custosRefId)
+      setRefDocCusto(refDocCustos)
     }
     return custosArray;
   };
@@ -204,7 +211,14 @@ export default function HomeContextProvider({ children }: any) {
         numberWallet,
         valueWallExitPlan,
         currentTransationDb,
-        custosData
+        custosData,
+        custosCollect,
+        refDocCustos,
+        custosArray,
+        setIsPlansOrCustos,
+        isPlansOrCustos,
+        setCustoSelected,
+        custoSelected
       }}
     >
       {children}
