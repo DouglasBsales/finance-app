@@ -15,9 +15,14 @@ export default function Custos() {
     ? transations.flatMap((transaction: any) => transaction.transacoes)
     : [];
 
+
+  const custoName = custoSelected ? custoSelected.name : ""
+
   const filteredCustos = allTransacoes && allTransacoes.filter(
-    (transacoes: any) => transacoes.data.nameCusto === custoSelected && custoSelected.name
+    (transacoes: any) => transacoes.data.nameCusto === custoName 
   );
+
+  console.log(filteredCustos)
 
   const valueAllCustos = filteredCustos.reduce((acc: number, transacoes: any)=> acc + transacoes.data.value, 0)
 
