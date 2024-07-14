@@ -4,7 +4,7 @@ import CardsTransacoesPlan from "../PlanPage/CardsTransacoesPlan";
 import Link from "next/link";
 
 const LastTransacoes = () => {
-  const { transations, } = useContext(HomeContext);
+  const { transations, setIsPage} = useContext(HomeContext);
 
   // Verifica se transations existe e se é um array com elementos
   const hasTransations = Array.isArray(transations) && transations.length > 0;
@@ -21,7 +21,7 @@ const LastTransacoes = () => {
         <p className="text-blackPrimary text-xl font-medium">
           Últimas movimentações
         </p>
-        <Link href="/Pages/LastTransations"className="text-bluePrimary text-xs font-medium pr-[28px]">
+        <Link href="/Pages/LastTransations"className="text-bluePrimary text-xs font-medium pr-[28px]" onClick={()=> setIsPage("pageTransacao")}>
           Ver todas
         </Link>
       </div>
