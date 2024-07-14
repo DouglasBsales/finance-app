@@ -4,7 +4,7 @@ import CardsTransacoesPlan from "../PlanPage/CardsTransacoesPlan";
 import Link from "next/link";
 
 const LastTransacoes = () => {
-  const { transations } = useContext(HomeContext);
+  const { transations, } = useContext(HomeContext);
 
   // Verifica se transations existe e se é um array com elementos
   const hasTransations = Array.isArray(transations) && transations.length > 0;
@@ -37,6 +37,7 @@ const LastTransacoes = () => {
                 name: transacao.data.name,
                 value: transacao.data.value,
                 sentValue: transacao.data.sentValue,
+                nameCusto: transacao.data.nameCusto
               }}
             />
           </div>
