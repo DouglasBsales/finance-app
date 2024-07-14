@@ -25,15 +25,15 @@ export const CardsCustos: FunctionComponent<CustosProps> = ({ infoCustos }) => {
 
   return (
     <div>
-      <div className=" w-[145px] rounded-md bg-white pl-3 pb-3">
+      <div className=" w-[135px] rounded-md bg-white pl-3 pb-3">
         <Link href="/Pages/Custos" onClick={()=> selectCustos(infoCustos.id)}>
           <div className="pt-4">
             <div className="w-9 h-9 flex justify-center items-center rounded-full bg-whitePrimary">
               <Image
                 src={infoCustos.categoryIcon}
                 alt="iconeCusto"
-                width={23}
-                height={23}
+                width={28}
+                height={28}
               />
             </div>
           </div>
@@ -41,7 +41,7 @@ export const CardsCustos: FunctionComponent<CustosProps> = ({ infoCustos }) => {
             <p className="text-blackPrimary font-semibold">{infoCustos.name}</p>
             <div className="flex gap-1">
               <p className="text-xs font-medium text-blackPrimary">
-                {formatarNumero(infoCustos.value)}
+                R$ {formatarNumero(infoCustos.value)}
               </p>
             </div>
           </div>
