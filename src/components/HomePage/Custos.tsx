@@ -33,10 +33,10 @@ export const Custos = () => {
               key={custos.custoId}
               infoCustos={{
                 id: custos.id,
-                name: custos.nameCusto,
-                value: custos.valueCusto,
+                name: custos.name,
+                value: custos.value,
                 category: custos.categoryCusto,
-                categoryIcon: custos.categoryIcon
+                categoryIcon: custos.icon
               }}
             />
           ))
