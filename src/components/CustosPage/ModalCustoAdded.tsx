@@ -94,6 +94,7 @@ export const ModalCustoAdded: FunctionComponent<ModalCustoAddedprops> = ({setIsM
               <option value="">Selecione uma categoria</option>
               <option value="Contas_gerais">Contas gerais</option>
               <option value="Musica">Música</option>
+              <option value="Alimentacao">Alimentação</option>
               <option value="Entretenimento">Filmes ou séries</option>
               <option value="Educacao">Educação</option>
               <option value="Moradia">Moradia</option>

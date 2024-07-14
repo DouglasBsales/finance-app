@@ -23,6 +23,7 @@ export type CustosData = {
 export enum CategoryIcon {
   Contas_gerais = "/contasGerais.svg",
   Educacao = "/educacao1.svg",
+  Alimentacao = "/food.svg",
   Moradia = "/House.svg",
   Transporte = "/transporte.svg",
   Tecnologia = "/tecnology.svg",
@@ -95,6 +96,7 @@ export const ModalNewCusto: React.FC<ModalNewCustoProps> = ({
             <option value="0">Selecione uma categoria</option>
             <option value="Contas_gerais">Contas gerais</option>
             <option value="Educacao">Educação</option>
+            <option value="Alimentacao">Alimentação</option>
             <option value="Moradia">Moradia</option>
             <option value="Transporte">Transporte</option>
             <option value="Tecnologia">Tecnologia</option>
