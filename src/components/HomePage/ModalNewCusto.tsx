@@ -1,24 +1,26 @@
 import { HomeContext } from "@/Context/HomeContext";
-import { faMoneyCheckDollar, faTags } from "@fortawesome/free-solid-svg-icons";
+import {  faTags } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { arrayUnion, updateDoc } from "firebase/firestore";
 import { nanoid } from "nanoid";
 import { useContext, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 
 type ModalNewCustoProps = {
   setModalNewCusto: any;
 };
 
-type CustosData = {
+export type CustosData = {
   id: string;
-  nameCusto: string;
-  valueCusto: number;
-  categoryCusto: string;
-  categoryIcon: string;
+  name: string,
+  nameCusto?: string,
+  value: number;
+  categoryCusto?: string;
+  icon: string;
+  date?: string;
 };
 
-enum CategoryIcon {
+export enum CategoryIcon {
   Contas_gerais = "/contasGerais.svg",
   Educacao = "/educacao1.svg",
   Moradia = "/House.svg",
@@ -30,6 +32,8 @@ enum CategoryIcon {
   Investimentos = "/investimentos.svg",
   Segurança = "/saude.svg",
   Emergências = "/emergencia.svg",
+  Musica = "/music.svg",
+  Entretenimento = "/Entretenimento.svg"
 }
 
 export const ModalNewCusto: React.FC<ModalNewCustoProps> = ({
@@ -43,12 +47,18 @@ export const ModalNewCusto: React.FC<ModalNewCustoProps> = ({
   const [categoryOfCusto, setCategoryOfCusto] = useState<string>("");
 
   const addedNewCusto = async () => {
+
+    if (!nameCusto || !nameCusto || !categoryOfCusto) {
+      alert("Todos os campos devem ser preenchidos corretamente.");
+      return;
+    }
+
     const newCusto: CustosData = {
       id: nanoid(),
-      nameCusto: nameCusto,
-      valueCusto: 0,
+      name: nameCusto,
+      value: 0,
       categoryCusto: categoryOfCusto,
-      categoryIcon: CategoryIcon[categoryOfCusto as keyof typeof CategoryIcon],
+      icon: CategoryIcon[categoryOfCusto as keyof typeof CategoryIcon],
     };
 
     await updateDoc(refDocCustos, { custos: arrayUnion(newCusto) });
