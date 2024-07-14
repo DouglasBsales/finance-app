@@ -24,6 +24,7 @@ export type TransationsType = {
 
 export default function HomeContextProvider({ children }: any) {
   const [optionPlan, setOptionPlan] = useState<String>("");
+  const [isPage, setIsPage] = useState<string>("Home");
 
   let userGoogle: any = "";
   if (typeof window !== "undefined") {
@@ -189,6 +190,8 @@ export default function HomeContextProvider({ children }: any) {
   return (
     <HomeContext.Provider
       value={{
+        setIsPage,
+        isPage,
         dataUser,
         valueWallet,
         userGoogle,

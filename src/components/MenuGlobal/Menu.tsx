@@ -1,5 +1,6 @@
 "use client";
 
+import { HomeContext } from "@/Context/HomeContext";
 import {
   faClockRotateLeft,
   faHouse,
@@ -8,10 +9,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 const Menu = () => {
-  const [isPage, setIsPage] = useState<string>("Home");
+
+  const {isPage, setIsPage} = useContext(HomeContext);
 
   const isPageHome = () => {
     setIsPage("Home");
