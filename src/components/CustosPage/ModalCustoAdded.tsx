@@ -4,7 +4,7 @@ import { CategoryIcon, CustosData } from "../HomePage/ModalNewCusto";
 import { nanoid } from "nanoid";
 import { FunctionComponent, useContext, useState } from "react";
 import { HomeContext } from "@/Context/HomeContext";
-import { getDoc, updateDoc } from "firebase/firestore";
+import { arrayRemove, getDoc, updateDoc } from "firebase/firestore";
 import { useQueryClient } from "react-query";
 
 type ModalCustoAddedprops = {
@@ -12,8 +12,8 @@ type ModalCustoAddedprops = {
     valueAllCustos:number
 }
 
-export const ModalCustoAdded: FunctionComponent<ModalCustoAddedprops> = ({setIsModalCustoAdded, valueAllCustos}) => {
-  const { custoSelected, transationRefId } = useContext(HomeContext);
+export const ModalCustoAdded: FunctionComponent<ModalCustoAddedprops> = ({setIsModalCustoAdded, valueAllCustos }) => {
+  const { custoSelected, transationRefId, refDocCustos } = useContext(HomeContext);
 
   const queryClient = useQueryClient()
 
@@ -25,12 +25,11 @@ export const ModalCustoAdded: FunctionComponent<ModalCustoAddedprops> = ({setIsM
   const valueParsed = parseFloat(custoValue);
 
   const addedCusto = async () => {
-
     if (!nameCusto || !custoName || isNaN(valueParsed) || !custoCategory) {
       alert("Todos os campos devem ser preenchidos corretamente.");
       return;
     }
-
+  
     const newCusto: CustosData = {
       id: nanoid(),
       nameCusto: nameCusto,
@@ -39,20 +38,63 @@ export const ModalCustoAdded: FunctionComponent<ModalCustoAddedprops> = ({setIsM
       icon: CategoryIcon[custoCategory as keyof typeof CategoryIcon],
       date: new Date().toLocaleDateString("pt-BR"),
     };
-
+  
     const custoAtt = {
-        id: nanoid(),
-        data: newCusto
+      id: nanoid(),
+      data: newCusto,
+    };
+  
+    const transationDoc: any = await getDoc(transationRefId);
+    const existingTransacoes = transationDoc.data()?.transacoes || [];
+    const updatedTransacoes = [custoAtt, ...existingTransacoes];
+  
+    await updateDoc(transationRefId, { transacoes: updatedTransacoes });
+    queryClient.invalidateQueries("transationsData");
+  
+    // Atualizar o valor total dos custos
+    const newValueAllCustos = valueAllCustos + valueParsed;
+    // Atualizar custos no Firestore e no localStorage
+    updateCustos(newValueAllCustos);
+  
+    setIsModalCustoAdded(false);
+  };
+  
+  // Ajustar a função updateCustos para receber o novo valor de valueAllCustos
+  const updateCustos = async (newValueAllCustos:any) => {
+    if (!custoSelected || !refDocCustos) return;
+  
+    // Remove o custo selecionado do Firestore
+    if (newValueAllCustos !== custoSelected.value) {
+      await updateDoc(refDocCustos, {
+        custos: arrayRemove({
+          id: custoSelected.id,
+          name: custoSelected.name,
+          icon: custoSelected.icon,
+          categoryCusto: custoSelected.categoryCusto,
+          value: custoSelected.value,
+        }),
+      });
+  
+      // ADIÇÃO DE NOVO CUSTO
+      const docSnap:any = await getDoc(refDocCustos);
+      const existingCustos = docSnap.data()?.custos || [];
+  
+      const custoAtt = {
+        id: custoSelected.id,
+        name: custoSelected.name,
+        icon: custoSelected.icon,
+        categoryCusto: custoSelected.categoryCusto,
+        value: newValueAllCustos,
+      };
+  
+      const attCustos = [custoAtt, ...existingCustos];
+      await updateDoc(refDocCustos, { custos: attCustos });
+      queryClient.invalidateQueries("custosData");
+  
+      if (typeof window !== "undefined") {
+        localStorage.setItem("custosSelected", JSON.stringify(custoAtt));
+      }
     }
-
-      const transationDoc: any = await getDoc(transationRefId);
-      
-      const existingTransacoes = transationDoc.data()?.transacoes || [];
-      const updatedTransacoes = [custoAtt, ...existingTransacoes];
-      
-      await updateDoc(transationRefId, { transacoes: updatedTransacoes });
-      queryClient.invalidateQueries("transationsData");
-      setIsModalCustoAdded(false)
   };
 
   return (
