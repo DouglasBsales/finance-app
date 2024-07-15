@@ -15,16 +15,18 @@ import { arrayRemove, getDoc, updateDoc } from "firebase/firestore";
 import { useQueryClient } from "react-query";
 
 type HeaderCustosProps = {
-  valueAllCustos: number
-}
+  valueAllCustos: number;
+};
 
-export const HeaderCustos:FunctionComponent<HeaderCustosProps> = ({valueAllCustos}) => {
+export const HeaderCustos: FunctionComponent<HeaderCustosProps> = ({
+  valueAllCustos,
+}) => {
+  const queryClient = useQueryClient();
 
-  const queryClient = useQueryClient()
-
-  const {custoSelected, setCustoSelected, refDocCustos} = useContext(HomeContext)
-  const [isModalOptions, setIsModalOptions] = useState<boolean>(false)
-  const [isModalCustoAdded, setIsModalCustoAdded] = useState<boolean>(false)
+  const { custoSelected, setCustoSelected, refDocCustos } =
+    useContext(HomeContext);
+  const [isModalOptions, setIsModalOptions] = useState<boolean>(false);
+  const [isModalCustoAdded, setIsModalCustoAdded] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -34,25 +36,26 @@ export const HeaderCustos:FunctionComponent<HeaderCustosProps> = ({valueAllCusto
         setCustoSelected(parseData);
       }
     }
-  }, [valueAllCustos]);
+  }, []);
 
-  useEffect(()=> {
-    const updateCustos = async () => {
-      if (!custoSelected || !refDocCustos) return;
-  
-        // Remove o custo selecionado do Firestore
-        await updateDoc(refDocCustos, {
-          custos: arrayRemove({
-            id: custoSelected.id,
-            name: custoSelected.name,
-            icon: custoSelected.icon,
-            categoryCusto: custoSelected.categoryCusto,
-            value: custoSelected.value,
-          }),
-        });
-  
+  const updateCustos = async () => {
+    if (!custoSelected || !refDocCustos) return;
+
+    // Remove o custo selecionado do Firestore
+
+    if (valueAllCustos !== custoSelected.value) {
+      await updateDoc(refDocCustos, {
+        custos: arrayRemove({
+          id: custoSelected.id,
+          name: custoSelected.name,
+          icon: custoSelected.icon,
+          categoryCusto: custoSelected.categoryCusto,
+          value: custoSelected.value,
+        }),
+      });
+
       // ADIÇÃO DE NOVO CUSTO
-      const docSnap:any = await getDoc(refDocCustos);
+      const docSnap: any = await getDoc(refDocCustos);
       const existingCustos = docSnap.data()?.custos || [];
 
       const custoAtt = {
@@ -60,34 +63,24 @@ export const HeaderCustos:FunctionComponent<HeaderCustosProps> = ({valueAllCusto
         name: custoSelected.name,
         icon: custoSelected.icon,
         categoryCusto: custoSelected.categoryCusto,
-        value: valueAllCustos
+        value: valueAllCustos,
+      };
+
+      const attCustos = [custoAtt, ...existingCustos];
+      await updateDoc(refDocCustos, { custos: attCustos });
+      queryClient.invalidateQueries("custosData");
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("custosSelected", JSON.stringify(custoAtt));
       }
-
-      const attCustos = [ custoAtt, ...existingCustos]
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      await updateDoc(refDocCustos, {custos: attCustos})
-
-      if(typeof window !== "undefined"){
-        localStorage.setItem("custosSelected", JSON.stringify(custoAtt))
-      }
-
-      queryClient.invalidateQueries("custosData")
-
     }
-
-    updateCustos()
-
-  }, [valueAllCustos])
-  
-
-  const parseValue:number = custoSelected ? parseFloat(custoSelected.value): 0;
+  };
 
   return (
     <div className="w-full flex flex-col items-center bg-white rounded-b-[30px] pb-5 overflow-x-hidden">
       {custoSelected ? (
         <div className="w-[390px] px-[28px]">
-          <Link href="/Pages/Home" passHref>
+          <Link href="/Pages/Home">
             <div className="flex gap-1 items-center pt-4 text-blackPrimary">
               <FontAwesomeIcon icon={faAngleLeft} />
               <p>Voltar para a home</p>
@@ -115,7 +108,10 @@ export const HeaderCustos:FunctionComponent<HeaderCustosProps> = ({valueAllCusto
                 </p>
               </div>
               <div className="relative">
-                <button className="outline-none" onClick={()=> setIsModalOptions(!isModalOptions)}>
+                <button
+                  className="outline-none"
+                  onClick={() => setIsModalOptions(!isModalOptions)}
+                >
                   <FontAwesomeIcon
                     icon={faEllipsis}
                     className="text-blackOpacity text-4xl"
@@ -135,12 +131,21 @@ export const HeaderCustos:FunctionComponent<HeaderCustosProps> = ({valueAllCusto
           </div>
           <div className="pt-6">
             <div className="flex gap-[37px]">
-              <button className="bg-bluePrimary rounded-[20px] px-3 py-[10px]" onClick={()=>setIsModalCustoAdded(true)}>
+              <button
+                className="bg-bluePrimary rounded-[20px] px-3 py-[10px]"
+                onClick={() => setIsModalCustoAdded(true)}
+              >
                 <p className="text-white font-semibold">Adicionar custo</p>
               </button>
             </div>
           </div>
-          {isModalCustoAdded && <ModalCustoAdded setIsModalCustoAdded={setIsModalCustoAdded} valueAllCustos={valueAllCustos}/>}
+          {isModalCustoAdded && (
+            <ModalCustoAdded
+              setIsModalCustoAdded={setIsModalCustoAdded}
+              updateCustos={updateCustos}
+              valueAllCustos={valueAllCustos}
+            />
+          )}
         </div>
       ) : (
         ""
