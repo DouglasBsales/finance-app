@@ -22,8 +22,6 @@ export default function Custos() {
     (transacoes: any) => transacoes.data.nameCusto === custoName 
   );
 
-  console.log(filteredCustos)
-
   const valueAllCustos = filteredCustos.reduce((acc: number, transacoes: any)=> acc + transacoes.data.value, 0)
 
   useEffect(() => {
