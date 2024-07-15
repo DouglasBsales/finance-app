@@ -38,44 +38,6 @@ export const HeaderCustos: FunctionComponent<HeaderCustosProps> = ({
     }
   }, []);
 
-  const updateCustos = async () => {
-    if (!custoSelected || !refDocCustos) return;
-
-    // Remove o custo selecionado do Firestore
-
-    if (valueAllCustos !== custoSelected.value) {
-      await updateDoc(refDocCustos, {
-        custos: arrayRemove({
-          id: custoSelected.id,
-          name: custoSelected.name,
-          icon: custoSelected.icon,
-          categoryCusto: custoSelected.categoryCusto,
-          value: custoSelected.value,
-        }),
-      });
-
-      // ADIÇÃO DE NOVO CUSTO
-      const docSnap: any = await getDoc(refDocCustos);
-      const existingCustos = docSnap.data()?.custos || [];
-
-      const custoAtt = {
-        id: custoSelected.id,
-        name: custoSelected.name,
-        icon: custoSelected.icon,
-        categoryCusto: custoSelected.categoryCusto,
-        value: valueAllCustos,
-      };
-
-      const attCustos = [custoAtt, ...existingCustos];
-      await updateDoc(refDocCustos, { custos: attCustos });
-      queryClient.invalidateQueries("custosData");
-
-      if (typeof window !== "undefined") {
-        localStorage.setItem("custosSelected", JSON.stringify(custoAtt));
-      }
-    }
-  };
-
   return (
     <div className="w-full flex flex-col items-center bg-white rounded-b-[30px] pb-5 overflow-x-hidden">
       {custoSelected ? (
@@ -142,7 +104,6 @@ export const HeaderCustos: FunctionComponent<HeaderCustosProps> = ({
           {isModalCustoAdded && (
             <ModalCustoAdded
               setIsModalCustoAdded={setIsModalCustoAdded}
-              updateCustos={updateCustos}
               valueAllCustos={valueAllCustos}
             />
           )}
