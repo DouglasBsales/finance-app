@@ -1,11 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import {getAuth} from "firebase/auth"
 
 const firebaseConfig = {
   apiKey: "AIzaSyDQstc7OPgvLjf7jRBU01NnvoUarlW6QzM",
   authDomain: "finance-app-668d2.firebaseapp.com",
+  databaseURL: "https://finance-app-668d2-default-rtdb.firebaseio.com",
   projectId: "finance-app-668d2",
   storageBucket: "finance-app-668d2.appspot.com",
   messagingSenderId: "263979267600",
