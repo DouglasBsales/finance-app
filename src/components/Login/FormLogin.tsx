@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const FormLogin = () => {
   return (
-    <div className="flex flex-col items-center pt-[89px]">
+    <div className="flex flex-col items-center pt-[40px]">
       <div className="flex flex-col items-center">
         <p className="text-3xl font-semibold text-bluePrimary">Faça login</p>
         <p className="text-blackSecondary font-light text-xs">
