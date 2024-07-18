@@ -3,6 +3,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, db } from "../../services/firebase";
 import { useState } from "react";
 import { setDoc, doc, collection, getDoc } from "firebase/firestore";
+import Link from "next/link";
 
 type UserGoogleType = {
   uId: string;
@@ -70,17 +71,17 @@ const LoginWithGoogle = () => {
   return (
     <div>
       <div className="w-full flex justify-center items-center pt-[30px]">
-        <div className="w-[141px] h-[1px] border mr-[16px]"></div>
-        <p>or</p>
-        <div className="w-[141px] h-[1px] border ml-[16px]"></div>
+        <div className="w-[149px] h-[1px] border mr-[8px]"></div>
+        <p className="text-[#D9D9D9]">Ou</p>
+        <div className="w-[149px] h-[1px] border ml-[8px]"></div>
       </div>
       <div className="w-full flex justify-center pt-[30px]">
         <button
-          className="w-[333px] py-[16px] flex items-center justify-center gap-1 border-2 rounded-md rounded-6"
+          className="w-[333px] py-[16px] flex items-center justify-center gap-1 rounded-[30px] bg-white shadow-md shadow-[#E7E8EC] "
           onClick={googleLogin}
         >
-          <Image src="/Google.png" alt="" width={12} height={12} />
-          <p className="text-blackOpacity">Entrar com Google</p>
+          <Image src="/Google.png" alt="" width={30} height={30} />
+          <p className=" pl-[10px] text-bluePrimary">Entrar com sua conta Google</p>
         </button>
       </div>
       {showAuth && (
@@ -95,6 +96,10 @@ const LoginWithGoogle = () => {
           </div>
         </div>
       )}
+      <div className="flex gap-1 justify-center pt-8">
+        <p className="text-xs text-blackSecondary">Não tem uma conta ?</p>
+        <Link href="/CreateAccount" className="text-xs text-bluePrimary"> Cadastre-se aqui</Link>
+      </div>
     </div>
   );
 };

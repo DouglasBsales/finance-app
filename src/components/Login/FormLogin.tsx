@@ -3,52 +3,43 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
 const FormLogin = () => {
-  const [showPassowrd, setShowPassword] = useState(true);
-  const showPasswordClick = () => {
-    setShowPassword(!showPassowrd);
-  };
-
   return (
-    <div className="flex flex-col items-center pt-[41px]">
-      <div>
-        <p className="text-3xl font-semibold text-bluePrimary">Entrar</p>
-        <p className="text-blackOpacity font-light text-xs">
-          Bem-vindo ao FinanceApp: controle total de finanças.
+    <div className="flex flex-col items-center pt-[89px]">
+      <div className="flex flex-col items-center">
+        <p className="text-3xl font-semibold text-bluePrimary">Faça login</p>
+        <p className="text-blackSecondary font-light text-xs">
+          Entre com suas informações
         </p>
       </div>
-      <div className="pt-[41px]">
+      <div className="pt-[74px]">
         <div>
-          <p className="font-semibold text-blackPrimary pb-1">Email:</p>
-          <div className="w-[333px] h-[37px] flex items-center pl-2 bg-white rounded-md ">
-            <input
-              type="text"
-              placeholder="Seu email"
-              className=" outline-none text-blackPrimary"
-            />
+          <div className="flex">
+            <p className=" text-blackSecondary pb-1">Email:</p>
+            <p className="text-redPrimary">*</p>
           </div>
+          <input
+            type="text"
+            placeholder="nome@example.com"
+            className={`w-full h-[40px] outline-none text-blackPrimary pl-3 rounded-md bg-transparent border border-[#E7E8EC] focus:border-bluePrimary`}
+          />
         </div>
         <div className="pt-4">
-          <p className="font-semibold text-blackPrimary pb-1">Senha:</p>
-          <div className="w-[333px] h-[37px] flex items-center pl-2 bg-white rounded-md ">
-            <div className="w-full flex items-center justify-between">
-              <input
-                type={showPassowrd ? "password" : "text"}
-                placeholder="Sua senha"
-                className=" outline-none text-blackPrimary"
-              />
-              <button className="outline-none" onClick={showPasswordClick}>
-                {showPassowrd ? (
-                  <FontAwesomeIcon
-                    icon={faEyeSlash}
-                    className="text-blackOpacity pr-4"
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faEye}
-                    className="text-blackOpacity pr-4"
-                  />
-                )}
-              </button>
+          <div className="flex">
+            <p className=" text-blackSecondary pb-1">Senha:</p>
+            <p className="text-redPrimary">*</p>
+          </div>
+          <div>
+            <div className="w-[333px] h-[40px] flex items-center bg-white rounded-md ">
+              <div className="w-full flex items-center justify-between">
+                <input
+                  type={"password"}
+                  placeholder="***********"
+                  className={`w-full h-[40px] outline-none text-blackPrimary pl-3 rounded-md bg-transparent border border-[#E7E8EC] focus:border-bluePrimary`}
+                />
+              </div>
+            </div>
+            <div className="w-full flex justify-end pt-2">
+              <p className="text-xs text-bluePrimary">Esqueci minha senha</p>
             </div>
           </div>
         </div>
