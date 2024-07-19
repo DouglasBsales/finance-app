@@ -90,7 +90,7 @@ const LoginWithGoogle = () => {
           className="w-[333px] py-[16px] flex items-center justify-center gap-1 rounded-[30px] bg-white shadow-md shadow-[#E7E8EC] "
           onClick={googleLogin}
         >
-          <Image src="/google.png" alt="" width={20} height={20} />
+          <Image src="/Google.png" alt="" width={20} height={20} />
           <p className=" pl-[10px] text-bluePrimary">
             Entrar com sua conta Google
           </p>
