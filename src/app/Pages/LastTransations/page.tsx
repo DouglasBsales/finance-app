@@ -28,10 +28,12 @@ export default function LastTransations() {
                 infoCards={{
                   date: transacao.data.date,
                   icon: transacao.data.icon,
-                  id: transacao.id,
+                  id: transacao.data.id,
+                  plano: transacao.data.plano,
                   name: transacao.data.name,
                   value: transacao.data.value,
                   sentValue: transacao.data.sentValue,
+                  nameCusto: transacao.data.nameCusto
                 }}
               />
             </div>

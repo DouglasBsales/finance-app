@@ -1,49 +1,50 @@
-import { faCreditCard, faHouse, faUmbrellaBeach } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { HomeContext } from "@/Context/HomeContext";
+import { useContext, useState } from "react";
+import { CardsCustos } from "./CardsCustos";
+import { ModalNewCusto } from "./ModalNewCusto";
 
 export const Custos = () => {
+  const { custosData } = useContext(HomeContext);
+
+  // Verifica se custosData não é undefined ou null antes de fazer o map
+  const hasCustos = custosData?.flatMap((custosData: any) => custosData.custos) || [];
+
+  // Verifica se algum dos arrays dentro de hasCustos não está vazio
+  const hasNonEmptyCustos = hasCustos.length > 0;
+
+  const [isModalNewCusto, setModalNewCusto] = useState<boolean>(false)
+
   return (
     <div className="pl-[28px] pt-[25px]">
-      <div className="flex justify-between items-center">
+      <div className="w-full flex justify-between items-center">
         <p className="text-blackPrimary text-xl font-medium">Seus custos</p>
-        <button className="text-bluePrimary text-xs font-medium pr-[28px]">
+        <button className="text-bluePrimary text-xs font-medium pr-[28px]" onClick={()=> setModalNewCusto(true)}>
           Novo custo
         </button>
       </div>
-      <div className="flex gap-3 pt-5">
-        <div className=" w-[130px] rounded-md bg-white pl-3 pb-3">
-          <div className="pt-4">
-            <div className="w-9 h-9 flex justify-center items-center rounded-full bg-whitePrimary">
-              <FontAwesomeIcon
-                icon={faCreditCard}
-                className="text-[#DAA520] text-xl"
-              />
-            </div>
-          </div>
-          <div className="pt-4">
-            <p className="text-blackPrimary font-semibold">Cartão itaú</p>
-            <div className="flex gap-1">
-              <p className="text-xs font-medium text-blackPrimary">R$ 500,35</p>
-            </div>
-          </div>
-        </div>
-        <div className=" w-[130px] rounded-md bg-white pl-3">
-          <div className="pt-4">
-            <div className="w-9 h-9 flex justify-center items-center rounded-full bg-whitePrimary">
-              <FontAwesomeIcon
-                icon={faCreditCard}
-                className="text-[#DAA520] text-xl"
-              />
-            </div>
-          </div>
-          <div className="pt-4">
-            <p className="text-blackPrimary font-semibold">Nubank</p>
-            <div className="flex gap-1">
-              <p className="text-xs font-medium text-blackPrimary">R$ 230,00</p>
-            </div>
-          </div>
-        </div>
+      <div className="flex gap-3 pt-5 overflow-x-scroll  pr-7"
+       style={{
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
+      }}>
+        {hasNonEmptyCustos ? (
+          hasCustos.map((custos: any) => (
+            <CardsCustos
+              key={custos.custoId}
+              infoCustos={{
+                id: custos.id,
+                name: custos.name,
+                value: custos.value,
+                category: custos.categoryCusto,
+                categoryIcon: custos.icon
+              }}
+            />
+          ))
+        ) : (
+          <p>Você ainda não possui custos adicionados</p>
+        )}
       </div>
+      {isModalNewCusto && <ModalNewCusto setModalNewCusto={setModalNewCusto}/>}
     </div>
   );
 };

@@ -3,12 +3,22 @@ import { FunctionComponent } from "react";
 import { formatarNumero } from "../PlanPage/HeaderPlan";
 
 type CardsProps = {
-  infoCards?: any;
+  infoCards?: {
+    date: string;
+    icon: string;
+    id: string;
+    plano?: string,
+    name: string;
+    nameCusto?: string;
+    value: number;
+    sentValue?: boolean;
+  };
 };
 
 const CardsTransacoesPlan: FunctionComponent<CardsProps> = ({ infoCards }) => {
+
   return (
-    <div className="pt-7">
+    <div className="pt-3">
       {infoCards ? (
         <div className="w-[337px] flex items-center pl-4 bg-white rounded-md">
           <div className="w-full flex justify-between items-center py-3">
@@ -18,17 +28,27 @@ const CardsTransacoesPlan: FunctionComponent<CardsProps> = ({ infoCards }) => {
                 <p className="text-blackOpacity text-sm font-light">
                   {infoCards.date}
                 </p>
-                <p className="font-medium text-blackPrimary ">{infoCards.name}</p>
+                <p className="font-medium text-blackPrimary ">
+                  {infoCards.name}
+                </p>
                 {infoCards.plano && (
-                  <p className="text-sm text-blackOpacity font-medium">
+                  <p className="text-sm text-blackOpacity font-light">
                     Plano: {infoCards.plano}
                   </p>
+                )}
+                {infoCards.nameCusto && (
+                  <p className="text-sm text-blackOpacity font-light">Custo: {infoCards.nameCusto}</p>
                 )}
               </div>
             </div>
             <div className="flex items-center pr-3">
-              <p className={`${ infoCards.sentValue ? "text-[#46E068]" : "text-[#FF0000]"}`}>
-                {infoCards.sentValue ? "+" : "-"} {formatarNumero(infoCards.value)}
+              <p
+                className={`${
+                  infoCards.sentValue ? "text-[#46E068]" : "text-[#FF0000]"
+                }`}
+              >
+                {infoCards.sentValue ? "+" : "-"}{" "}
+                {formatarNumero(infoCards.value)}
               </p>
             </div>
           </div>

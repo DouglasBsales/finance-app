@@ -1,11 +1,11 @@
 import { useContext} from "react";
-import { HomeContext } from "@/Context/HomeContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCircleArrowUp,faMoneyCheckDollar,} from "@fortawesome/free-solid-svg-icons";
+import { ContextPlan } from "@/Context/ContextPlan";
 const ModalExitValueWallet = () => {
 
-  const { setValueExitWallet, setShowModalExitValue, updateValueWalletPlan, isLoadingUpdatePlan} = useContext(HomeContext);
+  const { setValueExitWallet, setShowModalExitValue, updateValueWalletPlan, isLoadingUpdatePlan} = useContext(ContextPlan);
 
   return (
     <div>

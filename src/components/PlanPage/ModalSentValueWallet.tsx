@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { HomeContext } from "@/Context/HomeContext";
+import { ContextPlan } from "@/Context/ContextPlan";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCircleArrowUp, faMoneyCheckDollar } from "@fortawesome/free-solid-svg-icons";
@@ -7,7 +7,7 @@ import {faCircleArrowUp, faMoneyCheckDollar } from "@fortawesome/free-solid-svg-
 
 const ModalSentvalueWallet= () => {
   
-  const { setValueSentWallet, setShowModalSentValue, updateValueWalletPlan, isLoadingUpdatePlan  } = useContext(HomeContext);
+  const { setValueSentWallet, setShowModalSentValue, updateValueWalletPlan, isLoadingUpdatePlan  } = useContext(ContextPlan);
 
   return (
     <div>

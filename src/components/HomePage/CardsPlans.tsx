@@ -23,10 +23,13 @@ const CardsPlans: FunctionComponent<CardPlansProps> = ({
   iconCategory,
   categorySelected,
 }) => {
-  const { plansData } = useContext(HomeContext);
+  const { plansData,  setIsPlansOrCustos } = useContext(HomeContext);
 
 
   const selectPlan = (id: string): void => {
+
+    setIsPlansOrCustos("planos")
+
     const planData = plansData.find((plan: any) =>
       plan.planos.some((plano: any) => plano.id === id)
     );

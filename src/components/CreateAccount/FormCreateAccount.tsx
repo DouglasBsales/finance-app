@@ -4,117 +4,98 @@ import { useState } from "react";
 
 const FormCreateAccount = () => {
   const [showPassword, setShowPassword] = useState(true);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(true);
+
+  const [phone, setPhone] = useState("");
+
+  const maskPhone = (value: string) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, "");
+    const phoneNumberLength = phoneNumber.length;
+
+    if (phoneNumberLength < 3) return phoneNumber;
+    if (phoneNumberLength < 8) {
+      return `(${phoneNumber.slice(0, 2)}) ${phoneNumber.slice(2)}`;
+    }
+    return `(${phoneNumber.slice(0, 2)}) ${phoneNumber.slice(2,7)}-${phoneNumber.slice(7, 11)}`;
+  };
+
+  const handleInputChange = (e: any) => {
+    const maskedValue = maskPhone(e.target.value);
+    setPhone(maskedValue);
+  };
 
   return (
-    <div className="w-full flex-col pt-[41px]">
-      <div>
-        <p className="text-3xl font-semibold text-bluePrimary">Criar conta</p>
-        <p className="text-blackOpacity font-light text-xs">
-          Bem-vindo ao FinanceApp: controle total de finanças.
+    <div className="w-[330px] flex flex-col items-center pt-[40px]">
+      <div className="flex flex-col items-center">
+        <p className="text-3xl font-semibold text-bluePrimary">
+          Crie sua conta
+        </p>
+        <p className="text-blackSecondary font-light text-xs">
+          Preencha seus dados
         </p>
       </div>
-      <div className="pt-[41px]">
+      <div className="w-full flex flex-col gap-4 pt-[20px]">
         <div>
-          <p className="font-semibold text-blackPrimary pb-1">Nome:</p>
-          <div className="w-[333px] h-[37px] flex items-center pl-2 bg-white rounded-md ">
+          <div className="flex">
+            <p className=" text-blackSecondary pb-1">Nome:</p>
+            <p className="text-redPrimary">*</p>
+          </div>
+          <input
+            type="text"
+            placeholder="nome@example.com"
+            className={`w-full h-[40px] outline-none text-blackPrimary pl-3 rounded-md bg-transparent border border-[#E7E8EC] focus:border-bluePrimary`}
+          />
+        </div>
+        <div>
+          <div className="flex">
+            <p className=" text-blackSecondary pb-1">Email:</p>
+            <p className="text-redPrimary">*</p>
+          </div>
+          <input
+            type="text"
+            placeholder="nome@example.com"
+            className={`w-full h-[40px] outline-none text-blackPrimary pl-3 rounded-md bg-transparent border border-[#E7E8EC] focus:border-bluePrimary`}
+          />
+        </div>
+        <div>
+          <div className="flex">
+            <p className=" text-blackSecondary pb-1">Senha:</p>
+            <p className="text-redPrimary">*</p>
+          </div>
+          <div>
+            <input
+              type="password"
+              placeholder="•••••••••"
+              className={`w-full h-[40px] outline-none text-blackPrimary pl-3 rounded-md bg-transparent border border-[#E7E8EC] focus:border-bluePrimary`}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="flex">
+            <p className=" text-blackSecondary pb-1">Confirmar senha:</p>
+            <p className="text-redPrimary">*</p>
+          </div>
+          <div>
+            <input
+              type="password"
+              placeholder="•••••••••"
+              className={`w-full h-[40px] outline-none text-blackPrimary pl-3 rounded-md bg-transparent border border-[#E7E8EC] focus:border-bluePrimary`}
+            />
+          </div>
+        </div>
+        <div>
+          <div className="flex">
+            <p className=" text-blackSecondary pb-1">Telefone:</p>
+            <p className="text-redPrimary">*</p>
+          </div>
+          <div>
             <input
               type="text"
-              placeholder="Seu nome"
-              className=" outline-none text-blackPrimary"
+              value={phone}
+              onChange={handleInputChange}
+              placeholder="(00) 00000-0000"
+              className="w-full h-[40px] outline-none text-blackPrimary pl-3 rounded-md bg-transparent border border-[#E7E8EC] focus:border-bluePrimary"
             />
-          </div>
-        </div>
-        <div className="pt-4">
-          <p className="font-semibold text-blackPrimary pb-1">Sobrenome:</p>
-          <div className="w-[333px] h-[37px] flex items-center pl-2 bg-white rounded-md ">
-            <input
-              type="text"
-              placeholder="Seu sobrenome"
-              className=" outline-none text-blackPrimary"
-            />
-          </div>
-        </div>
-        <div className="pt-4">
-          <p className="font-semibold text-blackPrimary pb-1">Email:</p>
-          <div className="w-[333px] h-[37px] flex items-center pl-2 bg-white rounded-md ">
-            <input
-              type="email"
-              placeholder="Seu email"
-              className=" outline-none text-blackPrimary"
-            />
-          </div>
-        </div>
-        <div className="pt-4">
-          <p className="font-semibold text-blackPrimary pb-1">Senha:</p>
-          <div className="w-[333px] h-[37px] flex items-center pl-2 bg-white rounded-md ">
-            <div className="w-full flex items-center justify-between">
-              <input
-                type={showPassword ? "password" : "text"}
-                placeholder="Sua senha"
-                className=" outline-none text-blackPrimary"
-              />
-              <button
-                className="outline-none"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <FontAwesomeIcon
-                    icon={faEyeSlash}
-                    className="text-blackOpacity pr-4"
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faEye}
-                    className="text-blackOpacity pr-4"
-                  />
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="pt-4">
-          <p className="font-semibold text-blackPrimary pb-1">
-            Confirme sua senha:
-          </p>
-          <div className="w-[333px] h-[37px] flex items-center pl-2 bg-white rounded-md ">
-            <div className="w-full flex items-center justify-between">
-              <input
-                type={showConfirmPassword ? "password" : "text"}
-                placeholder="Sua senha"
-                className=" outline-none text-blackPrimary"
-              />
-              <button
-                className="outline-none"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? (
-                  <FontAwesomeIcon
-                    icon={faEyeSlash}
-                    className="text-blackOpacity pr-4"
-                  />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faEye}
-                    className="text-blackOpacity pr-4"
-                  />
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="pt-4">
-          <p className="font-semibold text-blackPrimary pb-1">
-            Seu número de telefone:
-          </p>
-          <div className="w-[333px] h-[37px] flex items-center pl-2 bg-white rounded-md ">
-            <div className="w-full flex items-center justify-between">
-              <input
-                type="text"
-                placeholder="(81) 9000-0000"
-                className=" outline-none text-blackPrimary"
-              />
-            </div>
           </div>
         </div>
       </div>
