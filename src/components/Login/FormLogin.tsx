@@ -1,6 +1,3 @@
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
 
 const FormLogin = () => {
   return (
@@ -29,7 +26,7 @@ const FormLogin = () => {
             <p className="text-redPrimary">*</p>
           </div>
           <div>
-            <div className="w-[333px] h-[40px] flex items-center bg-white rounded-md ">
+            <div className="w-[333px] h-[40px] flex items-centerrounded-md ">
               <div className="w-full flex items-center justify-between">
                 <input
                   type={"password"}
