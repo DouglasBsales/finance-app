@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Finance-app 💵
 
-## Getting Started
+# 🔨 Funcionalidades do projeto 
 
-First, run the development server:
+O finance-app atualmente está sendo desenvolvido para sanar a dificuldade que todas as pessoas tem hoje em dia que é de controlar suas contas e gerenciamento de planos envolvendo investimento relacionado a dinheiro.<br><br>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+# Features implementadas para o usuário
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- O projeto conta com uma carteira principal onde o usuário pode armazenar valores em dinheiro. <br><br>
+- O usuário pode realizar a criação de " planos " com o intuito de definir uma meta com um valor em dinheiro e ir atualizando esse plano com a entrada e saída de dinheiro até que o valor da carteira do plano seja igual ao da meta estabelicida.<br><br>
+- O usuário também pode realizar a criação de " custos " onde ele pode gerenciar todos os custos que foram realizados por ele da seguinte forma: <br> 
+Ao apertar em novo na cartegoria custo será aberto um modal para que o usuário defina o nome e a categoria dessa custo.<br> 
+Após a criação, o usuário poderá adicionar custos com um button de " adicionar custos ". Um outro modal será aberto para que defina: Nome do custo, valor do custo e sua categoria. <br><br>
+- O usuário poderá visualizar todas as movimentações realizadas por ele. na página home com um limite de últimas 5 e na sua página específica poderá visualizar e filtrar as movimentações. <br><br>
+- As movimentações são adicionadas da seguinte forma: 
+O usuário a qualquer ação de adição ou remoção que ele faça dentro do web-app seja: Entrada e saída de valores da Carteira principal, adição ou remoção de valores da carteira dos planos ou adição de custos. <br>
+Todas elas com suas características específicas, como: ícone indicador, nome da movimentação e data realizada. ao clicar em cada uma das movimentações um modal é aberto com mais informações adicionais como: horário.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+# ✔️ Técnicas e tecnologias utilizadas
+REACT <br>
+JTYPESCRIPT <br>
+TAILWIND CSS <br>
+FIREBASE <br>
+LIB react-toastify
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# 📁 Acesso ao projeto
+# https://finance-app-nu-self.vercel.app/Login
