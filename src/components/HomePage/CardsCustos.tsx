@@ -1,5 +1,3 @@
-import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FunctionComponent, useContext } from "react";
 import { formatarNumero } from "../PlanPage/HeaderPlan";
 import Image from "next/image";
@@ -25,7 +23,7 @@ export const CardsCustos: FunctionComponent<CustosProps> = ({ infoCustos }) => {
 
   return (
     <div>
-      <div className=" w-[135px] rounded-md bg-white pl-3 pb-3">
+      <div className=" w-[135px] rounded-md bg-white pl-3 pb-3" style={{boxShadow: "0px 2px 4px 1px #0000000D"}}>
         <Link href="/Pages/Custos" onClick={()=> selectCustos(infoCustos.id)}>
           <div className="pt-4">
             <div className="w-9 h-9 flex justify-center items-center rounded-full bg-whitePrimary">
@@ -38,7 +36,7 @@ export const CardsCustos: FunctionComponent<CustosProps> = ({ infoCustos }) => {
             </div>
           </div>
           <div className="pt-4">
-            <p className="text-blackPrimary font-semibold">{infoCustos.name}</p>
+            <p className="text-[#62636C] font-semibold">{infoCustos.name}</p>
             <div className="flex gap-1">
               <p className="text-xs font-medium text-blackPrimary">
                 R$ {formatarNumero(infoCustos.value)}

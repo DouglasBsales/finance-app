@@ -13,9 +13,9 @@ export const Planos = () => {
     plansData[0].planos.length > 0;
 
   return (
-    <div className="pl-[28px] pt-[25px]">
+    <div className="pl-[24px] pt-9">
       <div className="flex justify-between items-center">
-        <p className="text-blackPrimary text-xl font-medium">Seus planos</p>
+        <p className="text-blackPrimary text-xl">Seus planos</p>
         <Link
           href="/Pages/NewPlan"
           className="text-bluePrimary text-xs font-medium pr-[28px]"
@@ -24,7 +24,7 @@ export const Planos = () => {
         </Link>
       </div>
       <div
-        className="w-full flex gap-3 pt-5 overflow-x-scroll pr-7"
+        className="w-full flex gap-3 pt-5 pb-1 overflow-x-scroll pr-7 pl-1"
         style={{
           scrollbarWidth: "none",
           msOverflowStyle: "none",

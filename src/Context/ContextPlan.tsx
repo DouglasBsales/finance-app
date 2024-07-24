@@ -60,7 +60,7 @@ export default function ContextPlanProvider({ children }: any) {
    
     id: nanoid(),
     name:
-    methodWallet === "entrada" ? "Entrada de dinheiro no plano" : "Saida de dinheiro no plano",
+    methodWallet === "entrada" ? "Entrada no plano" : "Saida no plano",
     plano: planSelected ? planSelected.data.nameOfPlan : null,
     value: methodWallet === "entrada" ? valueParsedSent : valueParsedExit,
     icon: methodWallet === "entrada" ? "/arrowUp.svg" : "/arrowDown.svg",

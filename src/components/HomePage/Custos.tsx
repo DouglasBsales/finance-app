@@ -15,14 +15,14 @@ export const Custos = () => {
   const [isModalNewCusto, setModalNewCusto] = useState<boolean>(false)
 
   return (
-    <div className="pl-[28px] pt-[25px]">
+    <div className="pl-[24px] pt-4">
       <div className="w-full flex justify-between items-center">
-        <p className="text-blackPrimary text-xl font-medium">Seus custos</p>
+        <p className="text-blackPrimary text-xl">Seus custos</p>
         <button className="text-bluePrimary text-xs font-medium pr-[28px]" onClick={()=> setModalNewCusto(true)}>
           Novo custo
         </button>
       </div>
-      <div className="flex gap-3 pt-5 overflow-x-scroll  pr-7"
+      <div className="flex gap-3 pt-5 pb-1 overflow-x-scroll pr-7 pl-1"
        style={{
         scrollbarWidth: "none",
         msOverflowStyle: "none",

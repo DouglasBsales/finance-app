@@ -32,8 +32,8 @@ const Menu = () => {
   };
 
   return (
-    <div className="w-full h-[70px] flex justify-center items-center bg-white fixed bottom-0">
-      <div className="flex w-[310px] items-center gap-[62px]">
+    <div className="w-full h-[70px] flex justify-center items-center bg-white fixed bottom-0 border border-[#EFF0F3]">
+      <div className="flex px-[42px] gap-[62px] items-center ">
       <Link href="/Pages/Home" onClick={isPageHome}>
           <FontAwesomeIcon
             icon={faHouse}

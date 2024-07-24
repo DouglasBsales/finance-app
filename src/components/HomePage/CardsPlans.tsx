@@ -45,7 +45,7 @@ const CardsPlans: FunctionComponent<CardPlansProps> = ({
   };
 
   return (
-    <div className=" rounded-md bg-white px-3 pb-3">
+    <div className=" rounded-md bg-white px-3 pb-3" style={{boxShadow: "0px 2px 4px 1px #0000000D"}}>
       <Link href="/Pages/Plan" onClick={() => selectPlan(planId)}>
         <div className="pt-4">
           <div className="w-11 h-11 flex justify-center items-center rounded-full bg-whitePrimary">
@@ -54,7 +54,7 @@ const CardsPlans: FunctionComponent<CardPlansProps> = ({
         </div>
         <div className="w-[130px] pt-4">
           <p className="text-xs text-blackOpacity">{categorySelected}</p>
-          <p className="text-blackPrimary font-semibold">{nameOfPlan}</p>
+          <p className="text-[#62636C] font-semibold">{nameOfPlan}</p>
           <div className="flex gap-1">
             <p className="text-xs font-medium text-blackPrimary">
               R$ {formatarNumero(valuePlanWallet)}

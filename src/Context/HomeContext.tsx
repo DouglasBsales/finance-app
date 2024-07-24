@@ -150,7 +150,7 @@ export default function HomeContextProvider({ children }: any) {
     // tipo de dados a serem enviados para as transacoes na wallet principal
     id: nanoid(),
     name:
-    typeTransations === "walletHomeSent" ? "Entrada de dinheiro carteira" : "Saida de dinheiro carteira",
+    typeTransations === "walletHomeSent" ? "Entrada carteira" : "Saida carteira",
     value: typeTransations === "walletHomeSent" ? valueWalletSentPlan : valueWallExitPlan,
     icon: typeTransations === "walletHomeSent" ? "/arrowUp.svg" : "/arrowDown.svg",
     date: new Date().toLocaleDateString("pt-BR"),

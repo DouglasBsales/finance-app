@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { HomeContext } from "@/Context/HomeContext";
 
 import { arrayUnion, getDoc, setDoc, updateDoc } from "firebase/firestore";
@@ -15,11 +15,13 @@ type ModalSentValueProps = {
 export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSentValue }) => {
 
   const {idWalletAtt, setValueExitWalletPlan, newValueExitAtt, numberWallet, valueWallExitPlan, transationsData, transationRefId } = useContext(HomeContext);
+  const [error, setError] = useState(false)
 
   const queryClient = useQueryClient();
 
   const exitValueWallet = async () => {
-    if (numberWallet === 0 || valueWallExitPlan > numberWallet) {
+    if ((isNaN(valueWallExitPlan)) || valueWallExitPlan === 0 || valueWallExitPlan.length === 0 || valueWallExitPlan > numberWallet) {
+      setError(true)
       return;
     }
 
@@ -57,33 +59,28 @@ export const ModalExitValue: React.FC<ModalSentValueProps> = ({ setOpenModalSent
           <div className="flex items-center gap-3">
             <FontAwesomeIcon
               icon={faCircleArrowDown}
-              className="text-5xl text-bluePrimary"
+              className="text-5xl text-redPrimary"
             />
-            <p className="text-blackPrimary text-xl font-medium">Saída</p>
+            <p className="text-blackPrimary text-xl">Saída</p>
           </div>
           <div className="pt-4">
-            <p className="text-blackPrimary text-xl">Valor: </p>
+            <p className="text-blackPrimary">Valor: </p>
           </div>
           <div className="w-[223px] pt-1 pb-[54px]">
-            <div className="flex items-center bg-white rounded-md pl-[9px]">
-              <FontAwesomeIcon
-                icon={faMoneyCheckDollar}
-                className="text-blackOpacity text-sm"
-              />
               <input
                 type="text"
-                className="h-[40px] rounded-md outline-none pl-[9px] text-blackPrimary"
+                className="w-full h-[40px] rounded-md outline-none pl-[9px] text-blackPrimary border border-[#b8b8b865] focus:border-[#202020]"
                 placeholder="ex: 100"
                 onChange={(e) =>setValueExitWalletPlan(e.target.value)}
               />
+               {error && <p className="text-redPrimary text-sm pt-1">Insira um número válido</p>}
             </div>
-          </div>
         </div>
         <div className="flex gap-[11px]">
-          <button className="border-2 rounded-md" onClick={() => setOpenModalSentValue(false)}>
-            <p className="py-[8px] px-4 text-blackOpacity">Cancelar</p>
+          <button className="bg-[#F5F5F7] rounded-[20px]" onClick={() => setOpenModalSentValue(false)}>
+            <p className="py-[8px] px-4 text-[#B8B8B8]">Cancelar</p>
           </button>
-          <button className="bg-bluePrimary rounded-md" onClick={exitValueWallet}>
+          <button className="bg-[#2E2E2E] rounded-[20px]" onClick={exitValueWallet}>
             <p className="py-[8px] px-4 text-white">Confirmar</p>
           </button>
         </div>

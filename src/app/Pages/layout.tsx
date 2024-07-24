@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import Menu from "@/components/MenuGlobal/Menu";
+import { HeaderGlobal } from "@/components/MenuGlobal/HeaderGlobal";
 
 interface LayoutWithMenuProps {
   children: ReactNode;
@@ -8,6 +9,7 @@ interface LayoutWithMenuProps {
 const LayoutWithMenu: React.FC<LayoutWithMenuProps> = ({ children }) => {
   return (
     <div>
+      <HeaderGlobal/>
       {children}
       <Menu />
     </div>

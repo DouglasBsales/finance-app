@@ -16,9 +16,9 @@ const LastTransacoes = () => {
   const latestTransacoes = allTransacoes.slice(0, 5);
 
   return (
-    <div className="pl-[28px] pt-[25px]">
+    <div className="pl-[28px] pt-4">
       <div className="flex justify-between items-center">
-        <p className="text-blackPrimary text-xl font-medium">
+        <p className="text-blackPrimary text-xl">
           Últimas movimentações
         </p>
         <Link href="/Pages/LastTransations"className="text-bluePrimary text-xs font-medium pr-[28px]" onClick={()=> setIsPage("pageTransacao")}>

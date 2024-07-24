@@ -16,38 +16,35 @@ type CardsProps = {
 };
 
 const CardsTransacoesPlan: FunctionComponent<CardsProps> = ({ infoCards }) => {
-
   return (
     <div className="pt-3">
       {infoCards ? (
-        <div className="w-[337px] flex items-center pl-4 bg-white rounded-md">
-          <div className="w-full flex justify-between items-center py-3">
-            <Image src={infoCards.icon} alt="" width={38} height={38} />
-            <div className="">
-              <div className="w-[180px] flex flex-col">
-                <p className="text-blackOpacity text-sm font-light">
-                  {infoCards.date}
-                </p>
-                <p className="font-medium text-blackPrimary ">
+        <div className="w-[337px] flex items-center pl-2 bg-white rounded-md" style={{boxShadow: "0px 2px 4px 1px #0000000D"}}>
+          <div className="w-full flex items-center py-3">
+            <Image src={infoCards.icon} alt="" width={35} height={35} />
+            <div>
+              <div className="w-[210px] flex flex-col pl-2 relative top-[2px]">
+                <p className=" text-[#202020]">
                   {infoCards.name}
                 </p>
+                <p className="text-[#62636C] text-xs font-light relative bottom-1">
+                  {infoCards.date}
+                </p>
                 {infoCards.plano && (
-                  <p className="text-sm text-blackOpacity font-light">
+                  <p className="text-sm text-[#62636C] font-light">
                     Plano: {infoCards.plano}
                   </p>
                 )}
                 {infoCards.nameCusto && (
-                  <p className="text-sm text-blackOpacity font-light">Custo: {infoCards.nameCusto}</p>
+                  <p className="text-xs text-[#62636C] font-light relative bottom-1">Custo: {infoCards.nameCusto}</p>
                 )}
               </div>
             </div>
-            <div className="flex items-center pr-3">
+            <div className="flex flex-grow items-center justify-end pr-[10px]">
               <p
-                className={`${
-                  infoCards.sentValue ? "text-[#46E068]" : "text-[#FF0000]"
-                }`}
+                className={`font-medium ${infoCards.sentValue ? "text-[#46E068]" : "text-[#FF0000]"} text-right`}
               >
-                {infoCards.sentValue ? "+" : "-"}{" "}
+                {infoCards.sentValue ? "+" : "-"}
                 {formatarNumero(infoCards.value)}
               </p>
             </div>

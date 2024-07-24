@@ -17,9 +17,9 @@ export default function LastTransations() {
 
   return (
     <div className="w-full flex flex-col items-center bg-whitePrimary">
-      <div className="w-[390px] overflow-x-hidden pb-[100px] px-7">
-        <p className=" text-blackPrimary font-medium text-xl pt-[66px]">
-          Ulitmas movimentações
+      <div className="w-[390px] overflow-x-hidden pb-[100px] px-6">
+        <p className=" text-blackPrimary text-xl pt-5">
+          Ultimas movimentações
         </p>
         {allTransacoes.length > 0 ? (
           allTransacoes.map((transacao: any) => (
